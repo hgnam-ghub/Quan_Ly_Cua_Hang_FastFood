@@ -9,6 +9,7 @@ public final class DanhSachChiTietHoaDon {
     private ChiTietHoaDon[] DS_ChiTietHoaDon;
     private int soLuong;
 
+    public int getSoLuong() {return soLuong;}
     public DanhSachChiTietHoaDon() {
         soLuong = 0;
         DS_ChiTietHoaDon = new ChiTietHoaDon[soLuong];
