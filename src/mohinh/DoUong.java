@@ -1,6 +1,7 @@
 package mohinh;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 
 import quanly.NhapChuan;
 public class DoUong extends SanPham {
@@ -47,13 +48,13 @@ public class DoUong extends SanPham {
     }
 
     @Override
-    public void ghiFile(DataOutputStream dos) throws Exception {
+    public void ghiFile(DataOutputStream dos) throws IOException {
         super.ghiFile(dos);
         dos.writeDouble(theTich);
         dos.writeBoolean(coGas);
     }
     @Override 
-    public void docFile(DataInputStream dis) throws Exception {
+    public void docFile(DataInputStream dis) throws IOException {
         super.docFile(dis);
         theTich = dis.readDouble();
         coGas = dis.readBoolean();

@@ -1,10 +1,12 @@
 package mohinh;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.util.Scanner;
+import java.io.IOException;
 
 import quanly.NhapChuan;
-public abstract class SanPham {
+import rangbuoc.ITruyXuatMoHinh;
+
+public abstract class SanPham implements ITruyXuatMoHinh{
     private String ma;
     private String ten;
     private String donVi;
@@ -53,7 +55,8 @@ public abstract class SanPham {
         setGiaBan(NhapChuan.docSoNguyen("Gia ban"));
     }
 
-    public void ghiFile(DataOutputStream dos) throws Exception{
+    @Override
+    public void ghiFile(DataOutputStream dos) throws IOException{
         dos.writeUTF(ma);
         dos.writeUTF(ten);
         dos.writeUTF(donVi);
@@ -61,7 +64,8 @@ public abstract class SanPham {
         dos.writeDouble(giaBan);
         dos.writeInt(soLuong);
     }
-    public void docFile(DataInputStream dis) throws Exception {
+    @Override
+    public void docFile(DataInputStream dis) throws IOException {
         ten = dis.readUTF();
         donVi = dis.readUTF();
         phuongThucCheBien = dis.readUTF();

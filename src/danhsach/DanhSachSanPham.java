@@ -4,14 +4,16 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 
 import mohinh.DoAn;
 import mohinh.DoUong;
 import mohinh.SanPham;
 import quanly.NhapChuan;
+import rangbuoc.ITruyXuatDanhSach;
 
-public class DanhSachSanPham {
+public class DanhSachSanPham implements ITruyXuatDanhSach{
     private SanPham[] DS_SanPham;
     private int soLuong;
     private static final String fileDanhSach = "data/DS_SanPham.dat";
@@ -28,7 +30,7 @@ public class DanhSachSanPham {
     }
 
     // nhap, xuat, doc ghi danh sach
-    public void nhap() {
+    public void nhapThem() {
         System.out.println("****bat dau nhap danh sach****");
         int nhapThem = NhapChuan.docSoNguyenKhongAm("So luong san pham muon them");
         DS_SanPham = Arrays.copyOf(DS_SanPham, soLuong + nhapThem);
@@ -55,7 +57,7 @@ public class DanhSachSanPham {
             System.out.println("****Ket thuc nhap danh sach****");
         }
     }
-    public void xuat() {
+    public void xuatDanhSach() {
         System.out.println("====Danh Sach Cac San Pham====");
         for(int i = 0; i < soLuong; i++) {
             System.out.println("------------");
@@ -63,33 +65,42 @@ public class DanhSachSanPham {
         }
         System.out.println("====Het====");
     }
-    public void ghiDSXuongFile() throws Exception {
-        DataOutputStream dos = new DataOutputStream(new FileOutputStream(fileDanhSach));
-        dos.writeInt(soLuong);
-        for(int i = 0; i < soLuong; i++){
-            if(DS_SanPham[i] instanceof DoAn) dos.writeInt(1);
-            else if(DS_SanPham[i] instanceof DoUong) dos.writeInt(2);
-            DS_SanPham[i].ghiFile(dos);
-        }
-        dos.close();
-    }
-    public void docDSTuFile() throws Exception{
-        DataInputStream dis = new DataInputStream(new FileInputStream(fileDanhSach));
-        soLuong = dis.readInt();
-        if(soLuong > DS_SanPham.length) DS_SanPham = new SanPham[soLuong];
-        for(int i = 0; i < soLuong; i++) {
-            int loaiSP = dis.readInt();
-            switch (loaiSP) {
-                case 1:
-                    DS_SanPham[i] = new DoAn(dis.readUTF());
-                    break;
-                case 2:
-                    DS_SanPham[i] = new DoUong(dis.readUTF());
-                    break;
+    public void xuatDanhSachRaFile(){
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(fileDanhSach))){
+            dos.writeInt(soLuong);
+            for(int i = 0; i < soLuong; i++){
+                if(DS_SanPham[i] instanceof DoAn) dos.writeInt(1);
+                else if(DS_SanPham[i] instanceof DoUong) dos.writeInt(2);
+                DS_SanPham[i].ghiFile(dos);
             }
-            DS_SanPham[i].docFile(dis);
         }
-        dis.close();
+        catch (IOException e) {
+            System.out.println(">> loi trong qua trinh xuat danh sach san pham ra file");
+            e.printStackTrace();
+        }
+    }
+    public void nhapDanhSachTuFile(){
+        
+        try(DataInputStream dis = new DataInputStream(new FileInputStream(fileDanhSach))) {
+            soLuong = dis.readInt();
+            if(soLuong > DS_SanPham.length) DS_SanPham = new SanPham[soLuong];
+            for(int i = 0; i < soLuong; i++) {
+                int loaiSP = dis.readInt();
+                switch (loaiSP) {
+                    case 1:
+                        DS_SanPham[i] = new DoAn(dis.readUTF());
+                        break;
+                    case 2:
+                        DS_SanPham[i] = new DoUong(dis.readUTF());
+                        break;
+                }
+                DS_SanPham[i].docFile(dis);
+            }
+        }
+        catch(IOException e) {
+            System.out.println(">> Co loi trong qua trinh nhap danh sach vao chuong trinh");
+            e.printStackTrace();
+        }
     }
 
     // them mot san pham
@@ -107,7 +118,7 @@ public class DanhSachSanPham {
         DS_SanPham[viTri].nhap();
         return true;
     }
-    public void sua() {
+    public void nhapSua() {
         if(!sua(NhapChuan.docChuoiKhongRong("Nhap ma san pham")))
             System.out.println(">> San pham nay khong ton tai trong danh sach");
     }
@@ -121,7 +132,7 @@ public class DanhSachSanPham {
         DS_SanPham[--soLuong] = null;
         return true;
     }
-    public void xoa() {
+    public void nhapXoa() {
         if(!xoa(NhapChuan.docChuoiKhongRong("Nhap ma san pham")))
             System.out.println(">> Khong tim thay san pham can xoa");
     }
