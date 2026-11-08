@@ -1,4 +1,8 @@
 package mohinh;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import quanly.NhapChuan;
 public class DoAn extends SanPham {
     private int mucCay;
@@ -6,8 +10,8 @@ public class DoAn extends SanPham {
         super(ma, ten, donVi, phuongThucThanhToan, giaBan, soLuong);
         if(!setMucCay(mucCay)) this.mucCay = 0;
     }
-    public DoAn(String id) {
-        super(id);
+    public DoAn(String ma) {
+        super(ma);
         mucCay = 0;
     }
 
@@ -29,12 +33,22 @@ public class DoAn extends SanPham {
     @Override 
     public void xuat() {
         super.xuat();
-        xuatChuoi("spice level", mucCay);
+        xuatChuoi("Muc do cay", mucCay);
     }
     @Override 
     public void nhap() {
         super.nhap();
-        setMucCay(NhapChuan.docSoNguyen("Muc cay"));
+        setMucCay(NhapChuan.docSoNguyen("Muc do cay"));
+    }
+    @Override
+    public void ghiFile(DataOutputStream dos) throws IOException {
+        super.ghiFile(dos);
+        dos.writeInt(mucCay);
+    }
+    @Override 
+    public void docFile(DataInputStream dis) throws IOException {
+        super.docFile(dis);
+        mucCay = dis.readInt();
     }
     public int getMucCay(){return mucCay;}
     public boolean setMucCay(int mucCayMoi) {
