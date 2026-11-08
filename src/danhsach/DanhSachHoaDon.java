@@ -1,16 +1,23 @@
 package danhsach;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
+
 import mohinh.HoaDon;
 import quanly.NhapChuan;
-public class DanhSachHoaDon {
+import rangbuoc.ITruyXuatDanhSach;
+
+public class DanhSachHoaDon implements ITruyXuatDanhSach {
     private HoaDon[] DS_HoaDon;
     private int soLuong;
     private static final String fileDanhSach = "data/DS_HoaDon.dat";
+
     public int getSoLuong() { return soLuong; }
+
     public DanhSachHoaDon () {
         soLuong = 0;
         DS_HoaDon = new HoaDon[soLuong];
@@ -21,7 +28,9 @@ public class DanhSachHoaDon {
         for(int i = 0; i < soLuong; i++)
             DS_HoaDon[i] = ds_HD.DS_HoaDon[i].saoChep();  
     }
-    public void nhap() {
+
+    @Override
+    public void nhapThem() {
         System.out.println("**** Bat dau nhap danh sach hoa don ****");
         int nhapThem = NhapChuan.docSoNguyenKhongAm("So luong hoa don muon them");
         DS_HoaDon = Arrays.copyOf(DS_HoaDon, soLuong + nhapThem);
@@ -38,7 +47,8 @@ public class DanhSachHoaDon {
         }
         System.out.println("**** Ket thuc nhap danh sach hoa don ****");
     }
-    public void xuat() {
+    @Override
+    public void xuatDanhSach() {
         System.out.println("==== Danh Sach Cac Hoa Don ====");
         for(int i = 0; i < soLuong; i++) {
             System.out.println("------------");
@@ -46,24 +56,34 @@ public class DanhSachHoaDon {
         }
         System.out.println("==== Het ====");
     }
-    public void ghiDSXuongFile() throws Exception {
-        DataOutputStream dos = new DataOutputStream(new FileOutputStream(fileDanhSach));
-        dos.writeInt(soLuong);
-        for(int i = 0; i < soLuong; i++) {
-            DS_HoaDon[i].ghiFile(dos);
+
+    @Override
+    public void xuatDanhSachRaFile() {
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(fileDanhSach))) {
+            dos.writeInt(soLuong);
+            for(int i = 0; i < soLuong; i++) {
+                DS_HoaDon[i].ghiFile(dos);
+            }
+        } catch (IOException e) {
+            System.out.println(">> Loi trong qua trinh xuat danh sach hoa don ra file");
+            e.printStackTrace();
         }
-        dos.close();
     }
-    public void docDSTuFile() throws Exception {
-        DataInputStream dis = new DataInputStream(new FileInputStream(fileDanhSach));
-        soLuong = dis.readInt();
-        DS_HoaDon = new HoaDon[soLuong];
-        for(int i = 0; i < soLuong; i++) {
-            DS_HoaDon[i] = new HoaDon("");
-            DS_HoaDon[i].docFile(dis);
+    @Override
+    public void nhapDanhSachTuFile() {
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(fileDanhSach))) {
+            soLuong = dis.readInt();
+            if(soLuong > DS_HoaDon.length) DS_HoaDon = new HoaDon[soLuong];
+            for(int i = 0; i < soLuong; i++) {
+                DS_HoaDon[i] = new HoaDon("");
+                DS_HoaDon[i].docFile(dis);
+            }
+        } catch (IOException e) {
+            System.out.println(">> Co loi trong qua trinh nhap danh sach hoa don tu file");
+            e.printStackTrace();
         }
-        dis.close();
     }
+
     private boolean them(HoaDon hd) {
         if(kiemTraMa(hd.getMaHoaDon())) return false;
         if(soLuong == DS_HoaDon.length) DS_HoaDon = Arrays.copyOf(DS_HoaDon, soLuong + 1);
@@ -72,23 +92,29 @@ public class DanhSachHoaDon {
     }
     public boolean themHoaDon() {
         String maHD = NhapChuan.docChuoiKhongRong("Ma Hoa Don");
-        if (kiemTraMa(maHD)) { System.out.println(">> Ma hoa don da ton tai!"); return false; }
+        if (kiemTraMa(maHD)) { 
+            System.out.println(">> Ma hoa don da ton tai!"); 
+            return false; 
+        }
         String maNV = NhapChuan.docChuoiKhongRong("Ma nhan vien");
         String maKH = NhapChuan.docChuoiKhongRong("Ma khach hang");
         HoaDon hd = new HoaDon(maHD, maNV, maKH);
         hd.nhap();
         return them(hd);
     }
+
     private boolean sua(String maHD) {
         int viTri = timKiemViTriHoaDon(maHD);
         if(viTri == -1) return false;
         DS_HoaDon[viTri].nhap();
         return true;
     }
-    public void sua() {
+    @Override
+    public void nhapSua() {
         if(!sua(NhapChuan.docChuoiKhongRong("Nhap ma hoa don can sua")))
-            System.out.println(">> Hoa don khong ton tai!");
+            System.out.println(">> Hoa don khong ton tai trong danh sach!");
     }
+
     private boolean xoa(String maHD) {
         int viTri = timKiemViTriHoaDon(maHD);
         if (viTri == -1) return false;
@@ -97,10 +123,12 @@ public class DanhSachHoaDon {
         DS_HoaDon[--soLuong] = null;
         return true;
     }
-    public void xoa() {
+    @Override
+    public void nhapXoa() {
         if(!xoa(NhapChuan.docChuoiKhongRong("Nhap ma hoa don can xoa")))
-            System.out.println(">> Khong tim thay hoa don!");
+            System.out.println(">> Hoa don khong ton tai trong danh sach!");
     }
+
     private int timKiemViTriHoaDon(String maHD) {
         for(int i = 0; i < soLuong; i++)
             if(DS_HoaDon[i] != null && DS_HoaDon[i].getMaHoaDon().equals(maHD)) return i;
@@ -113,6 +141,7 @@ public class DanhSachHoaDon {
         int viTri = timKiemViTriHoaDon(maHD);
         return (viTri != -1) ? DS_HoaDon[viTri] : null;
     }
+
     public void xoaTheoDanhSach(DanhSachHoaDon DS_HD) {
         for (int i = 0; i < DS_HD.soLuong; i++)
             xoa(DS_HD.DS_HoaDon[i].getMaHoaDon());
@@ -122,6 +151,7 @@ public class DanhSachHoaDon {
             if (!kiemTraMa(DS_HD.DS_HoaDon[i].getMaHoaDon())) 
                 them(DS_HD.DS_HoaDon[i].saoChep());
     }
+    
     public DanhSachHoaDon timKiemTheoMaHD(String maHD) {
         DanhSachHoaDon dsTam = new DanhSachHoaDon();
         for (int i = 0; i < soLuong; i++) 
