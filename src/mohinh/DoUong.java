@@ -33,14 +33,14 @@ public class DoUong extends SanPham {
     @Override 
     public void xuat() {
         super.xuat();
-        xuatChuoi("volume", theTich, "ml");
-        xuatChuoi("has gas", coGas);
+        xuatChuoi("The tich", theTich, "ml");
+        xuatChuoi("Co gas", coGas?"co":"khong");
     }
     @Override 
     public void nhap() {
         super.nhap();
-        setTheTich(NhapChuan.docSoThucKhongAm("Volume: "));
-        setGas(NhapChuan.docYesNo("have gas", false));
+        setTheTich(NhapChuan.docSoThucKhongAm("The tich: "));
+        setGas(NhapChuan.docYesNo("Co gas", false));
     }
 
     public final double getTheTich(){return theTich;}

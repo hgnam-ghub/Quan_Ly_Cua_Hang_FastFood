@@ -6,8 +6,8 @@ public class DoAn extends SanPham {
         super(ma, ten, donVi, phuongThucThanhToan, giaBan, soLuong);
         if(!setMucCay(mucCay)) this.mucCay = 0;
     }
-    public DoAn(String id) {
-        super(id);
+    public DoAn(String ma) {
+        super(ma);
         mucCay = 0;
     }
 
@@ -29,12 +29,12 @@ public class DoAn extends SanPham {
     @Override 
     public void xuat() {
         super.xuat();
-        xuatChuoi("spice level", mucCay);
+        xuatChuoi("Muc do cay", mucCay);
     }
     @Override 
     public void nhap() {
         super.nhap();
-        setMucCay(NhapChuan.docSoNguyen("Muc cay"));
+        setMucCay(NhapChuan.docSoNguyen("Muc do cay"));
     }
     public int getMucCay(){return mucCay;}
     public boolean setMucCay(int mucCayMoi) {

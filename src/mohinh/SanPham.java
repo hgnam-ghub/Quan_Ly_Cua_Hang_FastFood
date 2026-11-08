@@ -1,4 +1,6 @@
 package mohinh;
+import java.util.Scanner;
+
 import quanly.NhapChuan;
 public abstract class SanPham {
     private String ma;
@@ -42,7 +44,7 @@ public abstract class SanPham {
         xuatChuoi("So luong", soLuong, donVi);
     }
     public void nhap() {
-        System.out.printf("nhap thong tin cho san pham co ma: %s\n", ma);
+        System.out.println("nhap thong tin cho san pham co ma: " + ma);
         setTen(NhapChuan.docChuoiKhongRong("Ten"));
         setDonVi(NhapChuan.docChuoiKhongRong("Don vi"));
         setPhuongThucCheBien(NhapChuan.docChuoiKhongRong("Phuong thuc che bien"));
@@ -65,7 +67,7 @@ public abstract class SanPham {
 
     private final boolean setMa(String maMoi) {
         if(maMoi.isEmpty()) return false;
-        ten = maMoi;
+        ma = maMoi;
         return true;
     }
     public final boolean setTen(String tenMoi) {
