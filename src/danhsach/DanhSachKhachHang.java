@@ -1,10 +1,15 @@
 package danhsach;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.Arrays;
 import mohinh.KhachHang;
 import quanly.NhapChuan;
 public class DanhSachKhachHang {
     private KhachHang[] DS_KhachHang;
     private int soLuong;
+    private static final String fileDanhSach = "data/DS_KhachHang.dat";
     public int getSoLuong() {return soLuong;}
     public DanhSachKhachHang() {
         soLuong = 0;
@@ -17,114 +22,127 @@ public class DanhSachKhachHang {
             DS_KhachHang[i] = DS_KH.DS_KhachHang[i].saoChep(); 
     }
     public void nhap() {
-        System.out.println("**********************");
+        System.out.println("**** Bat dau nhap danh sach khach hang ****");
         int nhapThem = NhapChuan.docSoNguyenKhongAm("So luong khach hang muon them");
         DS_KhachHang = Arrays.copyOf(DS_KhachHang, soLuong + nhapThem);
         for(int i = 0; i < nhapThem; i++) {
-            System.out.println("-------------");
+            System.out.println("---------------------");
             String maKH;
-            while (true) {
-                maKH = NhapChuan.docChuoiKhongRong("Nhap ma khach hang");
-                if(!kiemTraMa(maKH)) break;
+            while (kiemTraMa(maKH = NhapChuan.docChuoiKhongRong("Nhap ma khach hang")))
                 System.out.println(">> Ma khach hang nay da ton tai, nhap ma khac!!");
-            }
             DS_KhachHang[soLuong] = new KhachHang(maKH);
-            DS_KhachHang[soLuong].nhap();
-            soLuong++;
+            DS_KhachHang[soLuong++].nhap();
         }
+        System.out.println("**** Ket thuc nhap danh sach khach hang ****");
     }
     public void xuat() {
-        System.out.println("---Danh Sach Cac Khach Hang---");
+        System.out.println("==== Danh Sach Cac Khach Hang ====");
         for(int i = 0; i < soLuong; i++) {
-            System.out.println("-------------");
+            System.out.println("------------");
             DS_KhachHang[i].xuat();
         }
+        System.out.println("==== Het ====");
     }
-    public boolean ghiFile() {
-        return true;
+    public void ghiDSXuongFile() throws Exception {
+        DataOutputStream dos = new DataOutputStream(new FileOutputStream(fileDanhSach));
+        dos.writeInt(soLuong);
+        for(int i = 0; i < soLuong; i++) {
+            DS_KhachHang[i].ghiFile(dos);
+        }
+        dos.close();
     }
-    public boolean docFile() {
+    public void docDSTuFile() throws Exception {
+        DataInputStream dis = new DataInputStream(new FileInputStream(fileDanhSach));
+        soLuong = dis.readInt();
+        DS_KhachHang = new KhachHang[soLuong];
+        for(int i = 0; i < soLuong; i++) {
+            DS_KhachHang[i] = new KhachHang("");
+            DS_KhachHang[i].docFile(dis);
+        }
+        dis.close();
+    }
+    private boolean them(KhachHang kh) {
+        if(kiemTraMa(kh.getMa())) return false;
+        if(soLuong == DS_KhachHang.length) DS_KhachHang = Arrays.copyOf(DS_KhachHang, soLuong + 1);
+        DS_KhachHang[soLuong++] = kh;
         return true;
     }
     public boolean themKhachHang() {
-        String ma;
-        while (true) {
-            ma = NhapChuan.docChuoiKhongRong("Ma Khach Hang");
-            if(!kiemTraMa(ma)) break;
-            System.out.println(">> Ma khach hang nay da ton tai, nhap ma khac!!");
-        }
-        if(soLuong == DS_KhachHang.length)
-            DS_KhachHang = Arrays.copyOf(DS_KhachHang, soLuong+1);
-        DS_KhachHang[soLuong] = new KhachHang(ma);
-        DS_KhachHang[soLuong].nhap();
-        soLuong++;
+        String ma = NhapChuan.docChuoiKhongRong("Ma Khach Hang");
+        if(kiemTraMa(ma))  System.out.println(">> Ma nay da ton tai!"); return false; 
+        KhachHang kh = new KhachHang(ma);
+        kh.nhap();
+        return them(kh);
+    }
+    private boolean sua(String ma) {
+        int viTri = timKiemViTriKhachHang(ma);
+        if(viTri == -1) return false;
+        DS_KhachHang[viTri].nhap();
         return true;
     }
-    public boolean xoaKhachHang(String ma) {
-        int viTri = -1;
-        for (int i = 0; i < soLuong; i++) {
-            if (DS_KhachHang[i].getMa().equals(ma)) {
-                viTri = i;
-                break;
-            }
-        }
+    public void sua() {
+        if(!sua(NhapChuan.docChuoiKhongRong("Nhap ma khach hang can sua")))
+            System.out.println(">> Khach hang khong ton tai!");
+    }
+    private boolean xoa(String ma) {
+        int viTri = timKiemViTriKhachHang(ma);
         if (viTri == -1) return false;
         for (int i = viTri; i < soLuong - 1; i++)
             DS_KhachHang[i] = DS_KhachHang[i + 1];
-        DS_KhachHang = Arrays.copyOf(DS_KhachHang, soLuong - 1);
-        soLuong--;
+        DS_KhachHang[--soLuong] = null;
         return true;
     }
-    public KhachHang timKiemKhachHang(String ma) {
+    public void xoa() {
+        if(!xoa(NhapChuan.docChuoiKhongRong("Nhap ma khach hang can xoa")))
+            System.out.println(">> Khong tim thay khach hang!");
+    }
+    private int timKiemViTriKhachHang(String ma) {
         for(int i = 0; i < soLuong; i++) 
-            if(DS_KhachHang[i].getMa().equals(ma)) 
-                return DS_KhachHang[i];
-        return null;
+            if(DS_KhachHang[i] != null && DS_KhachHang[i].getMa().equals(ma)) return i;
+        return -1;
     }
     public boolean kiemTraMa(String ma) {
-        return timKiemKhachHang(ma) != null;
+        return timKiemViTriKhachHang(ma) != -1;
     }
-    private boolean nhapThamChieu(KhachHang khThamChieu) {
-        if (kiemTraMa(khThamChieu.getMa())) return false;
-        if (soLuong == DS_KhachHang.length) DS_KhachHang = Arrays.copyOf(DS_KhachHang, soLuong + 1);
-        DS_KhachHang[soLuong++] = khThamChieu;
-        return true;
+    public KhachHang timKiemKhachHang(String ma) {
+        int viTri = timKiemViTriKhachHang(ma);
+        return (viTri != -1) ? DS_KhachHang[viTri] : null;
     }
     public void xoaTheoDanhSach(DanhSachKhachHang DS_KH) {
         for (int i = 0; i < DS_KH.soLuong; i++) 
-            xoaKhachHang(DS_KH.DS_KhachHang[i].getMa());
+            xoa(DS_KH.DS_KhachHang[i].getMa());
     }
     public void nhapTuDanhSach(DanhSachKhachHang DS_KH) {
         for (int i = 0; i < DS_KH.soLuong; i++) 
             if (!kiemTraMa(DS_KH.DS_KhachHang[i].getMa())) 
-                nhapThamChieu(DS_KH.DS_KhachHang[i]);
+                them(DS_KH.DS_KhachHang[i].saoChep());
     }
     public DanhSachKhachHang timkiemTheoMa(String ma) {
         DanhSachKhachHang dsTam = new DanhSachKhachHang();
         for (int i = 0; i < soLuong; i++)
-            if (DS_KhachHang[i].getMa().equals(ma))
-                dsTam.nhapThamChieu(DS_KhachHang[i]);
+            if (DS_KhachHang[i] != null && DS_KhachHang[i].getMa().equals(ma))
+                dsTam.them(DS_KhachHang[i]);
         return (dsTam.soLuong == 0) ? null : dsTam;
     }
     public DanhSachKhachHang timkiemTheoHo(String ho) {
         DanhSachKhachHang dsTam = new DanhSachKhachHang();
         for (int i = 0; i < soLuong; i++) 
-            if (DS_KhachHang[i].getHo().equalsIgnoreCase(ho)) 
-                dsTam.nhapThamChieu(DS_KhachHang[i]);
+            if (DS_KhachHang[i] != null && DS_KhachHang[i].getHo().equalsIgnoreCase(ho)) 
+                dsTam.them(DS_KhachHang[i]);
         return (dsTam.soLuong == 0) ? null : dsTam;
     }
     public DanhSachKhachHang timkiemTheoTen(String ten) {
         DanhSachKhachHang dsTam = new DanhSachKhachHang();
         for (int i = 0; i < soLuong; i++) 
-            if (DS_KhachHang[i].getTen().equalsIgnoreCase(ten)) 
-                dsTam.nhapThamChieu(DS_KhachHang[i]);
+            if (DS_KhachHang[i] != null && DS_KhachHang[i].getTen().equalsIgnoreCase(ten)) 
+                dsTam.them(DS_KhachHang[i]);
         return (dsTam.soLuong == 0) ? null : dsTam;
     }
     public DanhSachKhachHang timkiemTheotongTienDaMua(double tongTienDaMua) {
         DanhSachKhachHang dsTam = new DanhSachKhachHang();
         for (int i = 0; i < soLuong; i++) 
-            if (DS_KhachHang[i].getTongSoTienMua() == tongTienDaMua) 
-                dsTam.nhapThamChieu(DS_KhachHang[i]);
+            if (DS_KhachHang[i] != null && DS_KhachHang[i].getTongSoTienMua() == tongTienDaMua) 
+                dsTam.them(DS_KhachHang[i]);
         return (dsTam.soLuong == 0) ? null : dsTam;
     }
 }
