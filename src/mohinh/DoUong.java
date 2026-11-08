@@ -1,4 +1,7 @@
 package mohinh;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
 import quanly.NhapChuan;
 public class DoUong extends SanPham {
     private double theTich;
@@ -39,8 +42,21 @@ public class DoUong extends SanPham {
     @Override 
     public void nhap() {
         super.nhap();
-        setTheTich(NhapChuan.docSoThucKhongAm("The tich: "));
+        setTheTich(NhapChuan.docSoThucKhongAm("The tich"));
         setGas(NhapChuan.docYesNo("Co gas", false));
+    }
+
+    @Override
+    public void ghiFile(DataOutputStream dos) throws Exception {
+        super.ghiFile(dos);
+        dos.writeDouble(theTich);
+        dos.writeBoolean(coGas);
+    }
+    @Override 
+    public void docFile(DataInputStream dis) throws Exception {
+        super.docFile(dis);
+        theTich = dis.readDouble();
+        coGas = dis.readBoolean();
     }
 
     public final double getTheTich(){return theTich;}

@@ -1,4 +1,7 @@
 package mohinh;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
 import quanly.NhapChuan;
 public class DoAn extends SanPham {
     private int mucCay;
@@ -35,6 +38,16 @@ public class DoAn extends SanPham {
     public void nhap() {
         super.nhap();
         setMucCay(NhapChuan.docSoNguyen("Muc do cay"));
+    }
+    @Override
+    public void ghiFile(DataOutputStream dos) throws Exception {
+        super.ghiFile(dos);
+        dos.writeInt(mucCay);
+    }
+    @Override 
+    public void docFile(DataInputStream dis) throws Exception {
+        super.docFile(dis);
+        mucCay = dis.readInt();
     }
     public int getMucCay(){return mucCay;}
     public boolean setMucCay(int mucCayMoi) {

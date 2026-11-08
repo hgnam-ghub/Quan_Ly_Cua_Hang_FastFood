@@ -1,4 +1,6 @@
 package mohinh;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.util.Scanner;
 
 import quanly.NhapChuan;
@@ -51,11 +53,20 @@ public abstract class SanPham {
         setGiaBan(NhapChuan.docSoNguyen("Gia ban"));
     }
 
-    public boolean ghiFile() {
-        return true;
+    public void ghiFile(DataOutputStream dos) throws Exception{
+        dos.writeUTF(ma);
+        dos.writeUTF(ten);
+        dos.writeUTF(donVi);
+        dos.writeUTF(phuongThucCheBien);
+        dos.writeDouble(giaBan);
+        dos.writeInt(soLuong);
     }
-    public boolean docFile() {
-        return true;
+    public void docFile(DataInputStream dis) throws Exception {
+        ten = dis.readUTF();
+        donVi = dis.readUTF();
+        phuongThucCheBien = dis.readUTF();
+        giaBan = dis.readDouble();
+        soLuong = dis.readInt();
     }
 
     public final String getMa(){return ma;}
