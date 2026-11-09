@@ -1,18 +1,22 @@
 package mohinh;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import quanly.NhapChuan;
 public final class KhachHang 
 {
     private String ma;
-    private String ten;
     private String ho;
+    private String ten;
     private String soDienThoai;
     private String ngaySinh;
     private double tongTienDaMua;
 
-    public KhachHang(String ma, String ten, String ho, String soDienThoai, String ngaySinh) {
+    public KhachHang(String ma, String ho, String ten, String soDienThoai, String ngaySinh) {
         this.ma = ma;
-        this.ten = ten;
         this.ho = ho;
+        this.ten = ten;
         this.soDienThoai = soDienThoai;
         this.ngaySinh = ngaySinh;
     }
@@ -20,7 +24,7 @@ public final class KhachHang
         this(ma, "khong co", "khong co", "khong co", "khong co");
     }
     public KhachHang(String maMoi, KhachHang khachHang) {
-        this(maMoi, khachHang.ten, khachHang.ho, khachHang.soDienThoai, khachHang.ngaySinh);
+        this(maMoi, khachHang.ho, khachHang.ten, khachHang.soDienThoai, khachHang.ngaySinh);
         tongTienDaMua = khachHang.tongTienDaMua;
     }
     public KhachHang(KhachHang khachHang) {
@@ -32,21 +36,39 @@ public final class KhachHang
     public KhachHang saoChepVoiMaMoi(String maMoi) {
         return new KhachHang(maMoi, this);
     }
-
-    public void xuat()
-    {
-        System.out.printf("id: %s%n", ma);
-        System.out.printf("name: %s%n", ho + ten);
-        System.out.printf("phone number: %s%n", soDienThoai);
-        System.out.printf("date of birth: %s%n", ngaySinh);
-        System.out.printf("totol spending: %f%n", tongTienDaMua);
+    protected final void xuatChuoi(String prompt, Object giaTri) {System.out.println(prompt + ": " + giaTri);}
+    protected final void xuatChuoi(String prompt, Object giaTri, String donVi) {System.out.println(prompt + ": " + giaTri + ' ' + donVi);}
+    public void xuat() {
+        xuatChuoi("Ma khach hang", ma);
+        xuatChuoi("Ho va ten", ho + " " + ten);
+        xuatChuoi("So dien thoai", soDienThoai);
+        xuatChuoi("Ngay sinh", ngaySinh);
+        xuatChuoi("Tong tien da mua", tongTienDaMua, "$");
     }
-    public void nhap()
-    {
-        ten = NhapChuan.docChuoiKhongRong("ten");
-        ho = NhapChuan.docChuoiKhongRong("ho");
-        soDienThoai = NhapChuan.docChuoiKhongRong("So dien thoai");
-        ngaySinh = NhapChuan.docChuoiKhongRong("Ngay sinh nhat");
+
+    public void nhap() {
+        System.out.println("Nhap thong tin cho khach hang co ma: " + ma);
+        setHo(NhapChuan.docChuoiKhongRong("Ho"));
+        setTen(NhapChuan.docChuoiKhongRong("Ten"));
+        setSoDienThoai(NhapChuan.docChuoiKhongRong("So dien thoai"));
+        setNgaySinh(NhapChuan.docChuoiKhongRong("Ngay sinh"));
+    }
+    public void ghiFile(DataOutputStream dos) throws IOException {
+        dos.writeUTF(ma);
+        dos.writeUTF(ho);
+        dos.writeUTF(ten);
+        dos.writeUTF(soDienThoai);
+        dos.writeUTF(ngaySinh);
+        dos.writeDouble(tongTienDaMua);
+    }
+
+    public void docFile(DataInputStream dis) throws IOException {
+        ma = dis.readUTF();
+        ho = dis.readUTF();
+        ten = dis.readUTF();
+        soDienThoai = dis.readUTF();
+        ngaySinh = dis.readUTF();
+        tongTienDaMua = dis.readDouble();
     }
     public String getMa(){return ma;}
     public String getTen(){return ten;}
