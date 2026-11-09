@@ -25,7 +25,7 @@ public class DanhSachNguyenLieu implements ITruyXuatDanhSach {
         soLuong = DS_NL.soLuong;
         DS_NguyenLieu = new NguyenLieu[soLuong];
         for (int i = 0; i < soLuong; i++)
-            DS_NguyenLieu[i] = new NguyenLieu(DS_NL.DS_NguyenLieu[i]);
+            DS_NguyenLieu[i] = DS_NL.DS_NguyenLieu[i].saoChep();
     }
 
     public void nhapThem() {
@@ -39,8 +39,7 @@ public class DanhSachNguyenLieu implements ITruyXuatDanhSach {
             while (kiemTraMa(maNL = NhapChuan.docChuoiKhongRong("Nhap ma nguyen lieu")))
                 System.out.println(">> Ma nay da ton tai, vui long nhap ma khac !!!");
 
-            NguyenLieu nl = new NguyenLieu();
-            nl.setMaNguyenLieu(maNL);
+            NguyenLieu nl = new NguyenLieu(maNL);
             nl.nhap();
             DS_NguyenLieu[soLuong++] = nl;
         }
@@ -74,8 +73,9 @@ public class DanhSachNguyenLieu implements ITruyXuatDanhSach {
             if (soLuong > DS_NguyenLieu.length)
                 DS_NguyenLieu = new NguyenLieu[soLuong];
             for (int i = 0; i < soLuong; i++) {
-                DS_NguyenLieu[i] = new NguyenLieu();
-                DS_NguyenLieu[i].docFile(dis);
+                NguyenLieu nl = new NguyenLieu("");
+                nl.docFile(dis);
+                DS_NguyenLieu[i] = nl;
             }
         } catch (IOException e) {
             System.out.println(">> Co loi trong qua trinh nhap danh sach nguyen lieu tu file");
@@ -84,7 +84,7 @@ public class DanhSachNguyenLieu implements ITruyXuatDanhSach {
     }
 
     private boolean them(NguyenLieu nl) {
-        if (kiemTraMa(nl.getMaNguyenLieu()))
+        if (kiemTraMa(nl.getMa()))
             return false;
         if (soLuong == DS_NguyenLieu.length)
             DS_NguyenLieu = Arrays.copyOf(DS_NguyenLieu, soLuong + 1);
@@ -123,7 +123,7 @@ public class DanhSachNguyenLieu implements ITruyXuatDanhSach {
 
     private int timKiemViTriNguyenLieu(String maNL) {
         for (int i = 0; i < soLuong; i++) {
-            if (DS_NguyenLieu[i] != null && DS_NguyenLieu[i].getMaNguyenLieu().equalsIgnoreCase(maNL))
+            if (DS_NguyenLieu[i] != null && DS_NguyenLieu[i].getMa().equalsIgnoreCase(maNL))
                 return i;
         }
         return -1;
@@ -136,7 +136,7 @@ public class DanhSachNguyenLieu implements ITruyXuatDanhSach {
     public DanhSachNguyenLieu timKiemTheoTen(String tenNguyenLieu) {
         DanhSachNguyenLieu dsTam = new DanhSachNguyenLieu();
         for (int i = 0; i < soLuong; i++) {
-            if (DS_NguyenLieu[i] != null && DS_NguyenLieu[i].getTenNguyenLieu().equalsIgnoreCase(tenNguyenLieu))
+            if (DS_NguyenLieu[i] != null && DS_NguyenLieu[i].getTen().equalsIgnoreCase(tenNguyenLieu))
                 dsTam.them(DS_NguyenLieu[i]);
         }
         if (dsTam.soLuong == 0)

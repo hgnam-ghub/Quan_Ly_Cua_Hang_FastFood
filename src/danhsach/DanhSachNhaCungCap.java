@@ -25,7 +25,7 @@ public class DanhSachNhaCungCap implements ITruyXuatDanhSach {
         soLuong = DS_NCC.soLuong;
         DS_NhaCungCap = new NhaCungCap[soLuong];
         for (int i = 0; i < soLuong; i++)
-            DS_NhaCungCap[i] = new NhaCungCap(DS_NCC.DS_NhaCungCap[i]);
+            DS_NhaCungCap[i] = DS_NCC.DS_NhaCungCap[i].saoChep();
     }
 
     public void nhapThem() {
@@ -39,8 +39,7 @@ public class DanhSachNhaCungCap implements ITruyXuatDanhSach {
             while (kiemTraMa(maNCC = NhapChuan.docChuoiKhongRong("Nhap ma nha cung cap")))
                 System.out.println(">> Ma nay da ton tai, vui long nhap ma khac !!!");
 
-            NhaCungCap ncc = new NhaCungCap();
-            ncc.setMaNhaCungCap(maNCC);
+            NhaCungCap ncc = new NhaCungCap(maNCC);
             ncc.nhap();
             DS_NhaCungCap[soLuong++] = ncc;
         }
@@ -74,8 +73,9 @@ public class DanhSachNhaCungCap implements ITruyXuatDanhSach {
             if (soLuong > DS_NhaCungCap.length)
                 DS_NhaCungCap = new NhaCungCap[soLuong];
             for (int i = 0; i < soLuong; i++) {
-                DS_NhaCungCap[i] = new NhaCungCap();
-                DS_NhaCungCap[i].docFile(dis);
+                NhaCungCap ncc = new NhaCungCap("");
+                ncc.docFile(dis);
+                DS_NhaCungCap[i] = ncc;
             }
         } catch (IOException e) {
             System.out.println(">> Co loi trong qua trinh nhap danh sach nha cung cap tu file");
@@ -84,7 +84,7 @@ public class DanhSachNhaCungCap implements ITruyXuatDanhSach {
     }
 
     private boolean them(NhaCungCap ncc) {
-        if (kiemTraMa(ncc.getMaNhaCungCap()))
+        if (kiemTraMa(ncc.getMa()))
             return false;
         if (soLuong == DS_NhaCungCap.length)
             DS_NhaCungCap = Arrays.copyOf(DS_NhaCungCap, soLuong + 1);
@@ -123,7 +123,7 @@ public class DanhSachNhaCungCap implements ITruyXuatDanhSach {
 
     private int timKiemViTriNhaCungCap(String maNCC) {
         for (int i = 0; i < soLuong; i++) {
-            if (DS_NhaCungCap[i] != null && DS_NhaCungCap[i].getMaNhaCungCap().equalsIgnoreCase(maNCC))
+            if (DS_NhaCungCap[i] != null && DS_NhaCungCap[i].getMa().equalsIgnoreCase(maNCC))
                 return i;
         }
         return -1;
@@ -136,7 +136,7 @@ public class DanhSachNhaCungCap implements ITruyXuatDanhSach {
     public DanhSachNhaCungCap timKiemTheoTen(String tenNhaCungCap) {
         DanhSachNhaCungCap dsTam = new DanhSachNhaCungCap();
         for (int i = 0; i < soLuong; i++) {
-            if (DS_NhaCungCap[i] != null && DS_NhaCungCap[i].getTenNhaCungCap().equalsIgnoreCase(tenNhaCungCap))
+            if (DS_NhaCungCap[i] != null && DS_NhaCungCap[i].getTen().equalsIgnoreCase(tenNhaCungCap))
                 dsTam.them(DS_NhaCungCap[i]);
         }
         if (dsTam.soLuong == 0)

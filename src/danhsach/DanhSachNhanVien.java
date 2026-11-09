@@ -25,7 +25,7 @@ public class DanhSachNhanVien implements ITruyXuatDanhSach {
         soLuong = DS_NV.soLuong;
         DS_NhanVien = new NhanVien[soLuong];
         for (int i = 0; i < soLuong; i++)
-            DS_NhanVien[i] = new NhanVien(DS_NV.DS_NhanVien[i]);
+            DS_NhanVien[i] = DS_NV.DS_NhanVien[i].saoChep();
     }
 
     public void nhapThem() {
@@ -39,8 +39,7 @@ public class DanhSachNhanVien implements ITruyXuatDanhSach {
             while (kiemTraMa(maNV = NhapChuan.docChuoiKhongRong("Nhap ma nhan vien")))
                 System.out.println(">> Ma nay da ton tai, vui long nhap ma khac !!!");
 
-            NhanVien nv = new NhanVien();
-            nv.setMaNhanVien(maNV); // Hoặc truyền trực tiếp vào constructor tùy lớp NhanVien của bạn
+            NhanVien nv = new NhanVien(maNV);
             nv.nhap();
             DS_NhanVien[soLuong++] = nv;
         }
@@ -74,8 +73,9 @@ public class DanhSachNhanVien implements ITruyXuatDanhSach {
             if (soLuong > DS_NhanVien.length)
                 DS_NhanVien = new NhanVien[soLuong];
             for (int i = 0; i < soLuong; i++) {
-                DS_NhanVien[i] = new NhanVien();
-                DS_NhanVien[i].docFile(dis);
+                NhanVien nv = new NhanVien("");
+                nv.docFile(dis);
+                DS_NhanVien[i] = nv;
             }
         } catch (IOException e) {
             System.out.println(">> Co loi trong qua trinh nhap danh sach nhan vien tu file");
@@ -84,7 +84,7 @@ public class DanhSachNhanVien implements ITruyXuatDanhSach {
     }
 
     private boolean them(NhanVien nv) {
-        if (kiemTraMa(nv.getMaNhanVien()))
+        if (kiemTraMa(nv.getMa()))
             return false;
         if (soLuong == DS_NhanVien.length)
             DS_NhanVien = Arrays.copyOf(DS_NhanVien, soLuong + 1);
@@ -123,7 +123,7 @@ public class DanhSachNhanVien implements ITruyXuatDanhSach {
 
     private int timKiemViTriNhanVien(String maNV) {
         for (int i = 0; i < soLuong; i++) {
-            if (DS_NhanVien[i] != null && DS_NhanVien[i].getMaNhanVien().equalsIgnoreCase(maNV))
+            if (DS_NhanVien[i] != null && DS_NhanVien[i].getMa().equalsIgnoreCase(maNV))
                 return i;
         }
         return -1;
@@ -136,7 +136,7 @@ public class DanhSachNhanVien implements ITruyXuatDanhSach {
     public DanhSachNhanVien timKiemTheoTen(String tenNhanVien) {
         DanhSachNhanVien dsTam = new DanhSachNhanVien();
         for (int i = 0; i < soLuong; i++) {
-            if (DS_NhanVien[i] != null && DS_NhanVien[i].getHoTen().equalsIgnoreCase(tenNhanVien))
+            if (DS_NhanVien[i] != null && DS_NhanVien[i].getTen().equalsIgnoreCase(tenNhanVien))
                 dsTam.them(DS_NhanVien[i]);
         }
         if (dsTam.soLuong == 0)
