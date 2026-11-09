@@ -1,5 +1,10 @@
 package mohinh;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import quanly.NhapChuan;
+
 public final class NguyenLieu {
     private String ma;
     private String ten;
@@ -31,27 +36,54 @@ public final class NguyenLieu {
     }
 
     public void nhap() {
-
+        this.ten = NhapChuan.docChuoiKhongRong("Nhap ten nguyen lieu");
+        this.donVi = NhapChuan.docChuoiKhongRong("Nhap don vi tinh");
+        this.donGia = NhapChuan.docSoThucKhongAm("Nhap don gia");
+        this.soLuong = NhapChuan.docSoNguyenKhongAm("Nhap so luong ban dau");
     }
+
     public void xuat() {
-
-    }
-    public void ghiFile() {
-
-    }
-    public void docFile() {
-
+        System.out.printf("Ma NL: %s | Ten: %s | Don vi: %s | Don gia: %.2f | So luong: %d\n", 
+            ma, ten, donVi, donGia, soLuong);
     }
 
-    public String getMa() {return ma;}
-    public String getTen() {return ten;}
-    public String getDonVi() {return donVi;}
-    public double getDonGia() {return donGia;}
-    public int getSoLuong() {return soLuong;}
+    public void ghiFile(DataOutputStream dos) throws IOException {
+        dos.writeUTF(ma);
+        dos.writeUTF(ten);
+        dos.writeUTF(donVi);
+        dos.writeDouble(donGia);
+        dos.writeInt(soLuong);
+    }
 
-    public boolean setTen() {return true;}
-    public boolean setDonVi() {return true;}
-    public boolean setDonGia() {return true;}
+    public void docFile(DataInputStream dis) throws IOException {
+        this.ma = dis.readUTF();
+        this.ten = dis.readUTF();
+        this.donVi = dis.readUTF();
+        this.donGia = dis.readDouble();
+        this.soLuong = dis.readInt();
+    }
+
+    public String getMa() { return ma; }
+    public String getTen() { return ten; }
+    public String getDonVi() { return donVi; }
+    public double getDonGia() { return donGia; }
+    public int getSoLuong() { return soLuong; }
+
+    public boolean setTen(String tenMoi) { 
+        if(tenMoi == null || tenMoi.trim().isEmpty()) return false;
+        this.ten = tenMoi;
+        return true; 
+    }
+    public boolean setDonVi(String donViMoi) { 
+        if(donViMoi == null || donViMoi.trim().isEmpty()) return false;
+        this.donVi = donViMoi;
+        return true; 
+    }
+    public boolean setDonGia(double donGiaMoi) { 
+        if(donGiaMoi < 0) return false;
+        this.donGia = donGiaMoi;
+        return true; 
+    }
     public boolean setSoLuong(int soLuongMoi) {
         if(soLuongMoi < 0) return false;
         soLuong = soLuongMoi;
