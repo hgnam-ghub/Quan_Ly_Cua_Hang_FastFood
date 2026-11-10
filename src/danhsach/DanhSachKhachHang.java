@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mohinh.KhachHang;
-import quanly.NhapChuan;
+import tienich.NhapChuan;
 import rangbuoc.ITruyXuatDanhSach;
 
 public class DanhSachKhachHang implements ITruyXuatDanhSach {
