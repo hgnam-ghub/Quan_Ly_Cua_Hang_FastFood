@@ -6,6 +6,7 @@
 bin/
 .vscode/
 src/test.java
+data/
 
 # User-specific files
 *.rsuser

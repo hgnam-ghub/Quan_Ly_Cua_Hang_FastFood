@@ -8,8 +8,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mohinh.ChiTietHoaDon;
-import quanly.NhapChuan;
-import rangbuoc.ITruyXuatDanhSach;
+import tienich.NhapChuan;
 
 public final class DanhSachChiTietHoaDon implements ITruyXuatDanhSach {
     private ChiTietHoaDon[] DS_ChiTietHoaDon;

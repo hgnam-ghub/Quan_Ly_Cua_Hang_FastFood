@@ -1,59 +1,66 @@
 package mohinh;
-import quanly.NhapChuan;
-public abstract class SanPham {
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import rangbuoc.ITruyXuatMoHinh;
+import tienich.NhapChuan;
+
+public abstract class SanPham implements ITruyXuatMoHinh{
     private String ma;
     private String ten;
     private String donVi;
     private String phuongThucCheBien;
     private double giaBan;
     private int soLuong;
-    
+
+    protected SanPham() {this("", "", "", "", 0, 1);}
     protected SanPham(String ma, String ten, String donVi, String phuongThucCheBien, double giaBan, int soLuong) {
-        if(!setMa(ma)) this.ma = "khong hop le";
-        if(!setTen(ten)) this.ten = "khong co";
-        if(!setDonVi(donVi)) this.donVi = "khong co";
-        if(!setPhuongThucCheBien(phuongThucCheBien)) this.phuongThucCheBien = "khong co";
-        if(!setGiaBan(giaBan)) this.giaBan = 0;
-        if(!setSoLuong(soLuong)) this.soLuong = 1;
+        if(setMa(ma) == null) this.ma = "khong hop le";
+        if(setTen(ten) == null) this.ten = "khong co";
+        if(setDonVi(donVi) == null) this.donVi = "khong co";
+        if(setPhuongThucCheBien(phuongThucCheBien) == null) this.phuongThucCheBien = "khong co";
+        if(setGiaBan(giaBan) == null) this.giaBan = 0;
+        if(setSoLuong(soLuong) == null) this.soLuong = 1;
     }
-    protected SanPham(String ma) {
-        this(ma, "", "", "", 0, 1);
-    }
-
-    protected SanPham(String ma, SanPham sanPham) {
-        this(ma, sanPham.ten, sanPham.donVi, sanPham.phuongThucCheBien, sanPham.giaBan, sanPham.soLuong);
-    }
-    protected SanPham(SanPham sanPham) {
-        this(sanPham.ma, sanPham);
-    }
-    
-    protected final void xuatChuoi(String prompt, Object giaTri) {System.out.println(prompt + ": " + giaTri);}
-    protected final void xuatChuoi(String prompt, Object giaTri, String donVi) {System.out.println(prompt + ": " + giaTri + ' ' + donVi);}
-
+    protected SanPham(SanPham sanPham) {this(sanPham.ma, sanPham.ten, sanPham.donVi, sanPham.phuongThucCheBien, sanPham.giaBan, sanPham.soLuong);}
     public abstract SanPham saoChep();
-    public abstract SanPham saoChepVoiMaMoi(String newID);
 
-    public void xuat() {
-        xuatChuoi("Ma", ma);
-        xuatChuoi("Ten", ten);
-        xuatChuoi("Don vi", donVi);
-        xuatChuoi("Phuong thuc thanh toan", phuongThucCheBien);
-        xuatChuoi("Gia ban", giaBan, "$");
-        xuatChuoi("So luong", soLuong, donVi);
+    public String[] xuat() {
+        String[] truongDuLieu = new String[6];
+        truongDuLieu[0] = ma;
+        truongDuLieu[1] = ten;
+        truongDuLieu[2] = donVi;
+        truongDuLieu[3] = phuongThucCheBien;
+        truongDuLieu[4] = String.valueOf(giaBan);
+        truongDuLieu[5] = String.valueOf(soLuong);
+        return truongDuLieu;
     }
-    public void nhap() {
-        System.out.printf("nhap thong tin cho san pham co ma: %s\n", ma);
+    public SanPham nhap() {
         setTen(NhapChuan.docChuoiKhongRong("Ten"));
         setDonVi(NhapChuan.docChuoiKhongRong("Don vi"));
         setPhuongThucCheBien(NhapChuan.docChuoiKhongRong("Phuong thuc che bien"));
         setGiaBan(NhapChuan.docSoNguyen("Gia ban"));
+        setSoLuong(NhapChuan.docSoNguyenKhongAm("So luong"));
+        return this;
     }
 
-    public boolean ghiFile() {
-        return true;
+    @Override
+    public void ghiFile(DataOutputStream dos) throws IOException{
+        dos.writeUTF(ma);
+        dos.writeUTF(ten);
+        dos.writeUTF(donVi);
+        dos.writeUTF(phuongThucCheBien);
+        dos.writeDouble(giaBan);
+        dos.writeInt(soLuong);
     }
-    public boolean docFile() {
-        return true;
+    @Override
+    public void docFile(DataInputStream dis) throws IOException {
+        ten = dis.readUTF();
+        donVi = dis.readUTF();
+        phuongThucCheBien = dis.readUTF();
+        giaBan = dis.readDouble();
+        soLuong = dis.readInt();
     }
 
     public final String getMa(){return ma;}
@@ -63,37 +70,37 @@ public abstract class SanPham {
     public final double getGia(){return giaBan;}
     public final int getSoLuong(){return soLuong;}
 
-    private final boolean setMa(String maMoi) {
-        if(maMoi.isEmpty()) return false;
-        ten = maMoi;
-        return true;
+    public final SanPham setMa(String maMoi) {
+        if(maMoi.isEmpty()) return null;
+        ma = maMoi;
+        return this;
     }
-    public final boolean setTen(String tenMoi) {
-        if(tenMoi.isEmpty()) return false;
+    public final SanPham setTen(String tenMoi) {
+        if(tenMoi.isEmpty()) return null;
         ten = tenMoi;
-        return true;
+        return this;
     }
-    public final boolean setDonVi(String donViMoi) {
-        if(donViMoi.isEmpty()) return false;
+    public final SanPham setDonVi(String donViMoi) {
+        if(donViMoi.isEmpty()) return null;
         donVi = donViMoi;
-        return true;
+        return this;
     }
-    public final boolean setPhuongThucCheBien(String phuongThucCheBienMoi){
-        if(phuongThucCheBienMoi.isEmpty()) return false;
+    public final SanPham setPhuongThucCheBien(String phuongThucCheBienMoi){
+        if(phuongThucCheBienMoi.isEmpty()) return null;
         phuongThucCheBien = phuongThucCheBienMoi;
-        return true;
+        return this;
     }
-    public final boolean setGiaBan(double giaBanMoi) {
-        if(giaBanMoi < 0) return false;
+    public final SanPham setGiaBan(double giaBanMoi) {
+        if(giaBanMoi < 0) return null;
         giaBan = giaBanMoi;
-        return true;
+        return this;
     }
-    private final boolean setSoLuong(int soLuongMoi) {
-        if(soLuongMoi < 0) return false;
+    public final SanPham setSoLuong(int soLuongMoi) {
+        if(soLuongMoi < 0) return null;
         soLuong = soLuongMoi;
-        return true;
+        return this;
     }
-    public final boolean thayDoiSoLuong(int luongThayDoi) {
+    public final SanPham thayDoiSoLuong(int luongThayDoi) {
         return setSoLuong(soLuong + luongThayDoi);
     }
 }

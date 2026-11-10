@@ -1,4 +1,4 @@
-package quanly;
+package tienich;
 
 import java.util.Scanner;
 
