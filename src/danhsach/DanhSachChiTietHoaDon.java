@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import mohinh.ChiTietHoaDon;
 import tienich.NhapChuan;
+import rangbuoc.ITruyXuatDanhSach;
 
 public final class DanhSachChiTietHoaDon implements ITruyXuatDanhSach {
     private ChiTietHoaDon[] DS_ChiTietHoaDon;
