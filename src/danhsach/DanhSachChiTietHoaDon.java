@@ -3,7 +3,7 @@ package danhsach;
 import java.util.Arrays;
 
 import mohinh.ChiTietHoaDon;
-import quanly.NhapChuan;
+import tienich.NhapChuan;
 
 public final class DanhSachChiTietHoaDon {
     private ChiTietHoaDon[] DS_ChiTietHoaDon;

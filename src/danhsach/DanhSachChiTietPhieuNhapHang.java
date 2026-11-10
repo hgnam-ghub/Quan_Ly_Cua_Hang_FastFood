@@ -7,7 +7,7 @@ public class DanhSachChiTietPhieuNhapHang {
     private int soLuong;
 
     public DanhSachChiTietPhieuNhapHang() {
-        soLuong = 0;
+        soLuong = 0; 
         DS_ChiTietPhieuNhapHang = new ChiTietPhieuNhapHang[soLuong];
     }
 

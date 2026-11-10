@@ -1,4 +1,4 @@
-package quanly;
+package tienich;
 
 import danhsach.DanhSachSanPham;
 import danhsach.DanhSachChiTietHoaDon;
