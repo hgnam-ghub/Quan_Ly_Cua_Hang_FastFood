@@ -3,7 +3,8 @@ package mohinh;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import quanly.NhapChuan;
+
+import tienich.NhapChuan;
 
 public final class NguyenLieu {
     private String ma;

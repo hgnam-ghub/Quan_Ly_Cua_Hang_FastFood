@@ -1,5 +1,5 @@
 package mohinh;
-import quanly.NhapChuan;
+import tienich.NhapChuan;
 public final class KhachHang 
 {
     private String ma;

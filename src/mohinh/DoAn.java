@@ -2,43 +2,37 @@ package mohinh;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
-import quanly.NhapChuan;
+import tienich.NhapChuan;
 public class DoAn extends SanPham {
     private int mucCay;
+    public DoAn() {mucCay = 0;}
+
     public DoAn(String ma, String ten, String donVi, String phuongThucThanhToan, double giaBan, int soLuong, int mucCay) {
         super(ma, ten, donVi, phuongThucThanhToan, giaBan, soLuong);
         if(!setMucCay(mucCay)) this.mucCay = 0;
     }
-    public DoAn(String ma) {
-        super(ma);
-        mucCay = 0;
-    }
-
-    public DoAn(String maMoi, DoAn doAn) {
-        super(maMoi, doAn);
-        mucCay = doAn.mucCay;
-    }
-
     public DoAn(DoAn doAn) {
         super(doAn);
         mucCay = doAn.mucCay;
     }
     @Override 
-    public DoAn saoChep() {return new DoAn(this.getMa(),this);}
+    public DoAn saoChep() {return new DoAn(this);}
 
     @Override 
-    public DoAn saoChepVoiMaMoi(String maMoi){return new DoAn(maMoi, this);}
-
-    @Override 
-    public void xuat() {
-        super.xuat();
-        xuatChuoi("Muc do cay", mucCay);
+    public String[] xuat() {
+        String[] truongDuLieu = Arrays.copyOf(super.xuat(), 9); 
+        truongDuLieu[6] = String.valueOf(mucCay);
+        truongDuLieu[7] = "";
+        truongDuLieu[8] = "";
+        return truongDuLieu;
     }
     @Override 
-    public void nhap() {
+    public DoAn nhap() {
         super.nhap();
         setMucCay(NhapChuan.docSoNguyen("Muc do cay"));
+        return this;
     }
     @Override
     public void ghiFile(DataOutputStream dos) throws IOException {

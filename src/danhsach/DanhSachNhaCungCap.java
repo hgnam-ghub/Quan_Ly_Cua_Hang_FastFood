@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mohinh.NhaCungCap;
-import quanly.NhapChuan;
 import rangbuoc.ITruyXuatDanhSach;
+import tienich.NhapChuan;
 
 public class DanhSachNhaCungCap implements ITruyXuatDanhSach {
     private NhaCungCap[] DS_NhaCungCap;
