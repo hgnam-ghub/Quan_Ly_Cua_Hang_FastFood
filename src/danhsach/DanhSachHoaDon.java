@@ -75,7 +75,7 @@ public class DanhSachHoaDon implements ITruyXuatDanhSach {
             soLuong = dis.readInt();
             if(soLuong > DS_HoaDon.length) DS_HoaDon = new HoaDon[soLuong];
             for(int i = 0; i < soLuong; i++) {
-                DS_HoaDon[i] = new HoaDon("");
+                DS_HoaDon[i] = new HoaDon("", "", "");
                 DS_HoaDon[i].docFile(dis);
             }
         } catch (IOException e) {
