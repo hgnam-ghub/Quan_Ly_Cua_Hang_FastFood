@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mohinh.ChiTietHoaDon;
+import tienich.BangDuLieu;
 import tienich.NhapChuan;
 import rangbuoc.ITruyXuatDanhSach;
 
@@ -37,26 +38,21 @@ public final class DanhSachChiTietHoaDon implements ITruyXuatDanhSach {
         DS_ChiTietHoaDon = Arrays.copyOf(DS_ChiTietHoaDon, soLuong + nhapThem);
         for(int i = 0; i < nhapThem; i++) {
             System.out.println("---------------------");
-            String maHD, maSP;
-            while (true) {
-                maHD = NhapChuan.docChuoiKhongRong("Nhap ma hoa don");
-                maSP = NhapChuan.docChuoiKhongRong("Nhap ma san pham");
-                if(!kiemTraMa(maHD, maSP)) break;
-                System.out.println(">> Ma hoa don va san pham nay da ton tai, nhap lai!!");
-            }
-            DS_ChiTietHoaDon[soLuong] = new ChiTietHoaDon(maHD, maSP);
-            DS_ChiTietHoaDon[soLuong++].nhap();
+            System.out.println("Chi tiet hoa don thu " + (soLuong + 1)+": ");
+            DS_ChiTietHoaDon[i] = new ChiTietHoaDon();
+            DS_ChiTietHoaDon[i].setMa(NhapChuan.docChuoiKhongRong("Nhap ma hoa don"), NhapChuan.docChuoiKhongRong("Nhap ma san pham"));
+            DS_ChiTietHoaDon[i].nhap();
+            soLuong++;
         }
         System.out.println("**** Ket thuc nhap danh sach chi tiet hoa don ****");
     }
     @Override
     public void xuatDanhSach() {
-        System.out.println("==== Danh Sach Cac Chi Tiet Hoa Don ====");
-        for(int i = 0; i < soLuong; i++) {
-            System.out.println("------------");
-            DS_ChiTietHoaDon[i].xuat();
-        }
-        System.out.println("==== Het ====");
+        String[] header = {"maHD", "maSP", "donGiaBan", "thanhTien", "soLuong"};
+        BangDuLieu.khoiTaoBang(header, soLuong);
+        for(int i = 0; i < soLuong; i++)
+            BangDuLieu.nhapDong(i, DS_ChiTietHoaDon[i].xuat());
+        BangDuLieu.xuatBang();
     }
 
     @Override
@@ -77,7 +73,7 @@ public final class DanhSachChiTietHoaDon implements ITruyXuatDanhSach {
             soLuong = dis.readInt();
             if(soLuong > DS_ChiTietHoaDon.length) DS_ChiTietHoaDon = new ChiTietHoaDon[soLuong];
             for(int i = 0; i < soLuong; i++) {
-                DS_ChiTietHoaDon[i] = new ChiTietHoaDon("", "");
+                DS_ChiTietHoaDon[i] = new ChiTietHoaDon();
                 DS_ChiTietHoaDon[i].docFile(dis);
             }
         } catch (IOException e) {
@@ -99,7 +95,7 @@ public final class DanhSachChiTietHoaDon implements ITruyXuatDanhSach {
             if(!kiemTraMa(maHD, maSP)) break;
             System.out.println(">> Ma hoa don va san pham nay da ton tai, nhap ma san pham khac!!");
         }
-        ChiTietHoaDon cthd = new ChiTietHoaDon(maHD, maSP);
+        ChiTietHoaDon cthd = new ChiTietHoaDon();
         cthd.nhap();
         return them(cthd);
     }

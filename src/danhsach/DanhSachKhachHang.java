@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mohinh.KhachHang;
+import tienich.BangDuLieu;
 import tienich.NhapChuan;
 import rangbuoc.ITruyXuatDanhSach;
 
@@ -28,7 +29,7 @@ public class DanhSachKhachHang implements ITruyXuatDanhSach {
         for(int i = 0; i < soLuong; i++)
             DS_KhachHang[i] = DS_KH.DS_KhachHang[i].saoChep(); 
     }
-    @Override
+    @Override 
     public void nhapThem() {
         System.out.println("**** Bat dau nhap danh sach khach hang ****");
         int nhapThem = NhapChuan.docSoNguyenKhongAm("So luong khach hang muon them");
@@ -36,22 +37,21 @@ public class DanhSachKhachHang implements ITruyXuatDanhSach {
 
         for(int i = 0; i < nhapThem; i++) {
             System.out.println("---------------------");
-            String maKH;
-            while (kiemTraMa(maKH = NhapChuan.docChuoiKhongRong("Nhap ma khach hang")))
-                System.out.println(">> Ma khach hang nay da ton tai, nhap ma khac!!");
-            DS_KhachHang[soLuong] = new KhachHang(maKH);
-            DS_KhachHang[soLuong++].nhap();
+            System.out.println("Khach hang thu " + (soLuong + 1) + ": ");
+            DS_KhachHang[i] = new KhachHang();
+            DS_KhachHang[i].setMa(NhapChuan.docChuoiKhongRong("Nhap ma khach hang"));
+            DS_KhachHang[i].nhap();
+            soLuong++;
         }
         System.out.println("**** Ket thuc nhap danh sach khach hang ****");
     }
     @Override
     public void xuatDanhSach() {
-        System.out.println("==== Danh Sach Cac Khach Hang ====");
-        for(int i = 0; i < soLuong; i++) {
-            System.out.println("------------");
-            DS_KhachHang[i].xuat();
-        }
-        System.out.println("==== Het ====");
+        String[] header = {"Ma", "Ho va Ten", "So dien thoai", "Ngay Sinh", "Tong tien da mua"};
+        BangDuLieu.khoiTaoBang(header, soLuong);
+        for(int i = 0; i < soLuong; i++)
+            BangDuLieu.nhapDong(i, DS_KhachHang[i].xuat());
+        BangDuLieu.xuatBang();
     }
 
     @Override
@@ -72,7 +72,7 @@ public class DanhSachKhachHang implements ITruyXuatDanhSach {
             soLuong = dis.readInt();
             if(soLuong > DS_KhachHang.length) DS_KhachHang = new KhachHang[soLuong];
             for(int i = 0; i < soLuong; i++) {
-                DS_KhachHang[i] = new KhachHang("");
+                DS_KhachHang[i] = new KhachHang();
                 DS_KhachHang[i].docFile(dis);
             }
         } catch (IOException e) {
@@ -93,7 +93,8 @@ public class DanhSachKhachHang implements ITruyXuatDanhSach {
             System.out.println(">> Ma nay da ton tai!"); 
             return false; 
         }
-        KhachHang kh = new KhachHang(ma);
+        KhachHang kh = new KhachHang();
+        kh.setMa(ma);
         kh.nhap();
         return them(kh);
     }

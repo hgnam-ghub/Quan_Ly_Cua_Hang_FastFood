@@ -4,8 +4,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import tienich.NhapChuan;
-public final class KhachHang 
-{
+import rangbuoc.ITruyXuatMoHinh;
+public final class KhachHang implements ITruyXuatMoHinh {
     private String ma;
     private String ho;
     private String ten;
@@ -20,38 +20,34 @@ public final class KhachHang
         this.soDienThoai = soDienThoai;
         this.ngaySinh = ngaySinh;
     }
-    public KhachHang(String ma) {
-        this(ma, "khong co", "khong co", "khong co", "khong co");
-    }
-    public KhachHang(String maMoi, KhachHang khachHang) {
-        this(maMoi, khachHang.ho, khachHang.ten, khachHang.soDienThoai, khachHang.ngaySinh);
-        tongTienDaMua = khachHang.tongTienDaMua;
+    public KhachHang() {
+        this("khong co", "khong co", "khong co", "khong co", "khong co");
     }
     public KhachHang(KhachHang khachHang) {
-        this(khachHang.ma, khachHang);
+        this(khachHang.ma, khachHang.ho, khachHang.ten, khachHang.soDienThoai, khachHang.ngaySinh);
     }
     public KhachHang saoChep() {
         return new KhachHang(this);
     }
-    public KhachHang saoChepVoiMaMoi(String maMoi) {
-        return new KhachHang(maMoi, this);
-    }
+    
     protected final void xuatChuoi(String prompt, Object giaTri) {System.out.println(prompt + ": " + giaTri);}
     protected final void xuatChuoi(String prompt, Object giaTri, String donVi) {System.out.println(prompt + ": " + giaTri + ' ' + donVi);}
-    public void xuat() {
-        xuatChuoi("Ma khach hang", ma);
-        xuatChuoi("Ho va ten", ho + " " + ten);
-        xuatChuoi("So dien thoai", soDienThoai);
-        xuatChuoi("Ngay sinh", ngaySinh);
-        xuatChuoi("Tong tien da mua", tongTienDaMua, "$");
+    public String[] xuat() {
+        String[] thongTin = new String[5];
+        thongTin[0] = ma;
+        thongTin[1] = ho + " " + ten;
+        thongTin[2] = soDienThoai;
+        thongTin[3] = ngaySinh;
+        thongTin[4] = String.valueOf(tongTienDaMua);
+        return thongTin;
     }
-
-    public void nhap() {
+    public KhachHang nhap() {
         System.out.println("Nhap thong tin cho khach hang co ma: " + ma);
         setHo(NhapChuan.docChuoiKhongRong("Ho"));
         setTen(NhapChuan.docChuoiKhongRong("Ten"));
         setSoDienThoai(NhapChuan.docChuoiKhongRong("So dien thoai"));
         setNgaySinh(NhapChuan.docChuoiKhongRong("Ngay sinh"));
+        return this;
     }
     public void ghiFile(DataOutputStream dos) throws IOException {
         dos.writeUTF(ma);
@@ -77,11 +73,21 @@ public final class KhachHang
     public String getNgaySinh(){return ngaySinh;}
     public double getTongSoTienMua(){return tongTienDaMua;}
 
-    public boolean setTen(String tenMoi){return true;}
-    public boolean setHo(String hoMoi){return true;}
-    public boolean setSoDienThoai(String newPhoneNumber){return true;}
-    public boolean setNgaySinh(String newDate){return true;}
-
+    public KhachHang setMa(String maMoi){
+        this.ma = maMoi;
+        return this;}
+    public KhachHang setTen(String tenMoi){
+        this.ten = tenMoi;
+        return this;}
+    public KhachHang setHo(String hoMoi){
+        this.ho = hoMoi;
+        return this;}
+    public KhachHang setSoDienThoai(String newPhoneNumber){
+        this.soDienThoai = newPhoneNumber;
+        return this;}
+    public KhachHang setNgaySinh(String newDate){
+        this.ngaySinh = newDate;
+        return this;}
     public boolean thanhToan(double soTien)
     {
         if(soTien <= 0) return false;
