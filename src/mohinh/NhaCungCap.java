@@ -4,110 +4,92 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import rangbuoc.ITruyXuatMoHinh;
 import tienich.NhapChuan;
 
-public final class NhaCungCap {
-    String ma;
-    String ho;
-    String ten;
-    String diaChi;
-    String soDienThoai;
-    String email;
+public class NhaCungCap implements ITruyXuatMoHinh {
+    private String maNhaCungCap;
+    private String tenNhaCungCap;
+    private String diaChi;
+    private String soDienThoai;
 
-    public NhaCungCap(String ma, String ho, String ten, String diaChi, String soDienThoai, String email) {
-        this.ma = ma;
-        this.ho = ho;
-        this.ten = ten;
-        this.diaChi = diaChi;
-        this.soDienThoai = soDienThoai;
-        this.email = email;
+    public NhaCungCap() {
+        this("", "", "", "");
     }
-    public NhaCungCap(String ma) {
-        this(ma, "khong co", "khong co", "khong co", "khong co", "khong co");
+
+    public NhaCungCap(String maNhaCungCap, String tenNhaCungCap, String diaChi, String soDienThoai) {
+        if(setMaNhaCungCap(maNhaCungCap) == null) this.maNhaCungCap = "khong hop le";
+        if(setTenNhaCungCap(tenNhaCungCap) == null) this.tenNhaCungCap = "khong co";
+        if(setDiaChi(diaChi) == null) this.diaChi = "khong co";
+        if(setSoDienThoai(soDienThoai) == null) this.soDienThoai = "khong co";
     }
-    public NhaCungCap(String ma, NhaCungCap nhaCungCap) {
-        this(ma, nhaCungCap.ho, nhaCungCap.ten, nhaCungCap.diaChi, nhaCungCap.soDienThoai, nhaCungCap.email);
+
+    public NhaCungCap(NhaCungCap ncc) {
+        this(ncc.maNhaCungCap, ncc.tenNhaCungCap, ncc.diaChi, ncc.soDienThoai);
     }
-    public NhaCungCap(NhaCungCap nhaCungCap) {
-        this(nhaCungCap.ma, nhaCungCap);
-    }
+
     public NhaCungCap saoChep() {
         return new NhaCungCap(this);
     }
-    public NhaCungCap saoChepVoiMaMoi(String maMoi) {
-        return new NhaCungCap(maMoi, this);
+
+    public String[] xuat() {
+        String[] truongDuLieu = new String[4];
+        truongDuLieu[0] = maNhaCungCap;
+        truongDuLieu[1] = tenNhaCungCap;
+        truongDuLieu[2] = diaChi;
+        truongDuLieu[3] = soDienThoai;
+        return truongDuLieu;
     }
 
-    public void nhap() {
-        this.ho = NhapChuan.docChuoiKhongRong("Nhap ho nha cung cap");
-        this.ten = NhapChuan.docChuoiKhongRong("Nhap ten nha cung cap");
-        this.diaChi = NhapChuan.docChuoiKhongRong("Nhap dia chi");
-        this.soDienThoai = NhapChuan.docChuoiKhongRong("Nhap so dien thoai");
-        this.email = NhapChuan.docChuoiKhongRong("Nhap email");
+    public NhaCungCap nhap() {
+        setTenNhaCungCap(NhapChuan.docChuoiKhongRong("Ten nha cung cap"));
+        setDiaChi(NhapChuan.docChuoiKhongRong("Dia chi"));
+        setSoDienThoai(NhapChuan.docChuoiKhongRong("So dien thoai"));
+        return this;
     }
 
-    public void xuat() {
-        System.out.printf("Ma NCC: %s | Ho ten: %s %s | Dia chi: %s | SDT: %s | Email: %s\n", 
-            ma, ho, ten, diaChi, soDienThoai, email);
-    }
-
+    @Override
     public void ghiFile(DataOutputStream dos) throws IOException {
-        dos.writeUTF(ma);
-        dos.writeUTF(ho);
-        dos.writeUTF(ten);
+        dos.writeUTF(maNhaCungCap);
+        dos.writeUTF(tenNhaCungCap);
         dos.writeUTF(diaChi);
         dos.writeUTF(soDienThoai);
-        dos.writeUTF(email);
     }
 
+    @Override
     public void docFile(DataInputStream dis) throws IOException {
-        this.ma = dis.readUTF();
-        this.ho = dis.readUTF();
-        this.ten = dis.readUTF();
-        this.diaChi = dis.readUTF();
-        this.soDienThoai = dis.readUTF();
-        this.email = dis.readUTF();
+        maNhaCungCap = dis.readUTF();
+        tenNhaCungCap = dis.readUTF();
+        diaChi = dis.readUTF();
+        soDienThoai = dis.readUTF();
     }
 
-    public String getMa() { return ma; }
-    public String getHo() { return ho; }
-    public String getTen() { return ten; }
-    public String getDiaChi() { return diaChi; }
-    public String getSoDienThoai() { return soDienThoai; }
-    public String getEmail() { return email; }
+    public final String getMaNhaCungCap() { return maNhaCungCap; }
+    public final String getTenNhaCungCap() { return tenNhaCungCap; }
+    public final String getDiaChi() { return diaChi; }
+    public final String getSoDienThoai() { return soDienThoai; }
 
-    // Các hàm bổ trợ tương thích với DanhSachNhaCungCap
-    public String getMaNhaCungCap() { return ma; }
-    public String getTenNhaCungCap() { return ten; }
+    public final NhaCungCap setMaNhaCungCap(String maMoi) {
+        if(maMoi.isEmpty()) return null;
+        maNhaCungCap = maMoi;
+        return this;
+    }
 
-    public boolean setMa(String maMoi) {
-        if(maMoi == null || maMoi.trim().isEmpty()) return false;
-        this.ma = maMoi;
-        return true;
+    public final NhaCungCap setTenNhaCungCap(String tenMoi) {
+        if(tenMoi.isEmpty()) return null;
+        tenNhaCungCap = tenMoi;
+        return this;
     }
-    public boolean setHo(String hoMoi) {
-        if(hoMoi == null || hoMoi.trim().isEmpty()) return false;
-        this.ho = hoMoi;
-        return true;
+
+    public final NhaCungCap setDiaChi(String diaChiMoi) {
+        if(diaChiMoi.isEmpty()) return null;
+        diaChi = diaChiMoi;
+        return this;
     }
-    public boolean setTen(String tenMoi) {
-        if(tenMoi == null || tenMoi.trim().isEmpty()) return false;
-        this.ten = tenMoi;
-        return true;
-    }
-    public boolean setDiaChi(String diaChiMoi) {
-        if(diaChiMoi == null || diaChiMoi.trim().isEmpty()) return false;
-        this.diaChi = diaChiMoi;
-        return true;
-    }
-    public boolean setSoDienThoai(String sdtMoi) {
-        if(sdtMoi == null || sdtMoi.trim().isEmpty()) return false;
-        this.soDienThoai = sdtMoi;
-        return true;
-    }
-    public boolean setEmail(String emailMoi) {
-        if(emailMoi == null || emailMoi.trim().isEmpty()) return false;
-        this.email = emailMoi;
-        return true;
+
+    public final NhaCungCap setSoDienThoai(String sdtMoi) {
+        if(sdtMoi.isEmpty()) return null;
+        soDienThoai = sdtMoi;
+        return this;
     }
 }

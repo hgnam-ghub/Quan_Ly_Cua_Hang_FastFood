@@ -4,96 +4,121 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import rangbuoc.ITruyXuatMoHinh;
 import tienich.NhapChuan;
 
-public final class NguyenLieu {
-    private String ma;
-    private String ten;
-    private String donVi;
-    private double donGia;
-    private int soLuong;
+public class NguyenLieu implements ITruyXuatMoHinh {
+    private String maNguyenLieu;
+    private String tenNguyenLieu;
+    private String donViTinh;
+    private double soLuongTon;
+    private double giaTien;
+    private String maNhaCungCap;
 
-    public NguyenLieu(String ma, String ten, String donVi, double donGia, int soLuong) {
-        this.ma = ma;
-        this.ten = ten;
-        this.donVi = donVi;
-        this.donGia = donGia;
-        this.soLuong = soLuong;
+    public NguyenLieu() {
+        this("", "", "", 0, 0, "");
     }
-    public NguyenLieu(String ma) {
-        this(ma, "Khong co", "N/A", 0, 0);
+
+    public NguyenLieu(String maNguyenLieu, String tenNguyenLieu, String donViTinh, double soLuongTon, double giaTien, String maNhaCungCap) {
+        if(setMaNguyenLieu(maNguyenLieu) == null) this.maNguyenLieu = "khong hop le";
+        if(setTenNguyenLieu(tenNguyenLieu) == null) this.tenNguyenLieu = "khong co";
+        if(setDonViTinh(donViTinh) == null) this.donViTinh = "khong co";
+        if(setSoLuongTon(soLuongTon) == null) this.soLuongTon = 0;
+        if(setGiaTien(giaTien) == null) this.giaTien = 0;
+        if(setMaNhaCungCap(maNhaCungCap) == null) this.maNhaCungCap = "khong co";
     }
-    public NguyenLieu(String ma, NguyenLieu nguyenLieu) {
-        this(ma, nguyenLieu.ten, nguyenLieu.donVi, nguyenLieu.donGia, nguyenLieu.soLuong);
+
+    public NguyenLieu(NguyenLieu nl) {
+        this(nl.maNguyenLieu, nl.tenNguyenLieu, nl.donViTinh, nl.soLuongTon, nl.giaTien, nl.maNhaCungCap);
     }
-    public NguyenLieu(NguyenLieu nguyenLieu) {
-        this(nguyenLieu.ma, nguyenLieu);
-    }
+
     public NguyenLieu saoChep() {
         return new NguyenLieu(this);
     }
-    public NguyenLieu saoChepVoiMaMoi(String maMoi) {
-        return new NguyenLieu(maMoi, this);
+
+    public String[] xuat() {
+        String[] truongDuLieu = new String[6];
+        truongDuLieu[0] = maNguyenLieu;
+        truongDuLieu[1] = tenNguyenLieu;
+        truongDuLieu[2] = donViTinh;
+        truongDuLieu[3] = String.valueOf(soLuongTon);
+        truongDuLieu[4] = String.valueOf(giaTien);
+        truongDuLieu[5] = maNhaCungCap;
+        return truongDuLieu;
     }
 
-    public void nhap() {
-        this.ten = NhapChuan.docChuoiKhongRong("Nhap ten nguyen lieu");
-        this.donVi = NhapChuan.docChuoiKhongRong("Nhap don vi tinh");
-        this.donGia = NhapChuan.docSoThucKhongAm("Nhap don gia");
-        this.soLuong = NhapChuan.docSoNguyenKhongAm("Nhap so luong ban dau");
+    public NguyenLieu nhap() {
+        setTenNguyenLieu(NhapChuan.docChuoiKhongRong("Ten nguyen lieu"));
+        setDonViTinh(NhapChuan.docChuoiKhongRong("Don vi tinh"));
+        setSoLuongTon(NhapChuan.docSoNguyenKhongAm("So luong ton"));
+        setGiaTien(NhapChuan.docSoNguyen("Gia tien"));
+        setMaNhaCungCap(NhapChuan.docChuoiKhongRong("Ma nha cung cap"));
+        return this;
     }
 
-    public void xuat() {
-        System.out.printf("Ma NL: %s | Ten: %s | Don vi: %s | Don gia: %.2f | So luong: %d\n", 
-            ma, ten, donVi, donGia, soLuong);
-    }
-
+    @Override
     public void ghiFile(DataOutputStream dos) throws IOException {
-        dos.writeUTF(ma);
-        dos.writeUTF(ten);
-        dos.writeUTF(donVi);
-        dos.writeDouble(donGia);
-        dos.writeInt(soLuong);
+        dos.writeUTF(maNguyenLieu);
+        dos.writeUTF(tenNguyenLieu);
+        dos.writeUTF(donViTinh);
+        dos.writeDouble(soLuongTon);
+        dos.writeDouble(giaTien);
+        dos.writeUTF(maNhaCungCap);
     }
 
+    @Override
     public void docFile(DataInputStream dis) throws IOException {
-        this.ma = dis.readUTF();
-        this.ten = dis.readUTF();
-        this.donVi = dis.readUTF();
-        this.donGia = dis.readDouble();
-        this.soLuong = dis.readInt();
+        tenNguyenLieu = dis.readUTF();
+        donViTinh = dis.readUTF();
+        soLuongTon = dis.readDouble();
+        giaTien = dis.readDouble();
+        maNhaCungCap = dis.readUTF();
     }
 
-    public String getMa() { return ma; }
-    public String getTen() { return ten; }
-    public String getDonVi() { return donVi; }
-    public double getDonGia() { return donGia; }
-    public int getSoLuong() { return soLuong; }
+    public final String getMaNguyenLieu() { return maNguyenLieu; }
+    public final String getTenNguyenLieu() { return tenNguyenLieu; }
+    public final String getDonViTinh() { return donViTinh; }
+    public final double getSoLuongTon() { return soLuongTon; }
+    public final double getGiaTien() { return giaTien; }
+    public final String getMaNhaCungCap() { return maNhaCungCap; }
 
-    public boolean setTen(String tenMoi) { 
-        if(tenMoi == null || tenMoi.trim().isEmpty()) return false;
-        this.ten = tenMoi;
-        return true; 
+    public final NguyenLieu setMaNguyenLieu(String maMoi) {
+        if(maMoi.isEmpty()) return null;
+        maNguyenLieu = maMoi;
+        return this;
     }
-    public boolean setDonVi(String donViMoi) { 
-        if(donViMoi == null || donViMoi.trim().isEmpty()) return false;
-        this.donVi = donViMoi;
-        return true; 
+
+    public final NguyenLieu setTenNguyenLieu(String tenMoi) {
+        if(tenMoi.isEmpty()) return null;
+        tenNguyenLieu = tenMoi;
+        return this;
     }
-    public boolean setDonGia(double donGiaMoi) { 
-        if(donGiaMoi < 0) return false;
-        this.donGia = donGiaMoi;
-        return true; 
+
+    public final NguyenLieu setDonViTinh(String donViMoi) {
+        if(donViMoi.isEmpty()) return null;
+        donViTinh = donViMoi;
+        return this;
     }
-    public boolean setSoLuong(int soLuongMoi) {
-        if(soLuongMoi < 0) return false;
-        soLuong = soLuongMoi;
-        return true;
+
+    public final NguyenLieu setSoLuongTon(double soLuongMoi) {
+        if(soLuongMoi < 0) return null;
+        soLuongTon = soLuongMoi;
+        return this;
     }
-    public boolean them(int luongThem) {
-        return setSoLuong(soLuong + luongThem);
+
+    public final NguyenLieu setGiaTien(double giaTienMoi) {
+        if(giaTienMoi < 0) return null;
+        giaTien = giaTienMoi;
+        return this;
     }
-    public boolean giam(int luongGiam) {
-        return setSoLuong(soLuong - luongGiam);
+
+    public final NguyenLieu setMaNhaCungCap(String maNccMoi) {
+        if(maNccMoi.isEmpty()) return null;
+        maNhaCungCap = maNccMoi;
+        return this;
+    }
+
+    public final NguyenLieu thayDoiSoLuongTon(double luongThayDoi) {
+        return setSoLuongTon(soLuongTon + luongThayDoi);
     }
 }
