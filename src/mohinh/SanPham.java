@@ -25,16 +25,9 @@ public abstract class SanPham implements ITruyXuatMoHinh{
     }
     protected SanPham(SanPham sanPham) {this(sanPham.ma, sanPham.ten, sanPham.donVi, sanPham.phuongThucCheBien, sanPham.giaBan, sanPham.soLuong);}
     public abstract SanPham saoChep();
-
+    
     public String[] xuat() {
-        String[] truongDuLieu = new String[6];
-        truongDuLieu[0] = ma;
-        truongDuLieu[1] = ten;
-        truongDuLieu[2] = donVi;
-        truongDuLieu[3] = phuongThucCheBien;
-        truongDuLieu[4] = String.valueOf(giaBan);
-        truongDuLieu[5] = String.valueOf(soLuong);
-        return truongDuLieu;
+        return new String[]{ma, ten, donVi, phuongThucCheBien, String.valueOf(giaBan), String.valueOf(soLuong)};
     }
     public SanPham nhap() {
         setTen(NhapChuan.docChuoiKhongRong("Ten"));

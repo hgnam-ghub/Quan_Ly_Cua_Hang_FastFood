@@ -32,9 +32,6 @@ public final class HoaDon {
     public HoaDon saoChep() {
         return new HoaDon(maHD, maNV, maKH, this);
     }
-    public HoaDon saoChepVoiMaMoi(String maHoaDon, String maNhanVien, String maKhachHang) {
-        return new HoaDon(maHoaDon, maNhanVien, maKhachHang, this);
-    }
 
     protected final void xuatChuoi(String prompt, Object giaTri) {System.out.println(prompt + ": " + giaTri);}
     protected final void xuatChuoi(String prompt, Object giaTri, String donVi) {System.out.println(prompt + ": " + giaTri + ' ' + donVi);}

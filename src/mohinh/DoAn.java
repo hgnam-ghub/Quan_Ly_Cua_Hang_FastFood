@@ -22,10 +22,11 @@ public class DoAn extends SanPham {
 
     @Override 
     public String[] xuat() {
-        String[] truongDuLieu = Arrays.copyOf(super.xuat(), 9); 
-        truongDuLieu[6] = String.valueOf(mucCay);
-        truongDuLieu[7] = "";
-        truongDuLieu[8] = "";
+        String[] duLieuGoc = super.xuat();
+        int doDaiGoc = duLieuGoc.length;
+
+        String[] truongDuLieu = Arrays.copyOf(duLieuGoc, doDaiGoc + 1);
+        truongDuLieu[doDaiGoc] = String.valueOf(mucCay);
         return truongDuLieu;
     }
     @Override 
