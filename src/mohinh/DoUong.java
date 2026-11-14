@@ -23,12 +23,15 @@ public class DoUong extends SanPham {
     @Override 
     public DoUong saoChep() {return new DoUong(this);}
 
+
     @Override 
     public String[] xuat() {
-        String[] truongDuLieu = Arrays.copyOf(super.xuat(), 9);
-        truongDuLieu[6] = "";
-        truongDuLieu[7] = String.valueOf(theTich);
-        truongDuLieu[8] = coGas?"Co":"Khong";
+        String[] duLieuGoc = super.xuat();
+        int doDaiGoc = duLieuGoc.length;
+
+        String[] truongDuLieu = Arrays.copyOf(duLieuGoc, doDaiGoc + 2);
+        truongDuLieu[doDaiGoc] = String.valueOf(theTich);
+        truongDuLieu[doDaiGoc+1] = coGas?"Co":"Khong";
         return truongDuLieu;
     }
     @Override 

@@ -11,7 +11,7 @@ import mohinh.DoAn;
 import mohinh.DoUong;
 import mohinh.SanPham;
 import rangbuoc.ITruyXuatDanhSach;
-import tienich.BangDuLieu;
+import tienich.FormatBang;
 import tienich.LuuTru;
 import tienich.NhapChuan;
 
@@ -30,6 +30,9 @@ public class DanhSachSanPham implements ITruyXuatDanhSach{
             DS_SanPham[i] = DS_SP.DS_SanPham[i].saoChep();
     }
 
+    public int getSoLuong() {
+        return soLuong;
+    }
     private SanPham khoiTaoSanPham(int loaiSanPham) {
         switch (loaiSanPham) { 
             case 1: return new DoAn();
@@ -39,11 +42,12 @@ public class DanhSachSanPham implements ITruyXuatDanhSach{
     }
 
     public void xuatDanhSach() {
-        String[] header = {"MaSP", "Ten San Pham", "Don Vi", "Phuong Thuc Che Bien", "Gia Ban ($)", "So Luong", "Muc Cay", "The Tich (ml)", "Gas"};
-        BangDuLieu.khoiTaoBang(header, soLuong);
+        String tieuDe = "DANH SACH";
+        String[][] bangDuLieu = new String[soLuong + 1][6];
+        bangDuLieu[0] = new String[] {"Ma", "Ten", "Don Vi", "Phuong thuc che bien", "Gia ban", "So luong"};
         for(int i = 0; i < soLuong; i++)
-            BangDuLieu.nhapDong(i, DS_SanPham[i].xuat());
-        BangDuLieu.xuatBang();
+            bangDuLieu[i+1] = DS_SanPham[i].xuat();
+        FormatBang.inBangDuLieu(tieuDe ,bangDuLieu, true);
     }
     public void xuatDanhSachRaFile(){
         try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.DANHSACH))){
