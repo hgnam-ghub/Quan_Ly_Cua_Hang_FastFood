@@ -6,16 +6,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import mohinh.HoaDon;
-import tienich.BangDuLieu;
+import tienich.FormatBang;
+import tienich.LuuTru;
 import tienich.NhapChuan;
 import rangbuoc.ITruyXuatDanhSach;
 
 public class DanhSachHoaDon implements ITruyXuatDanhSach {
     private HoaDon[] DS_HoaDon;
     private int soLuong;
-    private static final String fileDanhSach = "data/DS_HoaDon.dat";
 
     public int getSoLuong() { return soLuong; }
 
@@ -29,7 +31,6 @@ public class DanhSachHoaDon implements ITruyXuatDanhSach {
         for(int i = 0; i < soLuong; i++)
             DS_HoaDon[i] = ds_HD.DS_HoaDon[i].saoChep();  
     }
-
     @Override
     public void nhapThem() {
         System.out.println("**** Bat dau nhap danh sach hoa don ****");
@@ -48,15 +49,15 @@ public class DanhSachHoaDon implements ITruyXuatDanhSach {
     @Override
     public void xuatDanhSach() {
         String[] header = {"MaHD", "MaNV", "MaKH", "ngayTaoDon", "trangThai", "phuongThucThanhToan", "tongTien"};
-        BangDuLieu.khoiTaoBang(header, soLuong);
+        String[][] bangDuLieu = new String[soLuong + 1][7];
+        bangDuLieu[0] = header;
         for(int i = 0; i < soLuong; i++)
-            BangDuLieu.nhapDong(i, DS_HoaDon[i].xuat());
-        BangDuLieu.xuatBang();
+            bangDuLieu[i + 1] = DS_HoaDon[i].xuat();
+        FormatBang.inBangDuLieu("DANH SACH HOA DON", bangDuLieu);
     }
-
     @Override
     public void xuatDanhSachRaFile() {
-        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(fileDanhSach))) {
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.DS_HOADON))) {
             dos.writeInt(soLuong);
             for(int i = 0; i < soLuong; i++) {
                 DS_HoaDon[i].ghiFile(dos);
@@ -68,7 +69,7 @@ public class DanhSachHoaDon implements ITruyXuatDanhSach {
     }
     @Override
     public void nhapDanhSachTuFile() {
-        try (DataInputStream dis = new DataInputStream(new FileInputStream(fileDanhSach))) {
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.DS_HOADON))) {
             soLuong = dis.readInt();
             if(soLuong > DS_HoaDon.length) DS_HoaDon = new HoaDon[soLuong];
             for(int i = 0; i < soLuong; i++) {
@@ -80,7 +81,6 @@ public class DanhSachHoaDon implements ITruyXuatDanhSach {
             e.printStackTrace();
         }
     }
-
     private boolean them(HoaDon hd) {
         if(kiemTraMa(hd.getMaHoaDon())) return false;
         if(soLuong == DS_HoaDon.length) DS_HoaDon = Arrays.copyOf(DS_HoaDon, soLuong + 1);
@@ -99,7 +99,6 @@ public class DanhSachHoaDon implements ITruyXuatDanhSach {
         hd.nhap();
         return them(hd);
     }
-
     private boolean sua(String maHD) {
         int viTri = timKiemViTriHoaDon(maHD);
         if(viTri == -1) return false;
@@ -111,7 +110,6 @@ public class DanhSachHoaDon implements ITruyXuatDanhSach {
         if(!sua(NhapChuan.docChuoiKhongRong("Nhap ma hoa don can sua")))
             System.out.println(">> Hoa don khong ton tai trong danh sach!");
     }
-
     private boolean xoa(String maHD) {
         int viTri = timKiemViTriHoaDon(maHD);
         if (viTri == -1) return false;
@@ -125,7 +123,6 @@ public class DanhSachHoaDon implements ITruyXuatDanhSach {
         if(!xoa(NhapChuan.docChuoiKhongRong("Nhap ma hoa don can xoa")))
             System.out.println(">> Hoa don khong ton tai trong danh sach!");
     }
-
     private int timKiemViTriHoaDon(String maHD) {
         for(int i = 0; i < soLuong; i++)
             if(DS_HoaDon[i] != null && DS_HoaDon[i].getMaHoaDon().equals(maHD)) return i;
@@ -134,11 +131,29 @@ public class DanhSachHoaDon implements ITruyXuatDanhSach {
     public boolean kiemTraMa(String maHD) {
         return timKiemViTriHoaDon(maHD) != -1;
     }
-    public HoaDon timKiemHoaDon(String maHD) {
+    public HoaDon timKiemTheoMa(String maHD) {
         int viTri = timKiemViTriHoaDon(maHD);
         return (viTri != -1) ? DS_HoaDon[viTri] : null;
     }
-
+    public DanhSachHoaDon timKiemTheoKhoangNgay(String tuNgayStr, String denNgayStr) {
+        DanhSachHoaDon dsTam = new DanhSachHoaDon();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate tuNgay = LocalDate.parse(tuNgayStr.trim(), formatter);
+            LocalDate denNgay = LocalDate.parse(denNgayStr.trim(), formatter);
+            for (int i = 0; i < soLuong; i++) {
+                if (DS_HoaDon[i] != null && DS_HoaDon[i].getNgayTaoDon() != null) {
+                    LocalDate ngayHD = LocalDate.parse(DS_HoaDon[i].getNgayTaoDon().trim(), formatter);
+                    // Kiểm tra ngày hóa đơn nằm trong khoảng [tuNgay, denNgay]
+                    if (!ngayHD.isBefore(tuNgay) && !ngayHD.isAfter(denNgay)) 
+                        dsTam.them(DS_HoaDon[i].saoChep());
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(">> Loi dinh dang ngay thang! Vui long nhap theo chuan dd/MM/yyyy");
+        }
+        return (dsTam.soLuong == 0) ? null : dsTam;
+    }
     public void xoaTheoDanhSach(DanhSachHoaDon DS_HD) {
         for (int i = 0; i < DS_HD.soLuong; i++)
             xoa(DS_HD.DS_HoaDon[i].getMaHoaDon());
