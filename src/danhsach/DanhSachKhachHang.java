@@ -8,14 +8,14 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mohinh.KhachHang;
-import tienich.BangDuLieu;
+import tienich.FormatBang;
+import tienich.LuuTru;
 import tienich.NhapChuan;
 import rangbuoc.ITruyXuatDanhSach;
 
 public class DanhSachKhachHang implements ITruyXuatDanhSach {
     private KhachHang[] DS_KhachHang;
     private int soLuong;
-    private static final String fileDanhSach = "data/DS_KhachHang.dat";
 
     public int getSoLuong() {return soLuong;}
 
@@ -48,15 +48,15 @@ public class DanhSachKhachHang implements ITruyXuatDanhSach {
     @Override
     public void xuatDanhSach() {
         String[] header = {"Ma", "Ho va Ten", "So dien thoai", "Ngay Sinh", "Tong tien da mua"};
-        BangDuLieu.khoiTaoBang(header, soLuong);
+        String[][] bangDuLieu = new String[soLuong + 1][5];
+        bangDuLieu[0] = header;
         for(int i = 0; i < soLuong; i++)
-            BangDuLieu.nhapDong(i, DS_KhachHang[i].xuat());
-        BangDuLieu.xuatBang();
+            bangDuLieu[i + 1] = DS_KhachHang[i].xuat();
+        FormatBang.inBangDuLieu("DANH SACH KHACH HANG", bangDuLieu);
     }
-
     @Override
     public void xuatDanhSachRaFile() {
-        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(fileDanhSach))) {
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.DS_KHACHHANG))) {
             dos.writeInt(soLuong);
             for(int i = 0; i < soLuong; i++) {
                 DS_KhachHang[i].ghiFile(dos);
@@ -68,7 +68,7 @@ public class DanhSachKhachHang implements ITruyXuatDanhSach {
     }
     @Override
     public void nhapDanhSachTuFile() {
-        try (DataInputStream dis = new DataInputStream(new FileInputStream(fileDanhSach))) {
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.DS_KHACHHANG))) {
             soLuong = dis.readInt();
             if(soLuong > DS_KhachHang.length) DS_KhachHang = new KhachHang[soLuong];
             for(int i = 0; i < soLuong; i++) {
