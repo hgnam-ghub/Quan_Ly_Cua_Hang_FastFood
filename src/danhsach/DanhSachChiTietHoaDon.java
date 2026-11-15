@@ -8,14 +8,14 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mohinh.ChiTietHoaDon;
-import tienich.BangDuLieu;
+import tienich.FormatBang;
+import tienich.LuuTru;
 import tienich.NhapChuan;
 import rangbuoc.ITruyXuatDanhSach;
 
 public final class DanhSachChiTietHoaDon implements ITruyXuatDanhSach {
     private ChiTietHoaDon[] DS_ChiTietHoaDon;
     private int soLuong;
-    private static final String fileDanhSach = "data/DS_ChiTietHoaDon.dat";
 
     public int getSoLuong() { return soLuong; }
 
@@ -48,16 +48,17 @@ public final class DanhSachChiTietHoaDon implements ITruyXuatDanhSach {
     }
     @Override
     public void xuatDanhSach() {
-        String[] header = {"maHD", "maSP", "donGiaBan", "thanhTien", "soLuong"};
-        BangDuLieu.khoiTaoBang(header, soLuong);
+        String[] header = {"MaHD", "MaSP", "Don Gia Ban", "Thanh Tien", "So Luong"};
+        String[][] bangDuLieu = new String[soLuong + 1][5];
+        bangDuLieu[0] = header;
         for(int i = 0; i < soLuong; i++)
-            BangDuLieu.nhapDong(i, DS_ChiTietHoaDon[i].xuat());
-        BangDuLieu.xuatBang();
+            bangDuLieu[i + 1] = DS_ChiTietHoaDon[i].xuat();
+        FormatBang.inBangDuLieu("DANH SACH CHI TIET HOA DON", bangDuLieu);
     }
 
     @Override
     public void xuatDanhSachRaFile() {
-        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(fileDanhSach))) {
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.DS_CHITIETHOADON))) {
             dos.writeInt(soLuong);
             for(int i = 0; i < soLuong; i++) {
                 DS_ChiTietHoaDon[i].ghiFile(dos);
@@ -69,7 +70,7 @@ public final class DanhSachChiTietHoaDon implements ITruyXuatDanhSach {
     }
     @Override
     public void nhapDanhSachTuFile() {
-        try (DataInputStream dis = new DataInputStream(new FileInputStream(fileDanhSach))) {
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.DS_CHITIETHOADON))) {
             soLuong = dis.readInt();
             if(soLuong > DS_ChiTietHoaDon.length) DS_ChiTietHoaDon = new ChiTietHoaDon[soLuong];
             for(int i = 0; i < soLuong; i++) {
