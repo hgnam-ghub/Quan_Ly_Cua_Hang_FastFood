@@ -1,5 +1,5 @@
 package tienich;
-import rangbuoc.ITruyXuatDanhSach;
+import rangbuoc.IDanhSach;
 import danhsach.*;
 
 public final class QuanLyDanhSach{
@@ -12,7 +12,7 @@ public final class QuanLyDanhSach{
     public static DanhSachNhaCungCap DS_NHACUNGCAP = new DanhSachNhaCungCap();
     public static DanhSachPhieuNhapHang DS_PHIEUNHAPHANG = new DanhSachPhieuNhapHang();
     public static DanhSachChiTietPhieuNhapHang DS_CHITIETPHIEUNHAPHANG = new DanhSachChiTietPhieuNhapHang();
-    private static ITruyXuatDanhSach[] DANHSACH = new ITruyXuatDanhSach[] {DS_SANPHAM, DS_NHANVIEN, DS_KHACHHANG, DS_HOADON, DS_CHITIETHOADON, DS_NGUYENLIEU, DS_NHACUNGCAP};
+    private static IDanhSach[] DANHSACH = new IDanhSach[] {DS_SANPHAM, DS_NHANVIEN, DS_KHACHHANG, DS_HOADON, DS_CHITIETHOADON, DS_NGUYENLIEU, DS_NHACUNGCAP};
 
     private QuanLyDanhSach() {}
     public static void taiDuLieuDanhSach() {

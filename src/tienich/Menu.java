@@ -1,70 +1,59 @@
 package tienich;
 
 public class Menu {
+    public static String[] THONGBAOMENU= new String[] {
+        "[THONG BAO] Tinh nang chua update !!!\n",
+        "[THONG BAO] Lua chon khong hop le !!!\n"
+    };
+    private static String thongBaoMenu = null;
     private Menu(){}
+    public  static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+    }
+    private static int menuLuaChon(String tieuDeMenu,String[] menuListNgang) {
+        String[][] menuListDoc = new String[menuListNgang.length][];
+        for(int i = 0; i < menuListDoc.length; i++) {(menuListDoc[i] = new String[1])[0] = menuListNgang[i];}
+        FormatBang.inBangDuLieu(tieuDeMenu,menuListDoc, false);
+
+        if(thongBaoMenu != null){System.out.print(thongBaoMenu);thongBaoMenu = null;}
+
+        int luaChon = NhapChuan.nhapLuaChonMenu();
+        clearScreen();
+        return luaChon;
+    }
+
     public static void run() {
+        // chay menu voi man hinh thay the, dung ma ANSI de ra lenh cho terminal
+        System.out.print("\033[?1049h");
         QuanLyDanhSach.taiDuLieuDanhSach();
         menuLoop:
         while(true) {
-            System.out.println("-----MENU-----");
-            System.out.println("1. Quan ly san pham");
-            System.out.println("2. Quan ly nhan vien");
-            System.out.println("3. Quan ly khach hang");
-            System.out.println("4. Quan ly hoa don");
-            System.out.println("5. Quan ly nguyen lieu");
-            System.out.println("6. Quan ly nha cung cap");
-            System.out.println("7. Quan ly phieu nhap hang");
-            System.out.println("0. Dong va luu file");
-            System.out.println("--------------");
-
-            choseLoop:
-            while (true) {
-                int luaChon = NhapChuan.docSoNguyenKhongAm("Lua chon");
-                switch (luaChon) {
-                    case 0:break menuLoop;
-                    case 1:menuQLSP();;break choseLoop;
-                    case 2:chuaUpdate();break choseLoop;
-                    case 3:chuaUpdate();break choseLoop;
-                    case 4:chuaUpdate();break choseLoop;
-                    case 5:chuaUpdate();break choseLoop;
-                    case 6:chuaUpdate();break choseLoop;
-                    case 7:chuaUpdate();break choseLoop;
-                    default:chuaUpdate();break;
-                }   
-            }
+            String [] menuList = new String[]{"1. Quan ly danh sach san pham", "0. Thoat"};
+            switch (menuLuaChon("MENU", menuList)) {
+                case 0 -> {break menuLoop;}
+                case 1 -> menuQLSP();
+                default -> thongBaoMenu = THONGBAOMENU[1];
+            };
         }
+        // ra lenh cho termunal tat man hinh thay the va quay lai man hinh chinh
+        System.out.print("\033[?1049l");
     }
-    private static void chuaUpdate() {System.out.println(">> Chua cap nhat!!!");}
     public static void menuQLSP() {
         menuLoop:
         while(true) {
-            System.out.println("-----MENU-----");
-            System.out.println("1. Xem danh sach san pham");
-            System.out.println("2. Sua mot san pham");
-            System.out.println("3. Xoa mot san pham");
-            System.out.println("4. Them san pham");
-            System.out.println("5. Quan ly nguyen lieu");
-            System.out.println("6. Quan ly nha cung cap");
-            System.out.println("7. Quan ly phieu nhap hang");
-            System.out.println("0. Dong va luu file");
-            System.out.println("--------------");
-
-            choseLoop:
-            while (true) {
-                int luaChon = NhapChuan.docSoNguyenKhongAm("Lua chon");
-                switch (luaChon) {
-                    case 0:break menuLoop;
-                    case 1:QuanLyDanhSach.DS_SANPHAM.xuatDanhSach(); ;break choseLoop;
-                    case 2:QuanLyDanhSach.DS_SANPHAM.nhapSua();break choseLoop;
-                    case 3:QuanLyDanhSach.DS_SANPHAM.nhapXoa();break choseLoop;
-                    case 4:QuanLyDanhSach.DS_SANPHAM.nhapThem();break choseLoop;
-                    case 5:chuaUpdate();break choseLoop;
-                    case 6:chuaUpdate();break choseLoop;
-                    case 7:chuaUpdate();break choseLoop;
-                    default:chuaUpdate();break;
-                }   
-            }
+            String [] menuList = new String[]{"1. Xem Danh Sach", "2. Nhap Them San Pham", "3. Sua San Pham", "4. Xoa San Pham", "0. Thoat"};
+            int luaChon = menuLuaChon("QUAN LY SAN PHAM", menuList);
+            switch (luaChon) {
+                case 0 -> {break menuLoop;}
+                case 1 -> QuanLyDanhSach.DS_SANPHAM.xuatDanhSach();
+                case 2 -> QuanLyDanhSach.DS_SANPHAM.nhapThem();
+                case 3 -> QuanLyDanhSach.DS_SANPHAM.nhapSua();
+                case 4 -> QuanLyDanhSach.DS_SANPHAM.nhapXoa();
+                default -> thongBaoMenu = THONGBAOMENU[1];
+            };
+            clearScreen();
         }
     }
+
 }
 

@@ -16,23 +16,33 @@ public class FormatBang {
     // ham in bang du lieu tu bang dau vao
     public static void inBangDuLieu(String tieuDeBang,String[][] bangDuLieu, boolean midLine) {
         FormatBang.bangDuLieu = bangDuLieu;
-        cauHinhVaKiemTraBang();
-        xuLyDuLieuBang();
-        
+        if(!cauHinhVaKiemTraBang()) {System.out.println(">> Bang truyen vao khong hop le, kiem tra lai");return;}
+        layDoDaiToiThieuCot();
         String lineTop;
-        String lineBottom = makeLine(L_BOT_LEFT, T_SHAPE_BOT, L_BOT_RIGHT);
-        String format = taoFormatDuLieu();
+        String lineBottom;
+        String format;
 
         // neu co tieu de bang thi ve tieu de bang len dau bang
         if(tieuDeBang != null && !tieuDeBang.isEmpty()) {
             int doRongHangNgang = soCot - 1;
             for(int cot = 0; cot < soCot; cot++) doRongHangNgang += chieuRongCot[cot];
+            // if(tieuDeBang.length() >= doRongHangNgang - (2 * padding)) tieuDeBang = tieuDeBang.substring(0, doRongHangNgang - (2 * padding) - 3) + "...";
+            int doDaiTieuDe = tieuDeBang.length();
+            if( doDaiTieuDe > doRongHangNgang - (2 * padding)) {
+                int conThieu = doDaiTieuDe - (doRongHangNgang - (2 * padding));
+                int congThem = ((float)conThieu/soCot > conThieu/soCot)?conThieu/soCot + 1:conThieu/soCot;
+                for(int i = 0; i < soCot; i++){chieuRongCot[i]+=congThem;}
+                doRongHangNgang += congThem * soCot;
+            }
+            dinhDangEmpty();
             String padCanGiua = " ".repeat(doRongHangNgang/2 - tieuDeBang.length()/2);
             System.out.print(makeLine(L_TOP_LEFT, HORIZONTAL, L_TOP_RIGHT));
             System.out.printf("%c%-" + doRongHangNgang +  "s%c\n", VERTICAL, padCanGiua + tieuDeBang, VERTICAL);
             lineTop = makeLine(T_SHAPE_LEFT, T_SHAPE_TOP, T_SHAPE_RIGHT);
         }
         else lineTop = makeLine(L_TOP_LEFT, T_SHAPE_TOP, L_TOP_RIGHT);
+        lineBottom = makeLine(L_BOT_LEFT, T_SHAPE_BOT, L_BOT_RIGHT);
+        format = taoFormatDuLieu();
         System.out.print(lineTop); // dong ke dau tien cua bang
         if(midLine) {
             String dongKeMiddle = makeLine(T_SHAPE_LEFT, CROSS, T_SHAPE_RIGHT);
@@ -48,16 +58,18 @@ public class FormatBang {
     }
 
     // tim chieu rong toi thieu cho cot dua theo truong du lieu tren cot, tu dong thay the truong du lieu rong thanh dang ----- tuy vao do dai cot
-    private static void xuLyDuLieuBang() {
+    private static void layDoDaiToiThieuCot() {
         chieuRongCot = new int[soCot];
         for(int cot = 0; cot < soCot; cot++)
         for(int dong = 0; dong < soDong; dong++) {
-            int doDaiODuLieu = bangDuLieu[dong][cot].length() + 2 * padding;
+            int doDaiODuLieu = (bangDuLieu[dong][cot] != null)?bangDuLieu[dong][cot].length() + 2*padding:2*padding;
             if(chieuRongCot[cot] < doDaiODuLieu) chieuRongCot[cot] = doDaiODuLieu;
         }
+    }
+    private static void dinhDangEmpty() {
         for(int dong = 0; dong < soDong; dong++)
         for(int cot = 0; cot < soCot; cot++)
-            if(bangDuLieu[dong][cot].isEmpty()) bangDuLieu[dong][cot] = String.valueOf(HORIZONTAL).repeat(chieuRongCot[cot]);
+            if(bangDuLieu[dong][cot] == null || bangDuLieu[dong][cot].isEmpty()) bangDuLieu[dong][cot] = String.valueOf(HORIZONTAL).repeat(chieuRongCot[cot] - 2*padding);
     }
 
     // tao chuoi canh ngang cua bang, chuoi tai su dung thay vi moi lan in ra phai tao chuoi lai
@@ -81,7 +93,7 @@ public class FormatBang {
     private static boolean cauHinhVaKiemTraBang() {
         if(bangDuLieu == null) return false;
         soDong = bangDuLieu.length; soCot = bangDuLieu[0].length;
-        for(int i = 0; i < soDong; i++) if(bangDuLieu[i].length < soCot) return false;
+        for(int i = 0; i < soDong; i++) if(bangDuLieu[i] == null|| bangDuLieu[i].length < soCot) return false;
         if(soDong == 0) return false;
         return true;
     }

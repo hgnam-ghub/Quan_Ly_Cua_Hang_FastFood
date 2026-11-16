@@ -6,7 +6,7 @@ import java.io.IOException;
 import rangbuoc.ITruyXuatMoHinh;
 import tienich.NhapChuan;
 
-public abstract class SanPham implements ITruyXuatMoHinh{
+public abstract class SanPham implements ITruyXuatMoHinh {
     private String ma;
     private String ten;
     private String donVi;
@@ -26,9 +26,11 @@ public abstract class SanPham implements ITruyXuatMoHinh{
     protected SanPham(SanPham sanPham) {this(sanPham.ma, sanPham.ten, sanPham.donVi, sanPham.phuongThucCheBien, sanPham.giaBan, sanPham.soLuong);}
     public abstract SanPham saoChep();
     
+    @Override
     public String[] xuat() {
         return new String[]{ma, ten, donVi, phuongThucCheBien, String.valueOf(giaBan), String.valueOf(soLuong)};
     }
+    @Override
     public SanPham nhap() {
         setTen(NhapChuan.docChuoiKhongRong("Ten"));
         setDonVi(NhapChuan.docChuoiKhongRong("Don vi"));

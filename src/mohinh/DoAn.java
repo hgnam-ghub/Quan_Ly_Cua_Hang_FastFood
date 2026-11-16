@@ -24,7 +24,6 @@ public class DoAn extends SanPham {
     public String[] xuat() {
         String[] duLieuGoc = super.xuat();
         int doDaiGoc = duLieuGoc.length;
-
         String[] truongDuLieu = Arrays.copyOf(duLieuGoc, doDaiGoc + 1);
         truongDuLieu[doDaiGoc] = String.valueOf(mucCay);
         return truongDuLieu;

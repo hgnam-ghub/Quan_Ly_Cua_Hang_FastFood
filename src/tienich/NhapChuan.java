@@ -12,6 +12,18 @@ public final class NhapChuan
         return SCANNER.nextLine().trim();
     }
 
+    public static int nhapLuaChonMenu() {
+        System.out.print(">> ");
+        try
+        {
+            return Integer.parseInt(SCANNER.nextLine().trim());
+        }
+        catch (NumberFormatException e)
+        {
+            return -1;
+        }
+    }
+
     // đọc 1 chuỗi và bắt buộc chuỗi đó không rỗng
     public static String docChuoiKhongRong(String prompt) {
         while (true) 
@@ -32,7 +44,7 @@ public final class NhapChuan
             } 
             catch (NumberFormatException e) 
             {
-                System.out.println(">> Please enter an integer");
+                System.out.println(">> Phai nhap 1 so nguyen");
             }
         }
     }
@@ -42,7 +54,7 @@ public final class NhapChuan
         {
             int val = docSoNguyen(prompt);
             if (val >= 0) return val;
-                System.out.println(">> Please enter a non-negative integer");
+                System.out.println(">> Phai nhap so nguyen khong am");
         }
     }
 
@@ -56,7 +68,7 @@ public final class NhapChuan
             } 
             catch (NumberFormatException e) 
             {
-                System.out.println(">> Please enter an decimal number");
+                System.out.println(">> phai nhap 1 so thuc");
             }
         }
     }
@@ -66,7 +78,7 @@ public final class NhapChuan
         {
             double val = docSoThuc(prompt);
             if (val >= 0) return val;
-                System.out.println(">> Please enter a non-negative decimal number");
+                System.out.println(">> Phai nhap 1 so thuc khong am");
         }
     }
 
@@ -87,7 +99,7 @@ public final class NhapChuan
             if (input.equals("n") || input.equals("no")) 
                 return false;
 
-            System.out.println(">> Please enter (Yes/No) or (y/n)!");
+            System.out.println(">> Phai nhap voi dang (Yes/No) hoac (y/n)!");
         }
     }
 }
