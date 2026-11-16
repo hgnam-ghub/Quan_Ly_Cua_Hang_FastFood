@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mohinh.NhaCungCap;
-import rangbuoc.ITruyXuatDanhSach;
+import rangbuoc.IDanhSach;
 import tienich.NhapChuan;
 
-public class DanhSachNhaCungCap implements ITruyXuatDanhSach {
+public class DanhSachNhaCungCap implements IDanhSach {
     private NhaCungCap[] DS_NhaCungCap;
     private int soLuong;
     private static final String fileDanhSach = "data/DS_NhaCungCap.dat";
@@ -27,6 +27,9 @@ public class DanhSachNhaCungCap implements ITruyXuatDanhSach {
         for (int i = 0; i < soLuong; i++)
             DS_NhaCungCap[i] = DS_NCC.DS_NhaCungCap[i].saoChep();
     }
+
+    public DanhSachNhaCungCap saoChep() { return new DanhSachNhaCungCap(this);}
+    public int getSoLuong() { return soLuong; }
 
     public void nhapThem() {
         System.out.println("****Bat dau nhap danh sach nha cung cap****");

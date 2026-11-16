@@ -9,14 +9,12 @@ import java.util.Arrays;
 
 import mohinh.HoaDon;
 import tienich.NhapChuan;
-import rangbuoc.ITruyXuatDanhSach;
+import rangbuoc.IDanhSach;
 
-public class DanhSachHoaDon implements ITruyXuatDanhSach {
+public class DanhSachHoaDon implements IDanhSach {
     private HoaDon[] DS_HoaDon;
     private int soLuong;
     private static final String fileDanhSach = "data/DS_HoaDon.dat";
-
-    public int getSoLuong() { return soLuong; }
 
     public DanhSachHoaDon () {
         soLuong = 0;
@@ -28,6 +26,8 @@ public class DanhSachHoaDon implements ITruyXuatDanhSach {
         for(int i = 0; i < soLuong; i++)
             DS_HoaDon[i] = ds_HD.DS_HoaDon[i].saoChep();  
     }
+    public DanhSachHoaDon saoChep() {return new DanhSachHoaDon(this);}
+    public int getSoLuong() { return soLuong; }
 
     @Override
     public void nhapThem() {
