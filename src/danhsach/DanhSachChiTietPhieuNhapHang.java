@@ -18,6 +18,7 @@ public class DanhSachChiTietPhieuNhapHang {
     public void xuat() {
 
     }
+    
     public boolean ghiFile() {
         return true;
     }

@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mohinh.NguyenLieu;
-import rangbuoc.ITruyXuatDanhSach;
+import rangbuoc.IDanhSach;
 import tienich.NhapChuan;
 
-public class DanhSachNguyenLieu implements ITruyXuatDanhSach {
+public class DanhSachNguyenLieu implements IDanhSach {
     private NguyenLieu[] DS_NguyenLieu;
     private int soLuong;
     private static final String fileDanhSach = "data/DS_NguyenLieu.dat";
@@ -45,6 +45,11 @@ public class DanhSachNguyenLieu implements ITruyXuatDanhSach {
         }
         System.out.println("****Ket thuc nhap danh sach nguyen lieu****");
     }
+
+    public DanhSachNguyenLieu saoChep() { return new DanhSachNguyenLieu(this);}
+    public int getSoLuong() { return soLuong; }
+
+
 
     public void xuatDanhSach() {
         System.out.println("====Danh Sach Nguyen Lieu====");
@@ -131,6 +136,10 @@ public class DanhSachNguyenLieu implements ITruyXuatDanhSach {
 
     public boolean kiemTraMa(String maNL) {
         return timKiemViTriNguyenLieu(maNL) != -1;
+    }
+
+    public void timKiemMa() {
+    
     }
 
     public DanhSachNguyenLieu timKiemTheoTen(String tenNguyenLieu) {

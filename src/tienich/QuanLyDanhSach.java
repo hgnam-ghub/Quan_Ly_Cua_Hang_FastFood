@@ -1,5 +1,8 @@
 package tienich;
-import rangbuoc.ITruyXuatDanhSach;
+import rangbuoc.IDanhSach;
+
+import java.io.IOException;
+
 import danhsach.*;
 
 public final class QuanLyDanhSach{
@@ -12,16 +15,18 @@ public final class QuanLyDanhSach{
     public static DanhSachNhaCungCap DS_NHACUNGCAP = new DanhSachNhaCungCap();
     public static DanhSachPhieuNhapHang DS_PHIEUNHAPHANG = new DanhSachPhieuNhapHang();
     public static DanhSachChiTietPhieuNhapHang DS_CHITIETPHIEUNHAPHANG = new DanhSachChiTietPhieuNhapHang();
-    private static ITruyXuatDanhSach[] DANHSACH = new ITruyXuatDanhSach[] {DS_SANPHAM, DS_NHANVIEN, DS_KHACHHANG, DS_HOADON, DS_CHITIETHOADON, DS_NGUYENLIEU, DS_NHACUNGCAP};
+    private static IDanhSach[] DANHSACH = new IDanhSach[] {DS_SANPHAM};
+        //, DS_NHANVIEN, DS_KHACHHANG, DS_HOADON, DS_CHITIETHOADON, DS_NGUYENLIEU, DS_NHACUNGCAP};
 
     private QuanLyDanhSach() {}
     public static void taiDuLieuDanhSach() {
-        // for(ITruyXuatDanhSach ds: DANHSACH) {
-        //     ds.nhapDanhSachTuFile();
-        // }
-        DS_SANPHAM.nhapDanhSachTuFile();
+        for(IDanhSach ds: DANHSACH)
+        try{ds.nhapDanhSachTuFile();}
+        catch (IOException e ) {}
     }
     public static void ghiDuLieuDanhSach() {
-        DS_SANPHAM.xuatDanhSachRaFile();
+        for(IDanhSach ds: DANHSACH)
+        try{ds.xuatDanhSachRaFile();}
+        catch (IOException e ) {}
     }
 }

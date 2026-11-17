@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mohinh.NhanVien;
-import rangbuoc.ITruyXuatDanhSach;
+import rangbuoc.IDanhSach;
 import tienich.NhapChuan;
 
-public class DanhSachNhanVien implements ITruyXuatDanhSach {
+public class DanhSachNhanVien implements IDanhSach {
     private NhanVien[] DS_NhanVien;
     private int soLuong;
     private static final String fileDanhSach = "data/DS_NhanVien.dat";
@@ -27,6 +27,9 @@ public class DanhSachNhanVien implements ITruyXuatDanhSach {
         for (int i = 0; i < soLuong; i++)
             DS_NhanVien[i] = DS_NV.DS_NhanVien[i].saoChep();
     }
+
+    public IDanhSach saoChep() {return new DanhSachNhanVien(this);}
+    public int getSoLuong() {return soLuong;}
 
     public void nhapThem() {
         System.out.println("****Bat dau nhap danh sach nhan vien****");
@@ -127,6 +130,10 @@ public class DanhSachNhanVien implements ITruyXuatDanhSach {
                 return i;
         }
         return -1;
+    }
+
+    public void timKiemMa() {
+        
     }
 
     public boolean kiemTraMa(String maNV) {

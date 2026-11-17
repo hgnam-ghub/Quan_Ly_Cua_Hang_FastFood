@@ -9,14 +9,14 @@ import java.util.Arrays;
 
 import mohinh.KhachHang;
 import tienich.NhapChuan;
-import rangbuoc.ITruyXuatDanhSach;
+import rangbuoc.IDanhSach;
 
-public class DanhSachKhachHang implements ITruyXuatDanhSach {
+public class DanhSachKhachHang implements IDanhSach {
     private KhachHang[] DS_KhachHang;
     private int soLuong;
     private static final String fileDanhSach = "data/DS_KhachHang.dat";
 
-    public int getSoLuong() {return soLuong;}
+    
 
     public DanhSachKhachHang() {
         soLuong = 0;
@@ -28,6 +28,9 @@ public class DanhSachKhachHang implements ITruyXuatDanhSach {
         for(int i = 0; i < soLuong; i++)
             DS_KhachHang[i] = DS_KH.DS_KhachHang[i].saoChep(); 
     }
+
+    public DanhSachKhachHang saoChep() { return new DanhSachKhachHang(this);}
+    public int getSoLuong() {return soLuong;}
     @Override
     public void nhapThem() {
         System.out.println("**** Bat dau nhap danh sach khach hang ****");
@@ -145,6 +148,10 @@ public class DanhSachKhachHang implements ITruyXuatDanhSach {
         for (int i = 0; i < DS_KH.soLuong; i++) 
             if (!kiemTraMa(DS_KH.DS_KhachHang[i].getMa())) 
                 them(DS_KH.DS_KhachHang[i].saoChep());
+    }
+
+    public void timKiemMa() {
+        
     }
 
     public DanhSachKhachHang timkiemTheoMa(String ma) {

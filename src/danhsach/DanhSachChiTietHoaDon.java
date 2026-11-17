@@ -9,12 +9,14 @@ import java.util.Arrays;
 
 import mohinh.ChiTietHoaDon;
 import tienich.NhapChuan;
-import rangbuoc.ITruyXuatDanhSach;
+import rangbuoc.IDanhSach;
 
-public final class DanhSachChiTietHoaDon implements ITruyXuatDanhSach {
+public final class DanhSachChiTietHoaDon implements IDanhSach {
     private ChiTietHoaDon[] DS_ChiTietHoaDon;
     private int soLuong;
     private static final String fileDanhSach = "data/DS_ChiTietHoaDon.dat";
+
+    public DanhSachChiTietHoaDon saoChep() { return new DanhSachChiTietHoaDon(this);}
 
     public int getSoLuong() { return soLuong; }
 
@@ -57,6 +59,9 @@ public final class DanhSachChiTietHoaDon implements ITruyXuatDanhSach {
             DS_ChiTietHoaDon[i].xuat();
         }
         System.out.println("==== Het ====");
+    }
+    public void timKiemMa() {
+        
     }
 
     @Override
