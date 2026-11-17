@@ -136,6 +136,10 @@ public class DanhSachNhaCungCap implements IDanhSach {
         return timKiemViTriNhaCungCap(maNCC) != -1;
     }
 
+    public void timKiemMa() {
+        
+    }
+
     public DanhSachNhaCungCap timKiemTheoTen(String tenNhaCungCap) {
         DanhSachNhaCungCap dsTam = new DanhSachNhaCungCap();
         for (int i = 0; i < soLuong; i++) {

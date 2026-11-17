@@ -150,6 +150,10 @@ public class DanhSachKhachHang implements IDanhSach {
                 them(DS_KH.DS_KhachHang[i].saoChep());
     }
 
+    public void timKiemMa() {
+        
+    }
+
     public DanhSachKhachHang timkiemTheoMa(String ma) {
         DanhSachKhachHang dsTam = new DanhSachKhachHang();
         for (int i = 0; i < soLuong; i++)

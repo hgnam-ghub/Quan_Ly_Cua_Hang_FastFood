@@ -55,36 +55,31 @@ public class DanhSachSanPham implements IDanhSach {
         FormatBang.inBangDuLieu("DANH SACH SAN PHAM",bangSanPham);
         NhapChuan.docChuoi("Enter de quay lai");
     }
-    public void xuatDanhSachRaFile(){
-        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.DANHSACH))){
-            dos.writeInt(soLuong);
-            for(int i = 0; i < soLuong; i++){
-                if(DS_SanPham[i] instanceof DoAn) dos.writeInt(1);
-                else if(DS_SanPham[i] instanceof DoUong) dos.writeInt(2);
-                DS_SanPham[i].ghiFile(dos);
-            }
+    @Override
+    public void xuatDanhSachRaFile() throws IOException  {
+        DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.DANHSACH));
+        dos.writeInt(soLuong);
+        for(int i = 0; i < soLuong; i++){
+            if(DS_SanPham[i] instanceof DoAn) dos.writeInt(1);
+            else if(DS_SanPham[i] instanceof DoUong) dos.writeInt(2);
+            DS_SanPham[i].ghiFile(dos);
         }
-        catch (IOException e) {
-            System.out.println(">> [Loi ghi file]: " + e.getMessage());
-        }
+        dos.close();
     }
-    public void nhapDanhSachTuFile(){
+    @Override 
+    public void nhapDanhSachTuFile() throws IOException{
         int i = 0;
-        try(DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.DANHSACH))) {
-            soLuong = dis.readInt();
-            if(DS_SanPham.length < soLuong) DS_SanPham = new SanPham[soLuong];
-            for(i = 0; i < soLuong; i++) {
-                DS_SanPham[i] = khoiTaoSanPham(dis.readInt());
-                if((DS_SanPham[i]) == null) 
-                    throw new IOException("kieu doi tuong khong hop le, khong the khoi tao doi tuong " + i);
-                DS_SanPham[i].setMa(dis.readUTF());
-                DS_SanPham[i].docFile(dis);
-            }
+        DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.DANHSACH));
+        soLuong = dis.readInt();
+        if(DS_SanPham.length < soLuong) DS_SanPham = new SanPham[soLuong];
+        for(i = 0; i < soLuong; i++) {
+            DS_SanPham[i] = khoiTaoSanPham(dis.readInt());
+            if((DS_SanPham[i]) == null) 
+                throw new IOException("kieu doi tuong khong hop le, khong the khoi tao doi tuong " + i);
+            DS_SanPham[i].setMa(dis.readUTF());
+            DS_SanPham[i].docFile(dis);
         }
-        catch(IOException e) {
-            System.out.println(">> [Loi doc file]: " + e.getMessage());
-            soLuong = i;
-        }
+        dis.close();
     }
 
     // phuong thuc noi bo, dung de tao chuoi xu ly cho gon
@@ -128,18 +123,15 @@ public class DanhSachSanPham implements IDanhSach {
         if(viTriSP == -1) return null;
         return DS_SanPham[viTriSP].saoChep();
     }
-    public void timKiemTheoMa() {
-        if(timKiemViTriSanPham(NhapChuan.docChuoiKhongRong("Nhap Ma San Pham Can Tim")) == -1)
-            System.out.println(">> Khong tim thay san pham nay");
-        else
-            System.out.println(">> Da tim thay san pham can tim, bay gio muon lam gi voi san pham nay");
-    }
     // nhan san pham va tu dong sao chep ra, chan tham chieu
     public boolean themVaoSanPhamDanhSach(SanPham sp) {
         if(sp == null) return false;
         return them(sp.saoChep()) != null;
     }
 
+    public void timKiemMa() {
+        
+    }
     //them, sua, xoa
     public void nhapThem() {
         System.out.println("****bat dau nhap danh sach****");
@@ -159,15 +151,23 @@ public class DanhSachSanPham implements IDanhSach {
         NhapChuan.docChuoi("Enter de quay lai");
     }
     public void nhapSua() {
-        if(sua(NhapChuan.docChuoiKhongRong("Nhap ma san pham")) == null)
-            System.out.println(">> San pham nay khong ton tai trong danh sach");
-        else System.out.println(">> Sua thanh cong");
-        NhapChuan.docChuoi("Enter de thoat");
+        do{
+            if(sua(NhapChuan.docChuoiKhongRong("Nhap ma san pham")) == null)
+                System.out.println(">> San pham nay khong ton tai trong danh sach");
+            else System.out.println(">> Sua thanh cong");
+            System.out.println("Co tiep tuc nhap sua them san pham khac khong?");
+        }
+        while(NhapChuan.docYesNo("", false));
     }
     public void nhapXoa() {
-        if(!xoa(NhapChuan.docChuoiKhongRong("Nhap ma san pham")))
-            System.out.println(">> Khong tim thay san pham can xoa");
-        else System.out.println(">> Xoa thanh cong");
-        NhapChuan.docChuoi("Enter de thoat");
+        do
+        {
+            if(!xoa(NhapChuan.docChuoiKhongRong("Nhap ma san pham")))
+                System.out.println(">> Khong tim thay san pham can xoa");
+            else System.out.println(">> Xoa thanh cong");
+            System.out.println("Co tiep tuc xoa cac san pham khac khong?");
+        }
+        while(NhapChuan.docYesNo("", false));
+        
     }
 }

@@ -132,6 +132,10 @@ public class DanhSachNhanVien implements IDanhSach {
         return -1;
     }
 
+    public void timKiemMa() {
+        
+    }
+
     public boolean kiemTraMa(String maNV) {
         return timKiemViTriNhanVien(maNV) != -1;
     }

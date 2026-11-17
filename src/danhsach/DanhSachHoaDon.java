@@ -141,15 +141,8 @@ public class DanhSachHoaDon implements IDanhSach {
         int viTri = timKiemViTriHoaDon(maHD);
         return (viTri != -1) ? DS_HoaDon[viTri] : null;
     }
-
-    public void xoaTheoDanhSach(DanhSachHoaDon DS_HD) {
-        for (int i = 0; i < DS_HD.soLuong; i++)
-            xoa(DS_HD.DS_HoaDon[i].getMaHoaDon());
-    }
-    public void nhapTuDanhSach(DanhSachHoaDon DS_HD) {
-        for (int i = 0; i < DS_HD.soLuong; i++) 
-            if (!kiemTraMa(DS_HD.DS_HoaDon[i].getMaHoaDon())) 
-                them(DS_HD.DS_HoaDon[i].saoChep());
+    public void timKiemMa() {
+        
     }
     
     public DanhSachHoaDon timKiemTheoMaHD(String maHD) {

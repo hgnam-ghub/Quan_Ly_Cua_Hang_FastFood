@@ -60,6 +60,9 @@ public final class DanhSachChiTietHoaDon implements IDanhSach {
         }
         System.out.println("==== Het ====");
     }
+    public void timKiemMa() {
+        
+    }
 
     @Override
     public void xuatDanhSachRaFile() {
