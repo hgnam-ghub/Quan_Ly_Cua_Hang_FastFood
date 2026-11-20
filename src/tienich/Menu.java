@@ -46,9 +46,9 @@ public class Menu {
                 case 0 -> {break menuLoop;}
                 case 1 -> DanhSachDangLamViec = QuanLyDanhSach.DS_SANPHAM;
                 case 2 -> DanhSachDangLamViec = QuanLyDanhSach.DS_KHACHHANG;
-                case 3 -> DanhSachDangLamViec = QuanLyDanhSach.DS_NHANVIEN;
-                case 4 -> DanhSachDangLamViec = QuanLyDanhSach.DS_NHACUNGCAP;
-                case 5 -> DanhSachDangLamViec = QuanLyDanhSach.DS_NGUYENLIEU;
+                case 3 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
+                case 4 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
+                case 5 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
                 case 6 -> DanhSachDangLamViec = QuanLyDanhSach.DS_HOADON;
                 case 7 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
                 default -> {thongBaoMenu = THONGBAOMENU[1]; continue menuLoop;}
@@ -62,13 +62,15 @@ public class Menu {
     public static void menuDanhSach() {
         menuLoop:
         while(true) {
-            String [] menuList = new String[]{"1. Xem Danh Sach", "2. Nhap Them", "3. Sua", "4. Xoa", "0. Thoat"};
+            String [] menuList = new String[]{"1. Xem Danh Sach", "2. Nhap Them", "3. Sua", "4. Xoa","5. Tim Kiem", "6. Sap Xep", "0. Thoat"};
             switch (menuLuaChon("Danh Sach", menuList)) {
                 case 0 -> {break menuLoop;}
                 case 1 -> DanhSachDangLamViec.xuatDanhSach();
                 case 2 -> DanhSachDangLamViec.nhapThem();
                 case 3 -> DanhSachDangLamViec.nhapSua();
                 case 4 -> DanhSachDangLamViec.nhapXoa();
+                case 5 -> DanhSachDangLamViec.nhapTimKiem();
+                case 6 -> DanhSachDangLamViec.nhapSapXep();
                 default -> {thongBaoMenu = THONGBAOMENU[1]; continue menuLoop;}
             };
             clearScreen();
