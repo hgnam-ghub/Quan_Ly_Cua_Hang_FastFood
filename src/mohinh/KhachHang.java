@@ -1,4 +1,6 @@
 package mohinh;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,20 +12,20 @@ public class KhachHang implements ITruyXuatMoHinh
     private String ho;
     private String ten;
     private String soDienThoai;
-    private String ngaySinh;
+    private LocalDate ngaySinh;
     private double tongTienDaMua;
 
     public KhachHang() {this("", "", "", "01/01/2000", "khong co",0);}
-    protected KhachHang(String ma, String ho, String ten, String soDienThoai, String ngaySinh) {
+    protected KhachHang(String ma, String ho, String ten, String soDienThoai, LocalDate ngaySinh) {
         if(setMa(ma)==null) {this.ma = "khong hop le";}
         if(setHo(ho)==null) this.ho = "khong hop le";
         if(setTen(ten)==null) this.ten = "khong hop le";
         if(setSoDienThoai(soDienThoai)==null) this.soDienThoai = "khong hop le";
-        if(setNgaySinh(ngaySinh)==null) this.ngaySinh = "01/01/2000";
+        if(setNgaySinh(ngaySinh)==null) this.ngaySinh = LocalDate.of(2000, 1, 1);
         if(thanhToan(tongTienDaMua)==null) this.tongTienDaMua = 0;
     }
     protected KhachHang(String ma, String ho, String ten, String soDienThoai, String ngaySinh, double tongTienDaMua) {
-        this(ma, ho, ten, soDienThoai, ngaySinh);
+        this(ma, ho, ten, soDienThoai, LocalDate.parse(ngaySinh, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         this.tongTienDaMua = tongTienDaMua;
         
     }
@@ -34,14 +36,15 @@ public class KhachHang implements ITruyXuatMoHinh
         return new KhachHang(this);
     }
     public String[] xuat() {
-        return new String[] {ma, ho, ten, soDienThoai, ngaySinh, String.valueOf(tongTienDaMua)};
+        String ngaySinhStr = ngaySinh.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        return new String[] {ma, ho, ten, soDienThoai, ngaySinhStr, String.valueOf(tongTienDaMua)};
     }
     public KhachHang nhap() {
         System.out.println("Nhap thong tin cho khach hang co ma: " + ma);
         setHo(NhapChuan.docChuoiKhongRong("Ho"));
         setTen(NhapChuan.docChuoiKhongRong("Ten"));
         setSoDienThoai(NhapChuan.docChuoiKhongRong("So dien thoai"));
-        setNgaySinh(NhapChuan.docChuoiKhongRong("Ngay sinh"));
+        setNgaySinh(NhapChuan.docNgay("Ngay sinh"));
         return this;
     }
     public void ghiFile(DataOutputStream dos) throws IOException {
@@ -49,7 +52,7 @@ public class KhachHang implements ITruyXuatMoHinh
         dos.writeUTF(ho);
         dos.writeUTF(ten);
         dos.writeUTF(soDienThoai);
-        dos.writeUTF(ngaySinh);
+        dos.writeUTF(ngaySinh.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         dos.writeDouble(tongTienDaMua);
     }
 
@@ -58,14 +61,14 @@ public class KhachHang implements ITruyXuatMoHinh
         ho = dis.readUTF();
         ten = dis.readUTF();
         soDienThoai = dis.readUTF();
-        ngaySinh = dis.readUTF();
+        ngaySinh = LocalDate.parse(dis.readUTF(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         tongTienDaMua = dis.readDouble();
     }
     public String getMa(){return ma;}
     public String getTen(){return ten;}
     public String getHo(){return ho;}
     public String getSoDienThoai(){return soDienThoai;}
-    public String getNgaySinh(){return ngaySinh;}
+    public LocalDate getNgaySinh(){return ngaySinh;}
     public double getTongSoTienMua(){return tongTienDaMua;}
 
     public KhachHang setMa(String maMoi) {
@@ -88,8 +91,8 @@ public class KhachHang implements ITruyXuatMoHinh
         soDienThoai = soDienThoaiMoi;
         return this;
     }
-    public KhachHang setNgaySinh(String ngaySinhMoi) {
-        if(ngaySinhMoi.isEmpty()) return null;
+    public KhachHang setNgaySinh(LocalDate ngaySinhMoi) {
+        if(ngaySinhMoi == null) return null;
         ngaySinh = ngaySinhMoi;
         return this;
     }
