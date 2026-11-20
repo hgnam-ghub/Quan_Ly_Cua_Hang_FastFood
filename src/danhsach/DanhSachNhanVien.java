@@ -41,7 +41,7 @@ public class DanhSachNhanVien implements IDanhSach {
     // ghi du lieu danh sach xuong file
     @Override
     public void xuatDanhSachRaFile() throws IOException {
-        DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.DANHSACH));
+        DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.FILEDSNV));
         dos.writeInt(soLuong);
         for (int i = 0; i < soLuong; i++) {
             DS_NhanVien[i].ghiFile(dos);
@@ -52,7 +52,7 @@ public class DanhSachNhanVien implements IDanhSach {
     // doc du lieu danh sach vao chuong trinh
     @Override
     public void nhapDanhSachTuFile() throws IOException {
-        DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.DANHSACH));
+        DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.FILEDSNV));
         soLuong = dis.readInt();
         if (DS_NhanVien.length < soLuong) DS_NhanVien = new NhanVien[soLuong];
         for (int i = 0; i < soLuong; i++) {
