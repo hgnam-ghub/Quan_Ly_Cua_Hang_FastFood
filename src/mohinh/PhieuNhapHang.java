@@ -1,15 +1,26 @@
 package mohinh;
 
-public final class PhieuNhapHang {
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.time.LocalDate;
+
+import rangbuoc.ITruyXuatMoHinh;
+import tienich.NhapChuan;
+
+public final class PhieuNhapHang implements ITruyXuatMoHinh{
     private String maPNH;
     private String maNV;
     private String maNCC;
-    private String ngayTaoPhieu;
+    private LocalDate ngayTaoPhieu;
     private String trangThai;
     private String phuongThucThanhToan;
     private double tongTien;
     
-    public PhieuNhapHang(String maPNH, String maNV, String maNCC, String ngayTaoPhieu, String trangThai, String phuongThucThanhToan, double tongTien) {
+    public PhieuNhapHang() {
+        this("maPNH", "maNV", "maNCC", LocalDate.of(2000, 1, 1), "N/A", "N/A", 0);
+    }
+    public PhieuNhapHang(String maPNH, String maNV, String maNCC, LocalDate ngayTaoPhieu, String trangThai, String phuongThucThanhToan, double tongTien) {
         this.maPNH = maPNH;
         this.maNV = maNV;
         this.maNCC = maNCC;
@@ -18,35 +29,50 @@ public final class PhieuNhapHang {
         this.phuongThucThanhToan = phuongThucThanhToan;
         this.tongTien = tongTien;
     }
-    public PhieuNhapHang(String maPNH, String maNV, String maNCC) {
-        this(maPNH, maNV, maNCC, "01/01/2000", "N/A", "N/A", 0);
+    public PhieuNhapHang(PhieuNhapHang pnh) {this(pnh.maPNH, pnh.maNV, pnh.maNCC, pnh.ngayTaoPhieu, pnh.trangThai, pnh.phuongThucThanhToan, pnh.tongTien);}
+    public PhieuNhapHang saoChep() {return new PhieuNhapHang(this);}
+
+    @Override
+    public PhieuNhapHang nhap() {
+        maPNH = NhapChuan.docChuoiKhongRong("Ma PNH");
+        maNV = NhapChuan.docChuoiKhongRong("Ma NV");
+        maNCC = NhapChuan.docChuoiKhongRong("Ma NCC");
+        trangThai = NhapChuan.docChuoi("Trang Thai");
+        phuongThucThanhToan = NhapChuan.docChuoi("Phuong Thuc Thanh Toan");
+        return this;
     }
-    private PhieuNhapHang(String maPNH, String maNV, String maNCC, PhieuNhapHang pnh) {
-        this(maPNH, maNV, maNCC, pnh.ngayTaoPhieu, pnh.trangThai, pnh.phuongThucThanhToan, pnh.tongTien);
+    @Override 
+    public String[] xuat() {
+        return new String[] {maPNH, maNV, maNCC, trangThai, ngayTaoPhieu.toString(), phuongThucThanhToan,String.valueOf(tongTien)};
     }
-    public PhieuNhapHang saoChep() {
-        return new PhieuNhapHang(maPNH, maNV, maNCC, this);
+    @Override
+    public void ghiFile(DataOutputStream dos) throws IOException {
+        dos.writeUTF(maPNH);
+        dos.writeUTF(maNV);
+        dos.writeUTF(maNCC);
+        dos.writeUTF(ngayTaoPhieu.toString());
+        dos.writeUTF(trangThai);
+        dos.writeUTF(phuongThucThanhToan);
+        dos.writeDouble(tongTien);
     }
-    public PhieuNhapHang saoChepVoiMaMoi(String maPNHMoi, String maNVMoi, String maNCCMoi) {
-        return new PhieuNhapHang(maPNHMoi, maNVMoi, maNCCMoi, this);
+    @Override
+    public void docFile(DataInputStream dis) throws IOException {
+        maPNH = dis.readUTF();
+        maNV = dis.readUTF();
+        maNCC = dis.readUTF();
+        ngayTaoPhieu = LocalDate.parse(dis.readUTF());
+        trangThai = dis.readUTF();
+        phuongThucThanhToan = dis.readUTF();
+        tongTien = dis.readDouble();
     }
 
-    public void nhap() {
-        
-    }
-    public void xuat() {
-
-    }
-    public void ghiFile() {
-
-    }
-    public void docFile() {
-
-    }
+    public PhieuNhapHang setMaPNH(String maPNH) {this.maPNH = maPNH; return this;}
+    public PhieuNhapHang setMaNV(String maNV) {this.maNV = maNV; return this;}
+    public PhieuNhapHang setMaNCC(String maNCC) {this.maNCC = maNCC; return this;}
     public String getMaPNH() {return maPNH;}
     public String getMaNV() {return maNV;}
     public String getMaNCC() {return maNCC;}
-    public String getNgayTaoPhieu() {return ngayTaoPhieu;}
+    public LocalDate getNgayTaoPhieu() {return ngayTaoPhieu;}
     public String getTrangThai() {return trangThai;}
     public String getPhuongThucThanhToan() {return phuongThucThanhToan;}
     public double getTongTien() {return tongTien;}

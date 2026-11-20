@@ -9,4 +9,5 @@ public class LuuTru {
     public static final String FILEDSNL = "data/DS_NguyenLieu.dat";
     public static final String FILEDSNCC = "data/DS_NhaCungCap.dat";
     public static final String FILEDSNV = "data/DS_NhanVien.dat";
+    public static final String FILEDSPNH = "data/DS_NhanVien.dat";
 }
