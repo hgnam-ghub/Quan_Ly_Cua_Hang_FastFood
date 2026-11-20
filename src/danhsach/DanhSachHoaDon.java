@@ -16,6 +16,8 @@ import rangbuoc.IDanhSach;
 public class DanhSachHoaDon implements IDanhSach {
     private HoaDon[] DS_HoaDon;
     private int soLuong;
+    private DanhSachNhanVien dsNhanVien;
+    private DanhSachKhachHang dsKhachHang;
 
     public DanhSachHoaDon () {
         soLuong = 0;
@@ -116,6 +118,20 @@ public class DanhSachHoaDon implements IDanhSach {
         hd.nhap();
         return them(hd) != null;
     }
+    private String nhapMaNVHopLe() {
+        while (true) {
+            String maNV = NhapChuan.docChuoiKhongRong("Nhap ma nhan vien");
+            if (dsNhanVien == null || dsNhanVien.kiemTraMa(maNV)) return maNV;
+            System.out.println(">> Ma nhan vien khong ton tai, nhap lai!");
+        }
+    }
+    private String nhapMaKHHopLe() {
+        while (true) {
+            String maKH = NhapChuan.docChuoiKhongRong("Nhap ma khach hang");
+            if (dsKhachHang == null || dsKhachHang.kiemTraMa(maKH)) return maKH;
+            System.out.println(">> Ma khach hang khong ton tai, nhap lai!");
+        }
+    }
     @Override
     public void nhapTimKiem() {
         String maHD = NhapChuan.docChuoiKhongRong("Nhap ma hoa don can tim");
@@ -140,8 +156,8 @@ public class DanhSachHoaDon implements IDanhSach {
             System.out.println("--------------");
             System.out.printf("Nhap hoa don thu %d: \n", soLuong + 1);
             HoaDon hdMoi = new HoaDon();
-            String maNV = NhapChuan.docChuoiKhongRong("Nhap ma nhan vien");
-            String maKH = NhapChuan.docChuoiKhongRong("Nhap ma khach hang");
+            String maNV = nhapMaNVHopLe();
+            String maKH = nhapMaKHHopLe();
             while (them(hdMoi.setMa(NhapChuan.docChuoiKhongRong("Nhap ma hoa don"), maNV, maKH)) == null) {
                 System.out.println("Ma hoa don da ton tai, nhap lai ma hoa don khac!!!");
             }
