@@ -126,24 +126,28 @@ public final class DanhSachChiTietHoaDon implements IDanhSach {
         cthd.nhap();
         return them(cthd) != null;
     }
-
     @Override
     public void nhapTimKiem() {
-        String maHD = NhapChuan.docChuoiKhongRong("Nhap ma hoa don can tim");
-        String maSP = NhapChuan.docChuoiKhongRong("Nhap ma san pham can tim");
-        ChiTietHoaDon kq = timKiemTheoMa(maHD, maSP);
+        System.out.println("**** Tim kiem chi tiet hoa don (nhap 1 den 2 ma, Enter de bo qua ma khong nhap) ****");
+        String[] ma = NhapChuan.docNhieuMa("Ma hoa don", "Ma san pham");
+        DanhSachChiTietHoaDon kq = timKiemNhieuMa(ma[0], ma[1]);
         if (kq == null) {
             System.out.println(">> Khong tim thay chi tiet hoa don!");
         } else {
-            String[][] bang = new String[][] {
-                {"MaHD", "MaSP", "Don Gia Ban", "Thanh Tien", "So Luong"},
-                kq.xuat()
-            };
+            String[][] bang = new String[kq.soLuong + 1][];
+            bang[0] = new String[] {"MaHD", "MaSP", "Don Gia Ban", "Thanh Tien", "So Luong"};
+            for (int i = 0; i < kq.soLuong; i++)
+                bang[i + 1] = kq.DS_ChiTietHoaDon[i].xuat();
             FormatBang.inBangDuLieu("KET QUA TIM KIEM", bang);
         }
         NhapChuan.docChuoi("Enter de quay lai");
     }
-
+    @Override
+    public void nhapSapXep() {
+        System.out.println("**** Sap xep chi tiet hoa don theo ngay tao don cua hoa don ****");
+        DanhSachChiTietHoaDon dsDaSapXep = sapXepTheoNgayTaoDon(QuanLyDanhSach.DS_HOADON, NhapChuan.docThuTuSapXep());
+        dsDaSapXep.xuatDanhSach();
+    }
     @Override
     public void nhapThem() {
         System.out.println("**** Bat dau nhap danh sach chi tiet hoa don ****");
