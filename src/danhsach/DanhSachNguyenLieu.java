@@ -9,12 +9,13 @@ import java.util.Arrays;
 
 import mohinh.NguyenLieu;
 import rangbuoc.IDanhSach;
+import tienich.FormatBang;
+import tienich.LuuTru;
 import tienich.NhapChuan;
 
 public class DanhSachNguyenLieu implements IDanhSach {
     private NguyenLieu[] DS_NguyenLieu;
     private int soLuong;
-    private static final String fileDanhSach = "data/DS_NguyenLieu.dat";
 
     public DanhSachNguyenLieu() {
         soLuong = 0;
@@ -28,128 +29,170 @@ public class DanhSachNguyenLieu implements IDanhSach {
             DS_NguyenLieu[i] = DS_NL.DS_NguyenLieu[i].saoChep();
     }
 
-    public void nhapThem() {
-        System.out.println("****Bat dau nhap danh sach nguyen lieu****");
-        int nhapThem = NhapChuan.docSoNguyenKhongAm("So luong nguyen lieu muon them");
-        DS_NguyenLieu = Arrays.copyOf(DS_NguyenLieu, soLuong + nhapThem);
+    // sao chep 1 ra danh sach moi
+    @Override
+    public DanhSachNguyenLieu saoChep() { return new DanhSachNguyenLieu(this); }
 
-        for (int i = 0; i < nhapThem; i++) {
-            System.out.println("---------------------");
-            String maNL;
-            while (kiemTraMa(maNL = NhapChuan.docChuoiKhongRong("Nhap ma nguyen lieu")))
-                System.out.println(">> Ma nay da ton tai, vui long nhap ma khac !!!");
-
-            NguyenLieu nl = new NguyenLieu(maNL);
-            nl.nhap();
-            DS_NguyenLieu[soLuong++] = nl;
-        }
-        System.out.println("****Ket thuc nhap danh sach nguyen lieu****");
-    }
-
-    public DanhSachNguyenLieu saoChep() { return new DanhSachNguyenLieu(this);}
+    // doc so luong cua danh sach
+    @Override
     public int getSoLuong() { return soLuong; }
 
-
-
-    public void xuatDanhSach() {
-        System.out.println("====Danh Sach Nguyen Lieu====");
+    // ======================================================
+    // ghi du lieu danh sach xuong file
+    @Override
+    public void xuatDanhSachRaFile() throws IOException {
+        DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.FILEDSNL));
+        dos.writeInt(soLuong);
         for (int i = 0; i < soLuong; i++) {
-            System.out.println("------------");
-            DS_NguyenLieu[i].xuat();
+            DS_NguyenLieu[i].ghiFile(dos);
         }
-        System.out.println("====Het====");
+        dos.close();
     }
 
-    public void xuatDanhSachRaFile() {
-        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(fileDanhSach))) {
-            dos.writeInt(soLuong);
-            for (int i = 0; i < soLuong; i++) {
-                DS_NguyenLieu[i].ghiFile(dos);
-            }
-        } catch (IOException e) {
-            System.out.println(">> Loi trong qua trinh xuat danh sach nguyen lieu ra file");
-            e.printStackTrace();
+    // doc du lieu danh sach vao chuong trinh
+    @Override
+    public void nhapDanhSachTuFile() throws IOException {
+        DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.FILEDSNL));
+        soLuong = dis.readInt();
+        if (DS_NguyenLieu.length < soLuong) DS_NguyenLieu = new NguyenLieu[soLuong];
+        for (int i = 0; i < soLuong; i++) {
+            NguyenLieu nl = new NguyenLieu("");
+            nl.docFile(dis);
+            DS_NguyenLieu[i] = nl;
         }
+        dis.close();
     }
 
-    public void nhapDanhSachTuFile() {
-        try (DataInputStream dis = new DataInputStream(new FileInputStream(fileDanhSach))) {
-            soLuong = dis.readInt();
-            if (soLuong > DS_NguyenLieu.length)
-                DS_NguyenLieu = new NguyenLieu[soLuong];
-            for (int i = 0; i < soLuong; i++) {
-                NguyenLieu nl = new NguyenLieu("");
-                nl.docFile(dis);
-                DS_NguyenLieu[i] = nl;
-            }
-        } catch (IOException e) {
-            System.out.println(">> Co loi trong qua trinh nhap danh sach nguyen lieu tu file");
-            e.printStackTrace();
-        }
+    // ======================================================
+    // phuong thuc noi bo, dung de tao chuoi xu ly cho gon, dau vao phai duoc kiem tra truoc
+
+    // tim vi tri nguyen lieu
+    private int timKiemViTriNguyenLieu(String maNL) {
+        for (int i = 0; i < soLuong; i++)
+            if (DS_NguyenLieu[i] != null && DS_NguyenLieu[i].getMa().equals(maNL)) return i;
+        return -1;
     }
 
-    private boolean them(NguyenLieu nl) {
-        if (kiemTraMa(nl.getMa()))
-            return false;
-        if (soLuong == DS_NguyenLieu.length)
-            DS_NguyenLieu = Arrays.copyOf(DS_NguyenLieu, soLuong + 1);
+    // them, sua, xoa 1 nguyen lieu
+    private NguyenLieu them(NguyenLieu nl) {
+        if (kiemTraMa(nl.getMa())) return null;
+        if (soLuong == DS_NguyenLieu.length) DS_NguyenLieu = Arrays.copyOf(DS_NguyenLieu, soLuong + 1);
         DS_NguyenLieu[soLuong++] = nl;
-        return true;
+        return nl;
     }
 
-    private boolean sua(String maNL) {
+    private NguyenLieu sua(String maNL) {
         int viTri = timKiemViTriNguyenLieu(maNL);
-        if (viTri == -1)
-            return false;
+        if (viTri == -1) return null;
         DS_NguyenLieu[viTri].nhap();
-        return true;
-    }
-
-    public void nhapSua() {
-        if (!sua(NhapChuan.docChuoiKhongRong("Nhap ma nguyen lieu")))
-            System.out.println(">> Nguyen lieu nay khong ton tai trong danh sach");
+        return DS_NguyenLieu[viTri];
     }
 
     private boolean xoa(String maNL) {
         int viTri = timKiemViTriNguyenLieu(maNL);
-        if (viTri == -1)
-            return false;
-        for (int i = viTri; i < soLuong - 1; i++) {
+        if (viTri == -1) return false;
+        for (int i = viTri; i < soLuong - 1; i++)
             DS_NguyenLieu[i] = DS_NguyenLieu[i + 1];
-        }
         DS_NguyenLieu[--soLuong] = null;
         return true;
     }
 
-    public void nhapXoa() {
-        if (!xoa(NhapChuan.docChuoiKhongRong("Nhap ma nguyen lieu")))
-            System.out.println(">> Khong tim thay nguyen lieu can xoa");
-    }
+    // ======================================================
+    // cac phuong thuc giao tiep ra ben ngoai
 
-    private int timKiemViTriNguyenLieu(String maNL) {
-        for (int i = 0; i < soLuong; i++) {
-            if (DS_NguyenLieu[i] != null && DS_NguyenLieu[i].getMa().equalsIgnoreCase(maNL))
-                return i;
-        }
-        return -1;
-    }
-
+    // kiem tra ma nay da ton tai trong danh sach chua, co roi thi tra ve true, chua thi false
     public boolean kiemTraMa(String maNL) {
-        return timKiemViTriNguyenLieu(maNL) != -1;
+        if (maNL == null || maNL.isEmpty()) return false;
+        return (timKiemViTriNguyenLieu(maNL) != -1);
     }
 
-    public void nhapTimKiem() {
-    
+    // tra ra ban sao cua nguyen lieu
+    public NguyenLieu timKiemMa(String maNL) {
+        if (maNL == null || maNL.isEmpty()) return null;
+        int viTriNL = timKiemViTriNguyenLieu(maNL);
+        if (viTriNL == -1) return null;
+        return DS_NguyenLieu[viTriNL].saoChep();
     }
+
+    // them ban sao cua nguyen lieu ben ngoai vo danh sach
+    public boolean themVaoDanhSach(NguyenLieu nl) {
+        if (nl == null || nl.getMa().isEmpty()) return false;
+        return them(nl.saoChep()) != null;
+    }
+
+    public NguyenLieu docPhanTu(int index) { return DS_NguyenLieu[index].saoChep(); }
 
     public DanhSachNguyenLieu timKiemTheoTen(String tenNguyenLieu) {
         DanhSachNguyenLieu dsTam = new DanhSachNguyenLieu();
         for (int i = 0; i < soLuong; i++) {
             if (DS_NguyenLieu[i] != null && DS_NguyenLieu[i].getTen().equalsIgnoreCase(tenNguyenLieu))
-                dsTam.them(DS_NguyenLieu[i]);
+                dsTam.them(DS_NguyenLieu[i].saoChep());
         }
-        if (dsTam.soLuong == 0)
-            return null;
+        if (dsTam.soLuong == 0) return null;
         return dsTam;
+    }
+
+    // ------------------------------------
+    // cac phuong thuc giao dien
+    @Override
+    public void nhapTimKiem() {
+
+    }
+
+    // them, sua, xoa
+    @Override
+    public void nhapThem() {
+        System.out.println("****bat dau nhap danh sach****");
+        int nhapThem = NhapChuan.docSoNguyenKhongAm("So luong nguyen lieu muon them");
+        DS_NguyenLieu = Arrays.copyOf(DS_NguyenLieu, soLuong + nhapThem);
+        for (int i = 0; i < nhapThem; i++) {
+            System.out.println("---------------------");
+            String maNL;
+            while (kiemTraMa(maNL = NhapChuan.docChuoiKhongRong("Nhap ma nguyen lieu")))
+                System.out.println(">> ma nay da ton tai, vui long nhap ma khac !!!");
+            NguyenLieu nlMoi = new NguyenLieu(maNL);
+            nlMoi.nhap();
+            them(nlMoi);
+        }
+        System.out.println("****Ket thuc nhap danh sach****");
+        NhapChuan.docChuoi("Enter de quay lai");
+    }
+
+    @Override
+    public void nhapSua() {
+        do {
+            if (sua(NhapChuan.docChuoiKhongRong("Nhap ma nguyen lieu")) == null)
+                System.out.println(">> Nguyen lieu nay khong ton tai trong danh sach");
+            else System.out.println(">> Sua thanh cong");
+            System.out.println("Co tiep tuc nhap sua them nguyen lieu khac khong?");
+        } while (NhapChuan.docYesNo("", false));
+    }
+
+    @Override
+    public void nhapXoa() {
+        do {
+            if (!xoa(NhapChuan.docChuoiKhongRong("Nhap ma nguyen lieu")))
+                System.out.println(">> Khong tim thay nguyen lieu can xoa");
+            else System.out.println(">> Xoa thanh cong");
+            System.out.println("Co tiep tuc xoa cac nguyen lieu khac khong?");
+        } while (NhapChuan.docYesNo("", false));
+    }
+
+    // xuat danh sach voi cac dong du lieu duoc fomat bang
+    @Override
+    public void xuatDanhSach() {
+        String[][] bangNguyenLieu = new String[soLuong + 1][];
+        bangNguyenLieu[0] = new String[] { "Ma", "Ten", "Don vi", "Don gia", "So luong" };
+        for (int i = 0; i < soLuong; i++) {
+            bangNguyenLieu[i + 1] = new String[] {
+                DS_NguyenLieu[i].getMa(),
+                DS_NguyenLieu[i].getTen(),
+                DS_NguyenLieu[i].getDonVi(),
+                String.valueOf(DS_NguyenLieu[i].getDonGia()),
+                String.valueOf(DS_NguyenLieu[i].getSoLuong())
+            };
+        }
+        FormatBang.inBangDuLieu("DANH SACH NGUYEN LIEU", bangNguyenLieu);
+        NhapChuan.docChuoi("Enter de quay lai");
     }
 }

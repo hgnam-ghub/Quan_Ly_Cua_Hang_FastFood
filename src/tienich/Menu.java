@@ -46,9 +46,9 @@ public class Menu {
                 case 0 -> {break menuLoop;}
                 case 1 -> DanhSachDangLamViec = QuanLyDanhSach.DS_SANPHAM;
                 case 2 -> DanhSachDangLamViec = QuanLyDanhSach.DS_KHACHHANG;
-                case 3 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
-                case 4 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
-                case 5 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
+                case 3 -> DanhSachDangLamViec = QuanLyDanhSach.DS_NHANVIEN;
+                case 4 -> DanhSachDangLamViec = QuanLyDanhSach.DS_NHACUNGCAP;
+                case 5 -> DanhSachDangLamViec = QuanLyDanhSach.DS_NGUYENLIEU;
                 case 6 -> DanhSachDangLamViec = QuanLyDanhSach.DS_HOADON;
                 case 7 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
                 default -> {thongBaoMenu = THONGBAOMENU[1]; continue menuLoop;}
