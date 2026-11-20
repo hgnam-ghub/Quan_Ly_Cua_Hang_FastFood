@@ -132,7 +132,7 @@ public class DanhSachNhanVien implements IDanhSach {
         return -1;
     }
 
-    public void timKiemMa() {
+    public void nhapTimKiem() {
         
     }
 

@@ -136,7 +136,7 @@ public class DanhSachNhaCungCap implements IDanhSach {
         return timKiemViTriNhaCungCap(maNCC) != -1;
     }
 
-    public void timKiemMa() {
+    public void nhapTimKiem() {
         
     }
 
