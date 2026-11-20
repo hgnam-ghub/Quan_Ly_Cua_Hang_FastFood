@@ -138,7 +138,7 @@ public class DanhSachNguyenLieu implements IDanhSach {
         return timKiemViTriNguyenLieu(maNL) != -1;
     }
 
-    public void timKiemMa() {
+    public void nhapTimKiem() {
     
     }
 

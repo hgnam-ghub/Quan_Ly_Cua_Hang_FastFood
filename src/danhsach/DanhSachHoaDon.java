@@ -141,7 +141,7 @@ public class DanhSachHoaDon implements IDanhSach {
         int viTri = timKiemViTriHoaDon(maHD);
         return (viTri != -1) ? DS_HoaDon[viTri] : null;
     }
-    public void timKiemMa() {
+    public void nhapTimKiem() {
         
     }
     

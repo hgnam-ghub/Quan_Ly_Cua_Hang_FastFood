@@ -60,7 +60,7 @@ public final class DanhSachChiTietHoaDon implements IDanhSach {
         }
         System.out.println("==== Het ====");
     }
-    public void timKiemMa() {
+    public void nhapTimKiem() {
         
     }
 

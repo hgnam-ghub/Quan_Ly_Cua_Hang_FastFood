@@ -150,7 +150,7 @@ public class DanhSachKhachHang implements IDanhSach {
                 them(DS_KH.DS_KhachHang[i].saoChep());
     }
 
-    public void timKiemMa() {
+    public void nhapTimKiem() {
         
     }
 
