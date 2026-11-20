@@ -37,6 +37,10 @@ public class DanhSachKhachHang implements IDanhSach {
         String[][] bangKhachHang = new String[soLuong + 1][];
         bangKhachHang[0] = new String[] {"Ma KH", "Ho", "Ten", "So dien thoai", "Dia chi", "Tong tien da mua"};
         for (int i = 0; i < soLuong; i++) {
+            if(DS_KhachHang[i] == null){
+                System.out.println("loi vi tri " + i);
+                continue;
+            }
             bangKhachHang[i + 1] = DS_KhachHang[i].xuat();
         }
         FormatBang.inBangDuLieu("DANH SACH KHACH HANG", bangKhachHang);
@@ -151,11 +155,11 @@ public class DanhSachKhachHang implements IDanhSach {
         DS_KhachHang = Arrays.copyOf(DS_KhachHang, soLuong + nhapThem);
         for (int i = 0; i < nhapThem; i++) {
             System.out.println("---------------------");
-            System.out.printf("Nhap thong tin khach hang thu %d:\n", i + 1);
-            DS_KhachHang[i] = new KhachHang();
-            DS_KhachHang[i].setMa(NhapChuan.docChuoiKhongRong("Nhap ma khach hang"));
-            DS_KhachHang[i].nhap();
-            soLuong++;
+            System.out.printf("Nhap thong tin khach hang thu %d:\n", soLuong + 1);
+            KhachHang khMoi = new KhachHang();
+            while(them(khMoi.setMa(NhapChuan.docChuoiKhongRong("Nhap ma khach hang"))) == null)
+                System.out.println("Ma nay da ton tai trong danh sach, nhap lai!!!");
+            khMoi.nhap();
         }
         System.out.println("****Ket thuc nhap danh sach khach hang****");
         NhapChuan.docChuoi("Enter de quay lai");

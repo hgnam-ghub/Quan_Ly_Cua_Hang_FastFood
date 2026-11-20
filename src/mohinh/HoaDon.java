@@ -32,7 +32,7 @@ public class HoaDon implements ITruyXuatMoHinh {
     }
 
     public HoaDon nhap() {
-        setMa(NhapChuan.docChuoiKhongRong("Ma hoa don"), NhapChuan.docChuoiKhongRong("Ma nhan vien"), NhapChuan.docChuoiKhongRong("Ma khach hang"));
+        System.out.println("Nhap thong tin cho hoa don co ma: " + maHD);
         setNgayTaoDon(NhapChuan.docChuoiKhongRong("Ngay tao don (dd/MM/yyyy)"));
         setTrangThai(NhapChuan.docChuoiKhongRong("Trang thai"));
         setPhuongThucThanhToan(NhapChuan.docChuoiKhongRong("Phuong thuc thanh toan"));
