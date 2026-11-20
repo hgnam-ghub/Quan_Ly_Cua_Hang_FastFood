@@ -151,10 +151,10 @@ public class DanhSachKhachHang implements IDanhSach {
         DS_KhachHang = Arrays.copyOf(DS_KhachHang, soLuong + nhapThem);
         for (int i = 0; i < nhapThem; i++) {
             System.out.println("---------------------");
-            System.out.printf("Nhap thong tin khach hang thu %d:\n", i + 1);
-            DS_KhachHang[i] = new KhachHang();
-            DS_KhachHang[i].setMa(NhapChuan.docChuoiKhongRong("Nhap ma khach hang"));
-            DS_KhachHang[i].nhap();
+            System.out.printf("Nhap thong tin khach hang thu %d:\n", soLuong + 1);
+            DS_KhachHang[soLuong] = new KhachHang();
+            DS_KhachHang[soLuong].setMa(NhapChuan.docChuoiKhongRong("Nhap ma khach hang"));
+            DS_KhachHang[soLuong].nhap();
             soLuong++;
         }
         System.out.println("****Ket thuc nhap danh sach khach hang****");
