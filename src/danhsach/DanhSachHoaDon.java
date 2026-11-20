@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Comparator;
 
 import mohinh.HoaDon;
 import tienich.FormatBang;
@@ -210,32 +211,31 @@ public class DanhSachHoaDon implements IDanhSach {
                 dsTam.them(DS_HoaDon[i]);
         return (dsTam.soLuong == 0) ? null : dsTam;
     }
-    public DanhSachHoaDon timKiemTheotongTien(double tongTien) {
+    // tim theo nhieu ma cung luc: ma nao rong thi bo qua, cac ma con lai phai khop dong thoi
+    // chi nhap 1 ma thi tra ve tat ca hoa don chua ma do
+    public DanhSachHoaDon timKiemNhieuMa(String maHD, String maNV, String maKH) {
         DanhSachHoaDon dsTam = new DanhSachHoaDon();
-        for (int i = 0; i < soLuong; i++)
-            if (DS_HoaDon[i] != null && DS_HoaDon[i].getTongTien() == tongTien)
-                dsTam.them(DS_HoaDon[i]);
+        for (int i = 0; i < soLuong; i++) {
+            HoaDon hd = DS_HoaDon[i];
+            if (hd == null) continue;
+            if (!maHD.isEmpty() && !hd.getMaHoaDon().equals(maHD)) continue;
+            if (!maNV.isEmpty() && !hd.getMaNhanVien().equals(maNV)) continue;
+            if (!maKH.isEmpty() && !hd.getMaKhachHang().equals(maKH)) continue;
+            dsTam.them(hd.saoChep());
+        }
         return (dsTam.soLuong == 0) ? null : dsTam;
     }
-    public DanhSachHoaDon timKiemTheoNgayTaoDon(LocalDate ngayTaoDon) {
-        DanhSachHoaDon dsTam = new DanhSachHoaDon();
-        for (int i = 0; i < soLuong; i++)
-            if (DS_HoaDon[i] != null && ngayTaoDon != null && ngayTaoDon.equals(DS_HoaDon[i].getNgayTaoDon()))
-                dsTam.them(DS_HoaDon[i]);
-        return (dsTam.soLuong == 0) ? null : dsTam;
+    // tra ve ban sao da sap xep, danh sach goc giu nguyen thu tu
+    public DanhSachHoaDon sapXepTheoNgayTaoDon() {
+        return sapXepTheoNgayTaoDon(true);
     }
-    public DanhSachHoaDon timKiemTheoTrangThai(String trangThai) {
-        DanhSachHoaDon dsTam = new DanhSachHoaDon();
-        for (int i = 0; i < soLuong; i++) 
-            if (DS_HoaDon[i] != null && DS_HoaDon[i].getTrangThai().equalsIgnoreCase(trangThai)) 
-                dsTam.them(DS_HoaDon[i]);
-        return (dsTam.soLuong == 0) ? null : dsTam;
-    }
-    public DanhSachHoaDon timKiemTheoPhuongThucThanhToan(String phuongThucThanhToan) {
-        DanhSachHoaDon dsTam = new DanhSachHoaDon();
-        for (int i = 0; i < soLuong; i++) 
-            if (DS_HoaDon[i] != null && DS_HoaDon[i].getPhuongThucThanhToan().equalsIgnoreCase(phuongThucThanhToan)) 
-                dsTam.them(DS_HoaDon[i]);
-        return (dsTam.soLuong == 0) ? null : dsTam;
+    // so sanh bang LocalDate (nam -> thang -> ngay), cung ngay thi xep theo ma hoa don de ket qua on dinh
+    public DanhSachHoaDon sapXepTheoNgayTaoDon(boolean tangDan) {
+        DanhSachHoaDon dsTam = new DanhSachHoaDon(this);
+        Comparator<HoaDon> soSanh = Comparator.comparing(HoaDon::getNgayTaoDon);
+        if (!tangDan) soSanh = soSanh.reversed();
+        soSanh = soSanh.thenComparing(HoaDon::getMaHoaDon);
+        Arrays.sort(dsTam.DS_HoaDon, 0, dsTam.soLuong, soSanh);
+        return dsTam;
     }
 }
