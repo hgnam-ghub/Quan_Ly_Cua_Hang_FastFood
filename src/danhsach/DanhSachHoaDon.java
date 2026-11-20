@@ -32,13 +32,13 @@ public class DanhSachHoaDon implements IDanhSach {
 
     @Override
     public void xuatDanhSach() {
-        System.out.println("==== Danh Sach Cac Hoa Don ====");
-        for(int i = 0; i < soLuong; i++) {
-            System.out.println("------------");
-            if (DS_HoaDon[i] != null)
-                DS_HoaDon[i].xuat();
+       String[][] bangKhachHang = new String[soLuong + 1][];
+        bangKhachHang[0] = new String[] {"Ma HD", "Ma NV", "Ma KH", "Ngay lap", "Tong tien", "Trang thai", "Phuong thuc thanh toan"};
+        for (int i = 0; i < soLuong; i++) {
+            bangKhachHang[i + 1] = DS_HoaDon[i].xuat();
         }
-        System.out.println("==== Het ====");
+        FormatBang.inBangDuLieu("DANH SACH HOA DON", bangKhachHang);
+        NhapChuan.docChuoi("Enter de quay lai");
     }
     @Override
     public void xuatDanhSachRaFile() {
@@ -138,11 +138,14 @@ public class DanhSachHoaDon implements IDanhSach {
         DS_HoaDon = Arrays.copyOf(DS_HoaDon, soLuong+nhapThem);
         for(int i=0; i<nhapThem; i++){
             System.out.println("--------------");
-            System.out.println("Nhap hoa don thu " + (i+1)+": ");
-            DS_HoaDon[i]=new HoaDon();
-            DS_HoaDon[i].setMa(NhapChuan.docChuoiKhongRong("Ma hoa don"), NhapChuan.docChuoiKhongRong("Ma nhan vien"), NhapChuan.docChuoiKhongRong("Ma khach hang"));
-            DS_HoaDon[i].nhap();
-            soLuong++;
+            System.out.printf("Nhap hoa don thu %d: \n", soLuong + 1);
+            HoaDon hdMoi = new HoaDon();
+            String maNV = NhapChuan.docChuoiKhongRong("Nhap ma nhan vien");
+            String maKH = NhapChuan.docChuoiKhongRong("Nhap ma khach hang");
+            while (them(hdMoi.setMa(NhapChuan.docChuoiKhongRong("Nhap ma hoa don"), maNV, maKH)) == null) {
+                System.out.println("Ma hoa don da ton tai, nhap lai ma hoa don khac!!!");
+            }
+            hdMoi.nhap();
         }
         System.out.println("**** Ket thuc nhap danh sach hoa don ****");
         NhapChuan.docChuoi("Enter de quay lai");
