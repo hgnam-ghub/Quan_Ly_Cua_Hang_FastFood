@@ -114,18 +114,25 @@ public class DanhSachKhachHang implements IDanhSach {
     }
     @Override
     public void nhapTimKiem() {
-        String ma = NhapChuan.docChuoiKhongRong("Nhap ma khach hang can tim");
-        KhachHang kq = timKiemTheoMa(ma);
+        System.out.println("**** Tim kiem khach hang theo ma ****");
+        String[] ma = NhapChuan.docNhieuMa("Ma khach hang");
+        DanhSachKhachHang kq = timkiemTheoMa(ma[0]);
         if (kq == null) {
             System.out.println(">> Khong tim thay khach hang!");
         } else {
-            String[][] bang = new String[][] {
-                {"Ma KH", "Ho", "Ten", "So dien thoai", "Dia chi", "Tong tien da mua"},
-                kq.xuat()
-            };
+            String[][] bang = new String[kq.soLuong + 1][];
+            bang[0] = new String[] {"Ma KH", "Ho", "Ten", "So dien thoai", "Ngay sinh", "Tong tien da mua"};
+            for (int i = 0; i < kq.soLuong; i++)
+                bang[i + 1] = kq.DS_KhachHang[i].xuat();
             FormatBang.inBangDuLieu("KET QUA TIM KIEM KHACH HANG", bang);
         }
         NhapChuan.docChuoi("Enter de quay lai");
+    }
+    @Override
+    public void nhapSapXep() {
+        System.out.println("**** Sap xep khach hang theo ngay sinh ****");
+        DanhSachKhachHang dsDaSapXep = sapXepTheoNgaySinh(NhapChuan.docThuTuSapXep());
+        dsDaSapXep.xuatDanhSach();
     }
     // them, sua, xoa
     public void nhapThem() {
