@@ -116,7 +116,7 @@ public class DanhSachHoaDon implements IDanhSach {
         return them(hd) != null;
     }
     @Override
-    public void timKiemMa() {
+    public void nhapTimKiem() {
         String maHD = NhapChuan.docChuoiKhongRong("Nhap ma hoa don can tim");
         HoaDon kq = timKiemTheoMa(maHD);
         if (kq == null) {

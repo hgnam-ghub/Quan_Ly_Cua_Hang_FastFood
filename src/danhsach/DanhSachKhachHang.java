@@ -128,7 +128,8 @@ public class DanhSachKhachHang implements IDanhSach {
         return them(kh) != null;
     }
 
-    public void timKiemMa() {
+    @Override
+    public void nhapTimKiem() {
         String ma = NhapChuan.docChuoiKhongRong("Nhap ma khach hang can tim");
         KhachHang kq = timKiemTheoMa(ma);
         if (kq == null) {
