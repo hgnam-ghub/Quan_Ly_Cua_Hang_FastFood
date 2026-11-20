@@ -1,5 +1,7 @@
 package danhsach;
 
+import java.time.LocalDate;
+import java.util.Comparator;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
@@ -210,5 +212,48 @@ public final class DanhSachChiTietHoaDon implements IDanhSach {
             if (DS_ChiTietHoaDon[i] != null && DS_ChiTietHoaDon[i].getMaSanPham().equals(maSP))
                 dsTam.them(DS_ChiTietHoaDon[i].saoChep());
         return (dsTam.soLuong == 0) ? null : dsTam;
+    }
+    // tim theo nhieu ma cung luc: ma nao rong thi bo qua, cac ma con lai phai khop dong thoi
+    // chi nhap 1 ma thi tra ve tat ca chi tiet hoa don chua ma do
+    public DanhSachChiTietHoaDon timKiemNhieuMa(String maHD, String maSP) {
+        DanhSachChiTietHoaDon dsTam = new DanhSachChiTietHoaDon();
+        for (int i = 0; i < soLuong; i++) {
+            ChiTietHoaDon cthd = DS_ChiTietHoaDon[i];
+            if (cthd == null) continue;
+            if (!maHD.isEmpty() && !cthd.getMaHoaDon().equals(maHD)) continue;
+            if (!maSP.isEmpty() && !cthd.getMaSanPham().equals(maSP)) continue;
+            dsTam.them(cthd.saoChep());
+        }
+        return (dsTam.soLuong == 0) ? null : dsTam;
+    }
+    // chi tiet hoa don khong tu co ngay, nen ngay duoc lay tu hoa don chua no (noi qua ma hoa don)
+    // tra ve ban sao da sap xep, danh sach goc giu nguyen thu tu
+    public DanhSachChiTietHoaDon sapXepTheoNgayTaoDon(DanhSachHoaDon dsHoaDon) {
+        return sapXepTheoNgayTaoDon(dsHoaDon, true);
+    }
+    // cung ngay thi xep theo ma hoa don roi ma san pham, chi tiet khong tim thay hoa don luon nam cuoi
+    public DanhSachChiTietHoaDon sapXepTheoNgayTaoDon(DanhSachHoaDon dsHoaDon, boolean tangDan) {
+        DanhSachChiTietHoaDon dsTam = new DanhSachChiTietHoaDon(this);
+        final LocalDate[] ngay = new LocalDate[dsTam.soLuong];
+        for (int i = 0; i < dsTam.soLuong; i++) {
+            mohinh.HoaDon hd = (dsHoaDon == null) ? null : dsHoaDon.timKiemTheoMa(dsTam.DS_ChiTietHoaDon[i].getMaHoaDon());
+            ngay[i] = (hd == null) ? null : hd.getNgayTaoDon();
+        }
+        Integer[] viTri = new Integer[dsTam.soLuong];
+        for (int i = 0; i < viTri.length; i++) viTri[i] = i;
+        final ChiTietHoaDon[] goc = dsTam.DS_ChiTietHoaDon;
+        Comparator<Integer> soSanh = (x, y) -> {
+            if (ngay[x] == null && ngay[y] == null) return 0;
+            if (ngay[x] == null) return 1;
+            if (ngay[y] == null) return -1;
+            int kq = ngay[x].compareTo(ngay[y]);
+            return tangDan ? kq : -kq;
+        };
+        soSanh = soSanh.thenComparing(x -> goc[x].getMaHoaDon()).thenComparing(x -> goc[x].getMaSanPham());
+        Arrays.sort(viTri, soSanh);
+        ChiTietHoaDon[] daSapXep = new ChiTietHoaDon[dsTam.soLuong];
+        for (int i = 0; i < viTri.length; i++) daSapXep[i] = goc[viTri[i]];
+        dsTam.DS_ChiTietHoaDon = daSapXep;
+        return dsTam;
     }
 }
