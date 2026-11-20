@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Arrays;
 
 import mohinh.HoaDon;
@@ -216,10 +217,10 @@ public class DanhSachHoaDon implements IDanhSach {
                 dsTam.them(DS_HoaDon[i]);
         return (dsTam.soLuong == 0) ? null : dsTam;
     }
-    public DanhSachHoaDon timKiemTheoNgayTaoDon(String ngayTaoDon) {
+    public DanhSachHoaDon timKiemTheoNgayTaoDon(LocalDate ngayTaoDon) {
         DanhSachHoaDon dsTam = new DanhSachHoaDon();
         for (int i = 0; i < soLuong; i++)
-            if (DS_HoaDon[i] != null && DS_HoaDon[i].getNgayTaoDon().equals(ngayTaoDon)) 
+            if (DS_HoaDon[i] != null && ngayTaoDon != null && ngayTaoDon.equals(DS_HoaDon[i].getNgayTaoDon()))
                 dsTam.them(DS_HoaDon[i]);
         return (dsTam.soLuong == 0) ? null : dsTam;
     }
