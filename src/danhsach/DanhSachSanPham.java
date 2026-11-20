@@ -57,7 +57,7 @@ public class DanhSachSanPham implements IDanhSach {
     }
     @Override
     public void xuatDanhSachRaFile() throws IOException  {
-        DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.DANHSACH));
+        DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.FILEDSSP));
         dos.writeInt(soLuong);
         for(int i = 0; i < soLuong; i++){
             if(DS_SanPham[i] instanceof DoAn) dos.writeInt(1);
@@ -69,7 +69,7 @@ public class DanhSachSanPham implements IDanhSach {
     @Override 
     public void nhapDanhSachTuFile() throws IOException{
         int i = 0;
-        DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.DANHSACH));
+        DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.FILEDSSP));
         soLuong = dis.readInt();
         if(DS_SanPham.length < soLuong) DS_SanPham = new SanPham[soLuong];
         for(i = 0; i < soLuong; i++) {

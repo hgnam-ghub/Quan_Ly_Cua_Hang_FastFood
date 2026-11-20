@@ -45,7 +45,7 @@ public class DanhSachKhachHang implements IDanhSach {
 
     @Override
     public void xuatDanhSachRaFile() throws IOException {
-        DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.DS_KHACHHANG));
+        DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.FILEDSKHACHHANG));
         dos.writeInt(soLuong);
         for (int i = 0; i < soLuong; i++) {
             DS_KhachHang[i].ghiFile(dos);
@@ -56,7 +56,7 @@ public class DanhSachKhachHang implements IDanhSach {
     @Override
     public void nhapDanhSachTuFile() throws IOException {
         int i = 0;
-        DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.DS_KHACHHANG));
+        DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.FILEDSKHACHHANG));
         soLuong = dis.readInt();
         if (DS_KhachHang.length < soLuong) DS_KhachHang = new KhachHang[soLuong];
         for (i = 0; i < soLuong; i++) {

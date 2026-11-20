@@ -41,7 +41,7 @@ public class DanhSachHoaDon implements IDanhSach {
     }
     @Override
     public void xuatDanhSachRaFile() {
-        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.DS_HOADON))) {
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.FILEDSHD))) {
             dos.writeInt(soLuong);
             for(int i = 0; i < soLuong; i++) {
                 DS_HoaDon[i].ghiFile(dos);
@@ -53,7 +53,7 @@ public class DanhSachHoaDon implements IDanhSach {
     }
     @Override
     public void nhapDanhSachTuFile() {
-        try (DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.DS_HOADON))) {
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.FILEDSHD))) {
             soLuong = dis.readInt();
             if(soLuong > DS_HoaDon.length) DS_HoaDon = new HoaDon[soLuong];
             for(int i = 0; i < soLuong; i++) {

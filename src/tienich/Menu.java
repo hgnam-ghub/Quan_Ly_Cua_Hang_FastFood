@@ -45,11 +45,11 @@ public class Menu {
             switch (menuLuaChon("MENU", menuList)) {
                 case 0 -> {break menuLoop;}
                 case 1 -> DanhSachDangLamViec = QuanLyDanhSach.DS_SANPHAM;
-                case 2 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
+                case 2 -> DanhSachDangLamViec = QuanLyDanhSach.DS_KHACHHANG;
                 case 3 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
                 case 4 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
                 case 5 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
-                case 6 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
+                case 6 -> DanhSachDangLamViec = QuanLyDanhSach.DS_HOADON;
                 case 7 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
                 default -> {thongBaoMenu = THONGBAOMENU[1]; continue menuLoop;}
             };
@@ -57,6 +57,7 @@ public class Menu {
         }
         // dong man hinh ung dung
         System.out.print("\033[?1049l");
+        QuanLyDanhSach.ghiDuLieuDanhSach();
     }
     public static void menuDanhSach() {
         menuLoop:
