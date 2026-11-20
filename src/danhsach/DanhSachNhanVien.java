@@ -5,7 +5,9 @@ import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Comparator;
 
 import mohinh.NhanVien;
 import rangbuoc.IDanhSach;
@@ -19,64 +21,62 @@ public class DanhSachNhanVien implements IDanhSach {
 
     public DanhSachNhanVien() {
         soLuong = 0;
-        DS_NhanVien = new NhanVien[soLuong];
+        DS_NhanVien = new NhanVien[0];
     }
 
     public DanhSachNhanVien(DanhSachNhanVien DS_NV) {
         soLuong = DS_NV.soLuong;
         DS_NhanVien = new NhanVien[soLuong];
-        for (int i = 0; i < soLuong; i++)
-            DS_NhanVien[i] = DS_NV.DS_NhanVien[i].saoChep();
+        for (int i = 0; i < soLuong; i++) {
+            DS_NhanVien[i] = (DS_NV.DS_NhanVien[i] != null) ? DS_NV.DS_NhanVien[i].saoChep() : null;
+        }
     }
 
-    // sao chep 1 ra danh sach moi
     @Override
     public DanhSachNhanVien saoChep() { return new DanhSachNhanVien(this); }
 
-    // doc so luong cua danh sach
     @Override
     public int getSoLuong() { return soLuong; }
 
-    // ======================================================
-    // ghi du lieu danh sach xuong file
     @Override
     public void xuatDanhSachRaFile() throws IOException {
-        DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.FILEDSNV));
-        dos.writeInt(soLuong);
-        for (int i = 0; i < soLuong; i++) {
-            DS_NhanVien[i].ghiFile(dos);
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.FILEDSNV))) {
+            dos.writeInt(soLuong);
+            for (int i = 0; i < soLuong; i++) {
+                DS_NhanVien[i].ghiFile(dos);
+            }
         }
-        dos.close();
     }
 
-    // doc du lieu danh sach vao chuong trinh
     @Override
     public void nhapDanhSachTuFile() throws IOException {
-        DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.FILEDSNV));
-        soLuong = dis.readInt();
-        if (DS_NhanVien.length < soLuong) DS_NhanVien = new NhanVien[soLuong];
-        for (int i = 0; i < soLuong; i++) {
-            NhanVien nv = new NhanVien("");
-            nv.docFile(dis);
-            DS_NhanVien[i] = nv;
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.FILEDSNV))) {
+            soLuong = dis.readInt();
+            if (DS_NhanVien.length < soLuong) {
+                DS_NhanVien = new NhanVien[soLuong];
+            }
+            for (int i = 0; i < soLuong; i++) {
+                NhanVien nv = new NhanVien("");
+                nv.docFile(dis);
+                DS_NhanVien[i] = nv;
+            }
         }
-        dis.close();
     }
 
-    // ======================================================
-    // phuong thuc noi bo, dung de tao chuoi xu ly cho gon, dau vao phai duoc kiem tra truoc
-
-    // tim vi tri nhan vien
     private int timKiemViTriNhanVien(String maNV) {
-        for (int i = 0; i < soLuong; i++)
-            if (DS_NhanVien[i] != null && DS_NhanVien[i].getMa().equals(maNV)) return i;
+        if (maNV == null) return -1;
+        for (int i = 0; i < soLuong; i++) {
+            if (DS_NhanVien[i] != null && maNV.equals(DS_NhanVien[i].getMa())) return i;
+        }
         return -1;
     }
 
-    // them, sua, xoa 1 nhan vien
     private NhanVien them(NhanVien nv) {
-        if (kiemTraMa(nv.getMa())) return null;
-        if (soLuong == DS_NhanVien.length) DS_NhanVien = Arrays.copyOf(DS_NhanVien, soLuong + 1);
+        if (nv == null || nv.getMa() == null || nv.getMa().isEmpty() || kiemTraMa(nv.getMa())) return null;
+        if (soLuong == DS_NhanVien.length) {
+            int newSize = (DS_NhanVien.length == 0) ? 4 : DS_NhanVien.length * 2;
+            DS_NhanVien = Arrays.copyOf(DS_NhanVien, newSize);
+        }
         DS_NhanVien[soLuong++] = nv;
         return nv;
     }
@@ -91,22 +91,73 @@ public class DanhSachNhanVien implements IDanhSach {
     private boolean xoa(String maNV) {
         int viTri = timKiemViTriNhanVien(maNV);
         if (viTri == -1) return false;
-        for (int i = viTri; i < soLuong - 1; i++)
+        for (int i = viTri; i < soLuong - 1; i++) {
             DS_NhanVien[i] = DS_NhanVien[i + 1];
+        }
         DS_NhanVien[--soLuong] = null;
         return true;
     }
 
     // ======================================================
-    // cac phuong thuc giao tiep ra ben ngoai
-
-    // kiem tra ma nay da ton tai trong danh sach chua, co roi thi tra ve true, chua thi false
-    public boolean kiemTraMa(String maNV) {
-        if (maNV == null || maNV.isEmpty()) return false;
-        return (timKiemViTriNhanVien(maNV) != -1);
+    // Sap xep tang dan / giam dan
+    public void sapXepTheoMa(boolean tangDan) {
+        Comparator<String> strComp = Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER);
+        Comparator<NhanVien> comp = Comparator.comparing(NhanVien::getMa, strComp);
+        Arrays.sort(DS_NhanVien, 0, soLuong, tangDan ? comp : comp.reversed());
     }
 
-    // tra ra ban sao cua nhan vien
+    public void sapXepTheoTen(boolean tangDan) {
+        Comparator<String> strComp = Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER);
+        Comparator<NhanVien> comp = Comparator.comparing(NhanVien::getTen, strComp);
+        Arrays.sort(DS_NhanVien, 0, soLuong, tangDan ? comp : comp.reversed());
+    }
+
+    public void sapXepTheoLuongCoBan(boolean tangDan) {
+        Comparator<NhanVien> comp = Comparator.comparingDouble(NhanVien::getLuongCoBan);
+        Arrays.sort(DS_NhanVien, 0, soLuong, tangDan ? comp : comp.reversed());
+    }
+
+    public void sapXepTheoNgayVaoLam(boolean tangDan) {
+        Comparator<LocalDate> dateComp = tangDan
+            ? Comparator.nullsLast(Comparator.naturalOrder())
+            : Comparator.nullsLast(Comparator.reverseOrder());
+        Comparator<NhanVien> comp = Comparator.comparing(NhanVien::getNgayVaoLam, dateComp);
+        Arrays.sort(DS_NhanVien, 0, soLuong, comp);
+    }
+
+    public void sapXepTheoNgay(boolean tangDan) {
+        sapXepTheoNgayVaoLam(tangDan);
+    }
+
+    public void nhapSapXep() {
+        if (soLuong <= 1) {
+            System.out.println(">> Danh sach khong du phan tu de sap xep.");
+            return;
+        }
+        System.out.println("Chon tieu chi sap xep: 1-Ma | 2-Ten | 3-Luong co ban | 4-Ngay vao lam");
+        int tieuChi = NhapChuan.docSoNguyen("Nhap lua chon");
+        System.out.println("Chon chieu sap xep: 1-Tang dan | 2-Giam dan");
+        boolean tangDan = NhapChuan.docSoNguyen("Nhap lua chon") == 1;
+
+        switch (tieuChi) {
+            case 1 -> sapXepTheoMa(tangDan);
+            case 2 -> sapXepTheoTen(tangDan);
+            case 3 -> sapXepTheoLuongCoBan(tangDan);
+            case 4 -> sapXepTheoNgayVaoLam(tangDan);
+            default -> {
+                System.out.println(">> Lua chon khong hop le!");
+                return;
+            }
+        }
+        System.out.println(">> Sap xep thanh cong!");
+    }
+
+    // ======================================================
+    public boolean kiemTraMa(String maNV) {
+        if (maNV == null || maNV.isEmpty()) return false;
+        return timKiemViTriNhanVien(maNV) != -1;
+    }
+
     public NhanVien timKiemMa(String maNV) {
         if (maNV == null || maNV.isEmpty()) return null;
         int viTriNV = timKiemViTriNhanVien(maNV);
@@ -114,42 +165,48 @@ public class DanhSachNhanVien implements IDanhSach {
         return DS_NhanVien[viTriNV].saoChep();
     }
 
-    // them ban sao cua nhan vien ben ngoai vo danh sach
     public boolean themVaoDanhSach(NhanVien nv) {
-        if (nv == null || nv.getMa().isEmpty()) return false;
+        if (nv == null || nv.getMa() == null || nv.getMa().isEmpty()) return false;
         return them(nv.saoChep()) != null;
     }
 
-    public NhanVien docPhanTu(int index) { return DS_NhanVien[index].saoChep(); }
+    public NhanVien docPhanTu(int index) {
+        if (index < 0 || index >= soLuong || DS_NhanVien[index] == null) return null;
+        return DS_NhanVien[index].saoChep();
+    }
 
     public DanhSachNhanVien timKiemTheoTen(String tenNhanVien) {
+        if (tenNhanVien == null) return null;
         DanhSachNhanVien dsTam = new DanhSachNhanVien();
         for (int i = 0; i < soLuong; i++) {
-            if (DS_NhanVien[i] != null && DS_NhanVien[i].getTen().equalsIgnoreCase(tenNhanVien))
+            if (DS_NhanVien[i] != null && tenNhanVien.equalsIgnoreCase(DS_NhanVien[i].getTen())) {
                 dsTam.them(DS_NhanVien[i].saoChep());
+            }
         }
-        if (dsTam.soLuong == 0) return null;
-        return dsTam;
+        return (dsTam.soLuong == 0) ? null : dsTam;
     }
 
-    // ------------------------------------
-    // cac phuong thuc giao dien
     @Override
     public void nhapTimKiem() {
-
+        String tenCanTim = NhapChuan.docChuoiKhongRong("Nhap ten nhan vien can tim");
+        DanhSachNhanVien ketQua = timKiemTheoTen(tenCanTim);
+        if (ketQua == null) {
+            System.out.println(">> Khong tim thay nhan vien nao phu hop.");
+        } else {
+            ketQua.xuatDanhSach();
+        }
     }
 
-    // them, sua, xoa
     @Override
     public void nhapThem() {
         System.out.println("****bat dau nhap danh sach****");
         int nhapThem = NhapChuan.docSoNguyenKhongAm("So luong nhan vien muon them");
-        DS_NhanVien = Arrays.copyOf(DS_NhanVien, soLuong + nhapThem);
         for (int i = 0; i < nhapThem; i++) {
             System.out.println("---------------------");
             String maNV;
-            while (kiemTraMa(maNV = NhapChuan.docChuoiKhongRong("Nhap ma nhan vien")))
+            while (kiemTraMa(maNV = NhapChuan.docChuoiKhongRong("Nhap ma nhan vien"))) {
                 System.out.println(">> ma nay da ton tai, vui long nhap ma khac !!!");
+            }
             NhanVien nvMoi = new NhanVien(maNV);
             nvMoi.nhap();
             them(nvMoi);
@@ -178,11 +235,10 @@ public class DanhSachNhanVien implements IDanhSach {
         } while (NhapChuan.docYesNo("", false));
     }
 
-    // xuat danh sach voi cac dong du lieu duoc fomat bang
     @Override
     public void xuatDanhSach() {
         String[][] bangNhanVien = new String[soLuong + 1][];
-        bangNhanVien[0] = new String[] { "Ma", "Ho", "Ten", "Chuc vu", "So dien thoai", "Gioi tinh", "Luong CB", "Tong ban" };
+        bangNhanVien[0] = new String[] { "Ma", "Ho", "Ten", "Chuc vu", "So dien thoai", "Gioi tinh", "Luong CB", "Tong ban", "Ngay vao lam" };
         for (int i = 0; i < soLuong; i++) {
             bangNhanVien[i + 1] = new String[] {
                 DS_NhanVien[i].getMa(),
@@ -192,7 +248,8 @@ public class DanhSachNhanVien implements IDanhSach {
                 DS_NhanVien[i].getSoDienThoai(),
                 DS_NhanVien[i].getGioiTinh(),
                 String.valueOf(DS_NhanVien[i].getLuongCoBan()),
-                String.valueOf(DS_NhanVien[i].getTongTienDaBan())
+                String.valueOf(DS_NhanVien[i].getTongTienDaBan()),
+                NhanVien.dinhDangNgay(DS_NhanVien[i].getNgayVaoLam())
             };
         }
         FormatBang.inBangDuLieu("DANH SACH NHAN VIEN", bangNhanVien);
