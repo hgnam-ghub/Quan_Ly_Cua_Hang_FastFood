@@ -35,7 +35,8 @@ public class DanhSachHoaDon implements IDanhSach {
         System.out.println("==== Danh Sach Cac Hoa Don ====");
         for(int i = 0; i < soLuong; i++) {
             System.out.println("------------");
-            DS_HoaDon[i].xuat();
+            if (DS_HoaDon[i] != null)
+                DS_HoaDon[i].xuat();
         }
         System.out.println("==== Het ====");
     }
@@ -132,8 +133,9 @@ public class DanhSachHoaDon implements IDanhSach {
     }
     @Override
     public void nhapThem() {
-        System.out.println("**** Bat dau nhap danh sach chi tiet hoa don ****");
+        System.out.println("**** Bat dau nhap danh sach hoa don ****");
         int nhapThem= NhapChuan.docSoNguyenKhongAm("So luong hoa don can nhap them");
+        DS_HoaDon = Arrays.copyOf(DS_HoaDon, soLuong+nhapThem);
         for(int i=0; i<nhapThem; i++){
             System.out.println("--------------");
             System.out.println("Nhap hoa don thu " + (i+1)+": ");
@@ -142,7 +144,7 @@ public class DanhSachHoaDon implements IDanhSach {
             DS_HoaDon[i].nhap();
             soLuong++;
         }
-        System.out.println("**** Ket thuc nhap danh sach chi tiet hoa don ****");
+        System.out.println("**** Ket thuc nhap danh sach hoa don ****");
         NhapChuan.docChuoi("Enter de quay lai");
     }
      @Override
