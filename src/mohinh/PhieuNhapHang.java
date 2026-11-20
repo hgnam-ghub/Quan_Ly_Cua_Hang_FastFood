@@ -1,10 +1,15 @@
 package mohinh;
 
-public final class PhieuNhapHang {
+import java.time.LocalDate;
+
+import rangbuoc.ITruyXuatMoHinh;
+import tienich.NhapChuan;
+
+public final class PhieuNhapHang implements ITruyXuatMoHinh{
     private String maPNH;
     private String maNV;
     private String maNCC;
-    private String ngayTaoPhieu;
+    private LocalDate ngayTaoPhieu;
     private String trangThai;
     private String phuongThucThanhToan;
     private double tongTien;
@@ -31,8 +36,10 @@ public final class PhieuNhapHang {
         return new PhieuNhapHang(maPNHMoi, maNVMoi, maNCCMoi, this);
     }
 
-    public void nhap() {
-        
+    public PhieuNhapHang nhap() {
+        maPNH = NhapChuan.docChuoiKhongRong("Ma PNH");
+        maNV = NhapChuan.docChuoiKhongRong("Ma NV");
+        maNCC = NhapChuan.docChuoiKhongRong("Ma NCC");
     }
     public void xuat() {
 
