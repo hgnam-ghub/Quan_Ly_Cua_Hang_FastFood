@@ -126,7 +126,7 @@ public final class DanhSachChiTietHoaDon implements IDanhSach {
     }
 
     @Override
-    public void timKiemMa() {
+    public void nhapTimKiem() {
         String maHD = NhapChuan.docChuoiKhongRong("Nhap ma hoa don can tim");
         String maSP = NhapChuan.docChuoiKhongRong("Nhap ma san pham can tim");
         ChiTietHoaDon kq = timKiemTheoMa(maHD, maSP);
