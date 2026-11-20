@@ -1,11 +1,11 @@
 package mohinh;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import rangbuoc.ITruyXuatMoHinh;
 import tienich.NhapChuan;
 
-public final class HoaDon {
+public class HoaDon implements ITruyXuatMoHinh {
     private String maHD;
     private String maNV;
     private String maKH;
@@ -14,44 +14,30 @@ public final class HoaDon {
     private String phuongThucThanhToan;
     private double tongTien;
 
-    public HoaDon(String maHD, String maNV, String maKH, String ngayTaoDon, String trangThai, String phuongThucThanhToan, double tongTien) {
-        if(!setMa(maHD, maNV, maKH)) {this.maHD = "khong hop le"; this.maNV = "khong hop le"; this.maKH = "khong hop le";}
-        if(!setNgayTaoDon(ngayTaoDon)) this.ngayTaoDon = "01/01/2000";
-        if(!setTrangThai(trangThai)) this.trangThai = "khong co";
-        if(!setPhuongThucThanhToan(phuongThucThanhToan)) this.phuongThucThanhToan = "khong co";
-        if(!setTongTien(tongTien)) this.tongTien = 0;
+    public HoaDon() {this("", "", "", "01/01/2000", "khong co", "khong co", 0);}
+    protected HoaDon(String maHD, String maNV, String maKH, String ngayTaoDon, String trangThai, String phuongThucThanhToan, double tongTien) {
+        if(setMa(maHD, maNV, maKH)==null) {this.maHD = "khong hop le"; this.maNV = "khong hop le"; this.maKH = "khong hop le";}
+        if(setNgayTaoDon(ngayTaoDon)==null) this.ngayTaoDon = "01/01/2000";
+        if(setTrangThai(trangThai)==null) this.trangThai = "khong co";
+        if(setPhuongThucThanhToan(phuongThucThanhToan)==null) this.phuongThucThanhToan = "khong co";
+        if(setTongTien(tongTien)==null) this.tongTien = 0;
     }
-    public HoaDon(String maHD, String maNV, String maKH) {
-        this(maHD, maNV, maKH, "01/01/2000", "dang xu ly", "N/A", 0);
+    protected HoaDon( HoaDon hd) {
+        this(hd.maHD, hd.maNV, hd.maKH, hd.ngayTaoDon, hd.trangThai, hd.phuongThucThanhToan, hd.tongTien);
     }
-    public HoaDon(String maHD, String maNV, String maKH, HoaDon hd) {
-        this(maHD, maNV, maKH, hd.ngayTaoDon, hd.trangThai, hd.phuongThucThanhToan, hd.tongTien);
-    }
-    public HoaDon(HoaDon hd) {this(hd.maHD, hd.maNV, hd.maKH, hd);}
+    public HoaDon saoChep() {return new HoaDon(this){};}
 
-    public HoaDon saoChep() {
-        return new HoaDon(maHD, maNV, maKH, this);
+    public String[] xuat() {
+        return new String[] {maHD, maNV, maKH, ngayTaoDon, trangThai, phuongThucThanhToan, String.valueOf(tongTien)};
     }
 
-    protected final void xuatChuoi(String prompt, Object giaTri) {System.out.println(prompt + ": " + giaTri);}
-    protected final void xuatChuoi(String prompt, Object giaTri, String donVi) {System.out.println(prompt + ": " + giaTri + ' ' + donVi);}
-
-    public void nhap() {
-        System.out.println("Nhap thong tin cho hoa don co ma: " + maHD);
+    public HoaDon nhap() {
+        setMa(NhapChuan.docChuoiKhongRong("Ma hoa don"), NhapChuan.docChuoiKhongRong("Ma nhan vien"), NhapChuan.docChuoiKhongRong("Ma khach hang"));
         setNgayTaoDon(NhapChuan.docChuoiKhongRong("Ngay tao don (dd/MM/yyyy)"));
         setTrangThai(NhapChuan.docChuoiKhongRong("Trang thai"));
         setPhuongThucThanhToan(NhapChuan.docChuoiKhongRong("Phuong thuc thanh toan"));
         setTongTien(NhapChuan.docSoThucKhongAm("Tong tien"));
-    }
-
-    public void xuat() {
-        xuatChuoi("Ma hoa don", maHD);
-        xuatChuoi("Ma nhan vien", maNV);
-        xuatChuoi("Ma khach hang", maKH);
-        xuatChuoi("Ngay tao don", ngayTaoDon);
-        xuatChuoi("Trang thai", trangThai);
-        xuatChuoi("Phuong thuc thanh toan", phuongThucThanhToan);
-        xuatChuoi("Tong tien", tongTien, "$");
+        return this;
     }
 
     public void ghiFile(DataOutputStream dos) throws IOException {
@@ -82,31 +68,31 @@ public final class HoaDon {
     public String getPhuongThucThanhToan() {return phuongThucThanhToan;}
     public double getTongTien() {return tongTien;}
 
-    private boolean setMa(String maHDMoi, String maNVMoi, String maKHMoi) {
-        if(maHDMoi.isEmpty() || maNVMoi.isEmpty() || maKHMoi.isEmpty()) return false;
+    public HoaDon setMa(String maHDMoi, String maNVMoi, String maKHMoi) {
+        if(maHDMoi.isEmpty() || maNVMoi.isEmpty() || maKHMoi.isEmpty()) return null;
         maHD = maHDMoi;
         maNV = maNVMoi;
         maKH = maKHMoi;
-        return true;
+        return this;
     }
-    public boolean setNgayTaoDon(String ngayTaoDonMoi) {
-        if(ngayTaoDonMoi.isEmpty()) return false;
+    public HoaDon setNgayTaoDon(String ngayTaoDonMoi) {
+        if(ngayTaoDonMoi.isEmpty()) return null;
         ngayTaoDon = ngayTaoDonMoi;
-        return true;
+        return this;
     }
-    public boolean setTrangThai(String trangThaiMoi) {
-        if(trangThaiMoi.isEmpty()) return false;
+    public HoaDon setTrangThai(String trangThaiMoi) {
+        if(trangThaiMoi.isEmpty()) return null;
         trangThai = trangThaiMoi;
-        return true;
+        return this;
     }
-    public boolean setPhuongThucThanhToan(String phuongThucThanhToanMoi) {
-        if(phuongThucThanhToanMoi.isEmpty()) return false;
+    public HoaDon setPhuongThucThanhToan(String phuongThucThanhToanMoi) {
+        if(phuongThucThanhToanMoi.isEmpty()) return null;
         phuongThucThanhToan = phuongThucThanhToanMoi;
-        return true;
+        return this;
     }
-    public boolean setTongTien(double tongTienMoi) {
-        if(tongTienMoi < 0) return false;
+    public HoaDon setTongTien(double tongTienMoi) {
+        if(tongTienMoi < 0) return null;
         tongTien = tongTienMoi;
-        return true;
+        return this;
     }
 }

@@ -1,10 +1,10 @@
 package mohinh;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import rangbuoc.ITruyXuatMoHinh;
 import tienich.NhapChuan;
-public final class KhachHang 
+public class KhachHang implements ITruyXuatMoHinh
 {
     private String ma;
     private String ho;
@@ -13,45 +13,36 @@ public final class KhachHang
     private String ngaySinh;
     private double tongTienDaMua;
 
-    public KhachHang(String ma, String ho, String ten, String soDienThoai, String ngaySinh) {
-        this.ma = ma;
-        this.ho = ho;
-        this.ten = ten;
-        this.soDienThoai = soDienThoai;
-        this.ngaySinh = ngaySinh;
+    public KhachHang() {this("", "", "", "01/01/2000", "khong co",0);}
+    protected KhachHang(String ma, String ho, String ten, String soDienThoai, String ngaySinh) {
+        if(setMa(ma)==null) {this.ma = "khong hop le";}
+        if(setHo(ho)==null) this.ho = "khong hop le";
+        if(setTen(ten)==null) this.ten = "khong hop le";
+        if(setSoDienThoai(soDienThoai)==null) this.soDienThoai = "khong hop le";
+        if(setNgaySinh(ngaySinh)==null) this.ngaySinh = "01/01/2000";
+        if(thanhToan(tongTienDaMua)==null) this.tongTienDaMua = 0;
     }
-    public KhachHang(String ma) {
-        this(ma, "khong co", "khong co", "khong co", "khong co");
+    protected KhachHang(String ma, String ho, String ten, String soDienThoai, String ngaySinh, double tongTienDaMua) {
+        this(ma, ho, ten, soDienThoai, ngaySinh);
+        this.tongTienDaMua = tongTienDaMua;
+        
     }
-    public KhachHang(String maMoi, KhachHang khachHang) {
-        this(maMoi, khachHang.ho, khachHang.ten, khachHang.soDienThoai, khachHang.ngaySinh);
-        tongTienDaMua = khachHang.tongTienDaMua;
-    }
-    public KhachHang(KhachHang khachHang) {
-        this(khachHang.ma, khachHang);
+    protected KhachHang(KhachHang khachHang) {
+        this(khachHang.ma, khachHang.ho, khachHang.ten, khachHang.soDienThoai, khachHang.ngaySinh);
     }
     public KhachHang saoChep() {
         return new KhachHang(this);
     }
-    public KhachHang saoChepVoiMaMoi(String maMoi) {
-        return new KhachHang(maMoi, this);
+    public String[] xuat() {
+        return new String[] {ma, ho, ten, soDienThoai, ngaySinh, String.valueOf(tongTienDaMua)};
     }
-    protected final void xuatChuoi(String prompt, Object giaTri) {System.out.println(prompt + ": " + giaTri);}
-    protected final void xuatChuoi(String prompt, Object giaTri, String donVi) {System.out.println(prompt + ": " + giaTri + ' ' + donVi);}
-    public void xuat() {
-        xuatChuoi("Ma khach hang", ma);
-        xuatChuoi("Ho va ten", ho + " " + ten);
-        xuatChuoi("So dien thoai", soDienThoai);
-        xuatChuoi("Ngay sinh", ngaySinh);
-        xuatChuoi("Tong tien da mua", tongTienDaMua, "$");
-    }
-
-    public void nhap() {
+    public KhachHang nhap() {
         System.out.println("Nhap thong tin cho khach hang co ma: " + ma);
         setHo(NhapChuan.docChuoiKhongRong("Ho"));
         setTen(NhapChuan.docChuoiKhongRong("Ten"));
         setSoDienThoai(NhapChuan.docChuoiKhongRong("So dien thoai"));
         setNgaySinh(NhapChuan.docChuoiKhongRong("Ngay sinh"));
+        return this;
     }
     public void ghiFile(DataOutputStream dos) throws IOException {
         dos.writeUTF(ma);
@@ -77,15 +68,36 @@ public final class KhachHang
     public String getNgaySinh(){return ngaySinh;}
     public double getTongSoTienMua(){return tongTienDaMua;}
 
-    public boolean setTen(String tenMoi){return true;}
-    public boolean setHo(String hoMoi){return true;}
-    public boolean setSoDienThoai(String newPhoneNumber){return true;}
-    public boolean setNgaySinh(String newDate){return true;}
+    public KhachHang setMa(String maMoi) {
+        if(maMoi.isEmpty()) return null;
+        ma = maMoi;
+        return this;
+    }
+    public KhachHang setHo(String hoMoi) {
+        if(hoMoi.isEmpty()) return null;
+        ho = hoMoi;
+        return this;
+    }
+    public KhachHang setTen(String tenMoi) {
+        if(tenMoi.isEmpty()) return null;
+        ten = tenMoi;
+        return this;
+    }
+    public KhachHang setSoDienThoai(String soDienThoaiMoi) {
+        if(soDienThoaiMoi.isEmpty()) return null;
+        soDienThoai = soDienThoaiMoi;
+        return this;
+    }
+    public KhachHang setNgaySinh(String ngaySinhMoi) {
+        if(ngaySinhMoi.isEmpty()) return null;
+        ngaySinh = ngaySinhMoi;
+        return this;
+    }
 
-    public boolean thanhToan(double soTien)
+    public KhachHang thanhToan(double soTien)
     {
-        if(soTien <= 0) return false;
+        if(soTien <= 0) return null;
         tongTienDaMua += soTien;
-        return true;
+        return this;
     }
 }
