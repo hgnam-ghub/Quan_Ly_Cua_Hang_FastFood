@@ -37,10 +37,6 @@ public class DanhSachKhachHang implements IDanhSach {
         String[][] bangKhachHang = new String[soLuong + 1][];
         bangKhachHang[0] = new String[] {"Ma KH", "Ho", "Ten", "So dien thoai", "Dia chi", "Tong tien da mua"};
         for (int i = 0; i < soLuong; i++) {
-            if(DS_KhachHang[i] == null){
-                System.out.println("loi vi tri " + i);
-                continue;
-            }
             bangKhachHang[i + 1] = DS_KhachHang[i].xuat();
         }
         FormatBang.inBangDuLieu("DANH SACH KHACH HANG", bangKhachHang);
@@ -49,7 +45,7 @@ public class DanhSachKhachHang implements IDanhSach {
 
     @Override
     public void xuatDanhSachRaFile() throws IOException {
-        DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.FILEDSKH));
+        DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.FILEDSKHACHHANG));
         dos.writeInt(soLuong);
         for (int i = 0; i < soLuong; i++) {
             DS_KhachHang[i].ghiFile(dos);
@@ -60,7 +56,7 @@ public class DanhSachKhachHang implements IDanhSach {
     @Override
     public void nhapDanhSachTuFile() throws IOException {
         int i = 0;
-        DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.FILEDSKH));
+        DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.FILEDSKHACHHANG));
         soLuong = dis.readInt();
         if (DS_KhachHang.length < soLuong) DS_KhachHang = new KhachHang[soLuong];
         for (i = 0; i < soLuong; i++) {
