@@ -1,4 +1,7 @@
 package tienich;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import java.util.Scanner;
 
@@ -10,6 +13,17 @@ public final class NhapChuan
     public static String docChuoi(String prompt) {
         System.out.print(prompt + ": ");
         return SCANNER.nextLine().trim();
+    }
+    public static LocalDate docNgay(String prompt) {
+        while (true) {
+            System.out.print(prompt + ": ");
+            String input = SCANNER.nextLine().trim();
+            try {
+                return LocalDate.parse(input, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            } catch (DateTimeParseException e) {
+                System.out.println(">> Ngay khong hop le. Vui long nhap theo dinh dang dd/MM/yyyy.");
+            }
+        }
     }
 
     public static int nhapLuaChonMenu() {
