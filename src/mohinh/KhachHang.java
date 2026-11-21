@@ -47,7 +47,7 @@ public class KhachHang implements ITruyXuatMoHinh
         dos.writeUTF(ho);
         dos.writeUTF(ten);
         dos.writeUTF(soDienThoai);
-        dos.writeUTF(ngaySinh.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        dos.writeUTF(ngaySinh.toString());
         dos.writeDouble(tongTienDaMua);
     }
 
@@ -56,7 +56,7 @@ public class KhachHang implements ITruyXuatMoHinh
         ho = dis.readUTF();
         ten = dis.readUTF();
         soDienThoai = dis.readUTF();
-        ngaySinh = LocalDate.parse(dis.readUTF(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        ngaySinh = LocalDate.parse(dis.readUTF());
         tongTienDaMua = dis.readDouble();
     }
     public String getMa(){return ma;}
