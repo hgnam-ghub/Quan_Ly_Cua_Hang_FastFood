@@ -108,6 +108,19 @@ public class DanhSachChiTietPhieuNhapHang implements IChiTietDanhSach{
         bangDuLieu[0] = tieuDeCot;
         for(int i = 0; i < soLuong; i++) bangDuLieu[i+1] = DS_ChiTietPhieuNhapHang[i].xuat();
         FormatBang.inBangDuLieu("Chi Tiet Phieu Nhap Hang",bangDuLieu);
+        NhapChuan.docChuoi("Enter de thoat");
+    }
+
+    public DanhSachChiTietPhieuNhapHang timKiemNhieuMa(String maPNH, String maNCC) {
+        if(maPNH.isEmpty() && maNCC.isEmpty()) return null;
+        DanhSachChiTietPhieuNhapHang dsTam = new DanhSachChiTietPhieuNhapHang();
+        for (int i = 0; i < soLuong; i++) {
+            ChiTietPhieuNhapHang cthd = DS_ChiTietPhieuNhapHang[i];
+            if(!maPNH.isEmpty() && !cthd.getMaPNH().equals(maPNH)) continue;
+            if(!maNCC.isEmpty() && !cthd.getMaNL().equals(maNCC)) continue;
+            dsTam.them(cthd.saoChep());
+        }
+        return (dsTam.soLuong == 0) ? null : dsTam;
     }
 
     public DanhSachChiTietPhieuNhapHang timKiemNhieuMa(String maPNH, String maNCC) {
