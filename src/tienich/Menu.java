@@ -9,7 +9,7 @@ public class Menu {
         "[THONG BAO] Lua chon khong hop le !!!\n"
     };
     private static String thongBaoMenu = null;
-    public  static void clearScreen() {System.out.print("\033[H\033[2J");}
+    public  static void clearScreen() {System.out.print("\033[H\033[2J\033[3J");}
 
     // hien thi giao dien cac lua chon
     private static int menuLuaChon(String tieuDeMenu,String[] menuListNgang) {
@@ -26,19 +26,18 @@ public class Menu {
 
     public static void run() {
         // chay man hinh ung dung
-        System.out.print("\033[?1049h");
+        clearScreen();
         QuanLyDanhSach.taiDuLieuDanhSach();
         while(true) {
             String [] menuList = new String[]{"1. San Pham","2. Nhan Vien","3. Khach Hang","4. Hoa Don","5. Nguyen Lieu","6. Nha Cung Cap", "7. Phieu Nhap Hang","8. Thong Ke Danh Sach","0. Thoat"};
             int luaChon = menuLuaChon("MENU", menuList);
             if(luaChon == 0) break;
-            if(luaChon >= 1 && luaChon <= 8)
+            if(luaChon >= 1 && luaChon <= 7)
                 menuDanhSach(QuanLyDanhSach.DANHSACH[luaChon-1]);
             else if(luaChon == 8) menuThongKe();
             else thongBaoMenu = THONGBAOMENU[1];
         }
         // dong man hinh ung dung
-        System.out.print("\033[?1049l");
         QuanLyDanhSach.ghiDuLieuDanhSach();
     }
     public static void menuDanhSach(IDanhSach DSLamViec) {
@@ -65,7 +64,8 @@ public class Menu {
                 "2. Tong Tien Hoa Don (Quy|Thang/Nam)",
                 "3. Tong Tien Hoa Don Cua Nhan Vien (Quy|Nam)",
                 "4. Tong Tien Hoa Don Cua Khach Hang (Quy|Nam)",
-                "5. Tong Tien Hoa Don Theo San Pham (Quy|Nam)"
+                "5. Tong Tien Hoa Don Theo San Pham (Quy|Nam)",
+                "0. Thoat"
             };
             switch (menuLuaChon("Thong Ke", menuList)) {
                 case 0 -> {break menuLoop;}

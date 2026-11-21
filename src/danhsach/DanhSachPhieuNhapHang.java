@@ -84,7 +84,7 @@ public class DanhSachPhieuNhapHang implements IDanhSach{
         System.out.println("==============================");
         int soLuongThem = NhapChuan.docSoNguyenKhongAm("So luong phieu nhap muon them");
         if(DS_PhieuNhapHang.length < soLuong + soLuongThem) DS_PhieuNhapHang = Arrays.copyOf(DS_PhieuNhapHang, soLuong + soLuongThem);
-        for(int i = 0; i < soLuong; i++) {
+        for(int i = 0; i < soLuongThem; i++) {
             PhieuNhapHang pnhMoi = new PhieuNhapHang();
             while (kiemTraMa(pnhMoi.setMaPNH(NhapChuan.docChuoiKhongRong("Ma Phieu Nhap Hang")).getMaPNH()))
                 System.out.println("Phieu Nhap Hang nay da ton tai");

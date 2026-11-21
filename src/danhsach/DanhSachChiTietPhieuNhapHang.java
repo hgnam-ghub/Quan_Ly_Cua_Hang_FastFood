@@ -11,6 +11,7 @@ import mohinh.ChiTietPhieuNhapHang;
 import mohinh.NguyenLieu;
 import rangbuoc.IChiTietDanhSach;
 import rangbuoc.ITruyVanDanhSach;
+import tienich.FormatBang;
 import tienich.LuuTru;
 import tienich.NhapChuan;
 import tienich.QuanLyDanhSach;
@@ -95,6 +96,10 @@ public class DanhSachChiTietPhieuNhapHang implements IChiTietDanhSach{
 
     @Override 
     public void xuatDanhSach() {
-        
+        String[] tieuDeCot = new String[] {"Ma PNH", "Ma NL", "Don Gia Nhap", "Thanh Tien", "So Luong"};
+        String[][] bangDuLieu = new String[soLuong + 1][];
+        bangDuLieu[0] = tieuDeCot;
+        for(int i = 0; i < soLuong; i++) bangDuLieu[i+1] = DS_ChiTietPhieuNhapHang[i].xuat();
+        FormatBang.inBangDuLieu("Chi Tiet Phieu Nhap Hang",bangDuLieu);
     }
 }
