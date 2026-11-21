@@ -128,7 +128,6 @@ public class DanhSachKhachHang implements IDanhSach {
         }
         NhapChuan.docChuoi("Enter de quay lai");
     }
-    @Override
     public void nhapSapXep() {
         System.out.println("**** Sap xep khach hang theo ngay sinh ****");
         DanhSachKhachHang dsDaSapXep = sapXepTheoNgaySinh(NhapChuan.docThuTuSapXep());

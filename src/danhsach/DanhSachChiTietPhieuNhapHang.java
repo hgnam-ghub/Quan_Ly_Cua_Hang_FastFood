@@ -8,12 +8,14 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mohinh.ChiTietPhieuNhapHang;
-import rangbuoc.IDanhSach;
+import mohinh.NguyenLieu;
+import rangbuoc.IChiTietDanhSach;
+import rangbuoc.ITruyVanDanhSach;
 import tienich.LuuTru;
 import tienich.NhapChuan;
 import tienich.QuanLyDanhSach;
 
-public class DanhSachChiTietPhieuNhapHang implements IDanhSach {
+public class DanhSachChiTietPhieuNhapHang implements IChiTietDanhSach{
     private ChiTietPhieuNhapHang[] DS_ChiTietPhieuNhapHang;
     private int soLuong;
 
@@ -30,19 +32,13 @@ public class DanhSachChiTietPhieuNhapHang implements IDanhSach {
     }
 
     @Override
-    public IDanhSach saoChep() {return new DanhSachChiTietPhieuNhapHang(this);}
+    public ITruyVanDanhSach saoChep() {return new DanhSachChiTietPhieuNhapHang(this);}
 
     @Override
     public int getSoLuong() {return soLuong;}
 
-    @Override 
-    public void nhapThem() {System.out.println(">> Khong duoc phep sua chi tiet phieu nhap hang");}
     @Override
-    public void nhapSua() {System.out.println(">> Khong duoc phep sua chi tiet phieu nhap hang");}
-    @Override
-    public void nhapXoa() {System.out.println(">> Khong duoc phep xoa chi tiet phieu nhap hang");}
-
-    public boolean nhapThem(String maPNH){
+    public boolean nhapChiTiet(String maPNH){
         if(!QuanLyDanhSach.DS_PHIEUNHAPHANG.kiemTraMa(maPNH)) return false;
         if(DS_ChiTietPhieuNhapHang.length < this.soLuong + soLuong) DS_ChiTietPhieuNhapHang = Arrays.copyOf(DS_ChiTietPhieuNhapHang, this.soLuong + soLuong);
         for(int i = 0; i < soLuong; i++) {
@@ -55,9 +51,12 @@ public class DanhSachChiTietPhieuNhapHang implements IDanhSach {
                 else break;
             }
             DS_ChiTietPhieuNhapHang[soLuong++] = ctpnhMoi;
-            ctpnhMoi.setDonGiaNhap(QuanLyDanhSach.DS_NGUYENLIEU.timKiemMa(ctpnhMoi.getMaNL()).getDonGia());
+            NguyenLieu nl = QuanLyDanhSach.DS_NGUYENLIEU.timKiemMa(ctpnhMoi.getMaNL());
+            while (ctpnhMoi.nhap().getSoLuong() > nl.getSoLuong())
+                System.out.println("So nguyen lieu con lai trong kho trong du");
+            ctpnhMoi.setDonGiaNhap(nl.getDonGia());
             ctpnhMoi.setThanhTien(ctpnhMoi.getDonGiaNhap() * ctpnhMoi.getSoLuong());
-            // tam thoi chua cap nhat so luong cho nguyen lieu
+            QuanLyDanhSach.DS_NGUYENLIEU.capNhatSoLuong(maPNH, ctpnhMoi.getSoLuong());
         }
         return true;
     }
@@ -96,6 +95,6 @@ public class DanhSachChiTietPhieuNhapHang implements IDanhSach {
 
     @Override 
     public void xuatDanhSach() {
-
+        
     }
 }

@@ -149,7 +149,6 @@ public class DanhSachHoaDon implements IDanhSach {
         }
         NhapChuan.docChuoi("Enter de quay lai");
     }
-    @Override
     public void nhapSapXep() {
         System.out.println("**** Sap xep hoa don theo ngay tao don ****");
         DanhSachHoaDon dsDaSapXep = sapXepTheoNgayTaoDon(NhapChuan.docThuTuSapXep());

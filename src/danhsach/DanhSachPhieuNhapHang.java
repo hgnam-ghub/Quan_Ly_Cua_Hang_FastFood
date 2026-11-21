@@ -95,7 +95,7 @@ public class DanhSachPhieuNhapHang implements IDanhSach{
             DS_PhieuNhapHang[soLuong++] = pnhMoi;
             pnhMoi.nhap();
 
-            QuanLyDanhSach.DS_CHITIETPHIEUNHAPHANG.nhapThem(pnhMoi.getMaPNH());
+            QuanLyDanhSach.DS_CHITIETPHIEUNHAPHANG.nhapChiTiet(pnhMoi.getMaPNH());
         }
     }
 
