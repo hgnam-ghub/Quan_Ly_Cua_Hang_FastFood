@@ -42,8 +42,9 @@ public class DanhSachChiTietPhieuNhapHang implements IChiTietDanhSach{
     public double nhapChiTiet(String maPNH){
         if(!QuanLyDanhSach.DS_PHIEUNHAPHANG.kiemTraMa(maPNH)) return -1;
         double tongTien = 0;
-        if(DS_ChiTietPhieuNhapHang.length < this.soLuong + soLuong) DS_ChiTietPhieuNhapHang = Arrays.copyOf(DS_ChiTietPhieuNhapHang, this.soLuong + soLuong);
-        for(int i = 0; i < soLuong; i++) {
+        int soLuongThem = NhapChuan.docSoNguyenKhongAm("Nhap so luong chi tiet phieu muon them");
+        if(DS_ChiTietPhieuNhapHang.length < soLuong + soLuongThem) DS_ChiTietPhieuNhapHang = Arrays.copyOf(DS_ChiTietPhieuNhapHang, soLuong + soLuongThem);
+        for(int i = 0; i < soLuongThem; i++) {
             ChiTietPhieuNhapHang ctpnhMoi = new ChiTietPhieuNhapHang();
             ctpnhMoi.setMaPNH(maPNH);
             while(true) {

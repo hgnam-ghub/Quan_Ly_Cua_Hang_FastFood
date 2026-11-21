@@ -35,9 +35,6 @@ public final class PhieuNhapHang implements ITruyXuatMoHinh{
 
     @Override
     public PhieuNhapHang nhap() {
-        maPNH = NhapChuan.docChuoiKhongRong("Ma PNH");
-        maNV = NhapChuan.docChuoiKhongRong("Ma NV");
-        maNCC = NhapChuan.docChuoiKhongRong("Ma NCC");
         ngayTaoPhieu = NhapChuan.docNgay(maNCC);
         trangThai = NhapChuan.docChuoi("Trang Thai");
         phuongThucThanhToan = NhapChuan.docChuoi("Phuong Thuc Thanh Toan");
