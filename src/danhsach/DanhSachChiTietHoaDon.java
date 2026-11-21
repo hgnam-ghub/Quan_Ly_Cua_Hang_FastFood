@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mohinh.ChiTietHoaDon;
-import rangbuoc.IDanhSach;
+import rangbuoc.IChiTietDanhSach;
 import tienich.FormatBang;
 import tienich.LuuTru;
 import tienich.NhapChuan;
 
-public final class DanhSachChiTietHoaDon implements IDanhSach {
+public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
     private ChiTietHoaDon[] DS_ChiTietHoaDon;
     private int soLuong;
 
@@ -82,12 +82,6 @@ public final class DanhSachChiTietHoaDon implements IDanhSach {
         return cthd;
     }
 
-    private ChiTietHoaDon sua(String maHD, String maSP) {
-        int viTri = timKiemViTriChiTietHoaDon(maHD, maSP);
-        if (viTri == -1) return null;
-        return DS_ChiTietHoaDon[viTri].nhap();
-    }
-
     private boolean xoa(String maHD, String maSP) {
         int viTri = timKiemViTriChiTietHoaDon(maHD, maSP);
         if (viTri == -1) return false;
@@ -141,46 +135,9 @@ public final class DanhSachChiTietHoaDon implements IDanhSach {
         NhapChuan.docChuoi("Enter de quay lai");
     }
     @Override
-    public void nhapThem() {
-        System.out.println("**** Bat dau nhap danh sach chi tiet hoa don ****");
-        int nhapThem = NhapChuan.docSoNguyenKhongAm("So luong chi tiet hoa don muon them");
-        DS_ChiTietHoaDon = Arrays.copyOf(DS_ChiTietHoaDon, soLuong + nhapThem);
-        for(int i = 0; i < nhapThem; i++) {
-            System.out.println("---------------------");
-            System.out.println("Chi tiet hoa don thu " + (soLuong + 1)+": ");
-            DS_ChiTietHoaDon[i] = new ChiTietHoaDon();
-            DS_ChiTietHoaDon[i].setMa(NhapChuan.docChuoiKhongRong("Nhap ma hoa don"), NhapChuan.docChuoiKhongRong("Nhap ma san pham"));
-            DS_ChiTietHoaDon[i].nhap();
-            soLuong++;
-        }
-        System.out.println("**** Ket thuc nhap danh sach chi tiet hoa don ****");
-        NhapChuan.docChuoi("Enter de quay lai");
-    }
+    public boolean nhapChiTiet(String maDon) {
 
-    @Override
-    public void nhapSua() {
-        do {
-            String maHD = NhapChuan.docChuoiKhongRong("Nhap ma hoa don");
-            String maSP = NhapChuan.docChuoiKhongRong("Nhap ma san pham");
-            if (sua(maHD, maSP) == null)
-                System.out.println(">> Chi tiet hoa don nay khong ton tai trong danh sach");
-            else
-                System.out.println(">> Sua thanh cong");
-            System.out.println("Co tiep tuc nhap sua them chi tiet hoa don khac khong?");
-        } while (NhapChuan.docYesNo("", false));
-    }
-
-    @Override
-    public void nhapXoa() {
-        do {
-            String maHD = NhapChuan.docChuoiKhongRong("Nhap ma hoa don");
-            String maSP = NhapChuan.docChuoiKhongRong("Nhap ma san pham");
-            if (!xoa(maHD, maSP))
-                System.out.println(">> Khong tim thay chi tiet hoa don can xoa");
-            else
-                System.out.println(">> Xoa thanh cong");
-            System.out.println("Co tiep tuc xoa cac chi tiet hoa don khac khong?");
-        } while (NhapChuan.docYesNo("", false));
+        return false;
     }
 
     public void xoaTheoDanhSach(DanhSachChiTietHoaDon DS_HD) {
