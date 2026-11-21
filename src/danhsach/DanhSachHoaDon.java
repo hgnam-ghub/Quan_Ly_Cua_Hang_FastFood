@@ -65,9 +65,8 @@ public class DanhSachHoaDon implements IDanhSach {
     }
     private boolean them(HoaDon hd) {
         if(kiemTraMa(hd.getMaHD())) return false;
-        if(soLuong == DS_HoaDon.length) DS_HoaDon = Arrays.copyOf(DS_HoaDon, ++soLuong);
-        else ++soLuong;
-        DS_HoaDon[soLuong--] = hd.saoChep();
+        if(soLuong == DS_HoaDon.length) DS_HoaDon = Arrays.copyOf(DS_HoaDon, soLuong+1);
+        DS_HoaDon[soLuong++] = hd.saoChep();
         return true;
     }
     public boolean kiemTraMa(String maHD) {
@@ -91,7 +90,7 @@ public class DanhSachHoaDon implements IDanhSach {
     @Override
     public void nhapThem() {
         System.out.println("==============================");
-        int soLuongThem = NhapChuan.docSoNguyenKhongAm("So luong phieu nhap muon them");
+        int soLuongThem = NhapChuan.docSoNguyenKhongAm("So luong hoa don muon them");
         if(DS_HoaDon.length < soLuong + soLuongThem) DS_HoaDon = Arrays.copyOf(DS_HoaDon, soLuong + soLuongThem);
         for(int i = 0; i < soLuongThem; i++) {
             HoaDon hdMoi = new HoaDon();
