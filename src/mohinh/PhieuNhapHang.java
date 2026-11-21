@@ -69,6 +69,10 @@ public final class PhieuNhapHang implements ITruyXuatMoHinh{
     public PhieuNhapHang setMaPNH(String maPNH) {this.maPNH = maPNH; return this;}
     public PhieuNhapHang setMaNV(String maNV) {this.maNV = maNV; return this;}
     public PhieuNhapHang setMaNCC(String maNCC) {this.maNCC = maNCC; return this;}
+    public PhieuNhapHang setNgayTaoPhieu(LocalDate ngayTao) {this.ngayTaoPhieu = ngayTao; return this;}
+    public PhieuNhapHang setTrangThai(String trangThai) {this.trangThai = trangThai; return this;}
+    public PhieuNhapHang setPhuongThucThanhToan(String PTTT) {this.phuongThucThanhToan = PTTT; return this;}
+    public PhieuNhapHang setTongTien(double tongTien) {this.tongTien = tongTien; return this;}
     public String getMaPNH() {return maPNH;}
     public String getMaNV() {return maNV;}
     public String getMaNCC() {return maNCC;}
