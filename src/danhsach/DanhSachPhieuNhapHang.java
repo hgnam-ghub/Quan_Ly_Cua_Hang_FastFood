@@ -94,6 +94,8 @@ public class DanhSachPhieuNhapHang implements IDanhSach{
                 System.out.println("khong tim thay nha cung cap nay!!!");
             DS_PhieuNhapHang[soLuong++] = pnhMoi;
             pnhMoi.nhap();
+
+            QuanLyDanhSach.DS_CHITIETPHIEUNHAPHANG.nhapThem(pnhMoi.getMaPNH());
         }
     }
 
