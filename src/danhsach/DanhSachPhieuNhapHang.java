@@ -111,6 +111,7 @@ public class DanhSachPhieuNhapHang implements IDanhSach{
             DS_PhieuNhapHang[soLuong++] = pnhMoi;
             pnhMoi.nhap();
             pnhMoi.setTongTien(QuanLyDanhSach.DS_CHITIETPHIEUNHAPHANG.nhapChiTiet(pnhMoi.getMaPNH()));
+            NhapChuan.docChuoi("Enter de quay lai");
         }
     }
     
