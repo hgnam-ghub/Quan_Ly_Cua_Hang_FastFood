@@ -27,7 +27,7 @@ public final class ChiTietPhieuNhapHang implements ITruyXuatMoHinh{
 
     @Override
     public  ChiTietPhieuNhapHang nhap() {
-        donGiaNhap = NhapChuan.docSoNguyenKhongAm("So Luong");
+        soLuong = NhapChuan.docSoNguyenKhongAm("So Luong");
         return this;
     }
     @Override 

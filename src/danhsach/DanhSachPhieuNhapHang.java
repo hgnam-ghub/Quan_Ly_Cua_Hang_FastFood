@@ -38,7 +38,7 @@ public class DanhSachPhieuNhapHang implements IDanhSach{
         String[] tieuDeCot= new String[] {"Ma PNH", "Ma NV", "Ma NCC", "Ngay Tao Phieu", "Trang Thai", "Phuong Thuc Thanh Toan", "Tong Tien"};
         String[][] bangDuLieu = new String[soLuong + 1][];
         bangDuLieu[0] = tieuDeCot;
-        for(int i = 0; i < 0; i++)
+        for(int i = 0; i < soLuong; i++)
             bangDuLieu[i+1] = DS_PhieuNhapHang[i].xuat();
         FormatBang.inBangDuLieu("Phieu Nhap Hang",bangDuLieu);
         NhapChuan.docChuoi("Enter de quay lai");
