@@ -15,17 +15,22 @@ public class KhachHang implements ITruyXuatMoHinh
     private LocalDate ngaySinh;
     private double tongTienDaMua;
 
-    public KhachHang() {this("", "", "", "", null,0);}
-    public KhachHang(String ma, String ho, String ten, String soDienThoai, LocalDate ngaySinh, double tongTienDaMua) {
+    public KhachHang() {this("", "", "", "khong co", "01/01/2000",0);}
+    protected KhachHang(String ma, String ho, String ten, String soDienThoai, LocalDate ngaySinh) {
         if(setMa(ma)==null) {this.ma = "khong hop le";}
         if(setHo(ho)==null) this.ho = "khong hop le";
         if(setTen(ten)==null) this.ten = "khong hop le";
         if(setSoDienThoai(soDienThoai)==null) this.soDienThoai = "khong hop le";
         if(setNgaySinh(ngaySinh)==null) this.ngaySinh = LocalDate.of(2000, 1, 1);
-        if(thanhToan(tongTienDaMua)==null) this.tongTienDaMua = tongTienDaMua;
+        if(thanhToan(tongTienDaMua)==null) this.tongTienDaMua = 0;
+    }
+    protected KhachHang(String ma, String ho, String ten, String soDienThoai, String ngaySinh, double tongTienDaMua) {
+        this(ma, ho, ten, soDienThoai, LocalDate.parse(ngaySinh, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        this.tongTienDaMua = tongTienDaMua;
+        
     }
     protected KhachHang(KhachHang khachHang) {
-        this(khachHang.ma, khachHang.ho, khachHang.ten, khachHang.soDienThoai, khachHang.ngaySinh, khachHang.tongTienDaMua);
+        this(khachHang.ma, khachHang.ho, khachHang.ten, khachHang.soDienThoai, khachHang.ngaySinh);
     }
     public KhachHang saoChep() {
         return new KhachHang(this);
@@ -60,8 +65,8 @@ public class KhachHang implements ITruyXuatMoHinh
         tongTienDaMua = dis.readDouble();
     }
     public String getMa(){return ma;}
-    public String getHo(){return ho;}
     public String getTen(){return ten;}
+    public String getHo(){return ho;}
     public String getSoDienThoai(){return soDienThoai;}
     public LocalDate getNgaySinh(){return ngaySinh;}
     public double getTongSoTienMua(){return tongTienDaMua;}

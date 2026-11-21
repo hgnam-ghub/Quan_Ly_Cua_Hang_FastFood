@@ -13,6 +13,7 @@ import rangbuoc.IDanhSach;
 import tienich.FormatBang;
 import tienich.LuuTru;
 import tienich.NhapChuan;
+import tienich.QuanLyDanhSach;
 public class DanhSachKhachHang implements IDanhSach {
     private KhachHang[] DS_KhachHang;
     private int soLuong;
@@ -84,6 +85,7 @@ public class DanhSachKhachHang implements IDanhSach {
             DS_KhachHang[i] = DS_KhachHang[i + 1];
         }
         DS_KhachHang[--soLuong] = null;
+        QuanLyDanhSach.DS_HOADON.xoaTheoMaKH(ma);
         return true;
     }
     // cac phuong thuc giao tiep ra ben ngoai
@@ -128,6 +130,7 @@ public class DanhSachKhachHang implements IDanhSach {
         }
         NhapChuan.docChuoi("Enter de quay lai");
     }
+    @Override
     public void nhapSapXep() {
         System.out.println("**** Sap xep khach hang theo ngay sinh ****");
         DanhSachKhachHang dsDaSapXep = sapXepTheoNgaySinh(NhapChuan.docThuTuSapXep());
