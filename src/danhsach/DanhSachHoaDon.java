@@ -36,7 +36,7 @@ public class DanhSachHoaDon implements IDanhSach {
     @Override
     public void xuatDanhSach() {
        String[][] bangKhachHang = new String[soLuong + 1][];
-        bangKhachHang[0] = new String[] {"Ma HD", "Ma NV", "Ma KH", "Ngay lap", "Tong tien", "Trang thai", "Phuong thuc thanh toan"};
+        bangKhachHang[0] = new String[] {"Ma HD", "Ma NV", "Ma KH", "Ngay lap", "Phuong thuc thanh toan", "Trang thai",  "Tong tien"};
         for (int i = 0; i < soLuong; i++) {
             bangKhachHang[i + 1] = DS_HoaDon[i].xuat();
         }
