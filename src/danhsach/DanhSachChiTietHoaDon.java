@@ -139,12 +139,10 @@ public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
 
         return false;
     }
-
-    public void xoaTheoDanhSach(DanhSachChiTietHoaDon DS_HD) {
-        for (int i = 0; i < DS_HD.soLuong; i++)
-            xoa(DS_HD.DS_ChiTietHoaDon[i].getMaHoaDon(), DS_HD.DS_ChiTietHoaDon[i].getMaSanPham());
+    public void xoaTheoMaHD(String maHD) {
+        for (int i = soLuong - 1; i >= 0; i--)
+            if (DS_ChiTietHoaDon[i].getMaHoaDon().equals(maHD)) xoa(maHD, DS_ChiTietHoaDon[i].getMaSanPham());
     }
-
     public void nhapTuDanhSach(DanhSachChiTietHoaDon DS_HD) {
         for (int i = 0; i < DS_HD.soLuong; i++)
             if (!kiemTraMa(DS_HD.DS_ChiTietHoaDon[i].getMaHoaDon(), DS_HD.DS_ChiTietHoaDon[i].getMaSanPham()))
