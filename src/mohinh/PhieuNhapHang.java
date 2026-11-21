@@ -35,14 +35,14 @@ public final class PhieuNhapHang implements ITruyXuatMoHinh{
 
     @Override
     public PhieuNhapHang nhap() {
-        ngayTaoPhieu = NhapChuan.docNgay(maNCC);
+        ngayTaoPhieu = NhapChuan.docNgay("Ngay tao phieu");
         trangThai = NhapChuan.docChuoi("Trang Thai");
         phuongThucThanhToan = NhapChuan.docChuoi("Phuong Thuc Thanh Toan");
         return this;
     }
     @Override 
     public String[] xuat() {
-        return new String[] {maPNH, maNV, maNCC, trangThai, ngayTaoPhieu.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), trangThai, phuongThucThanhToan,String.valueOf(tongTien)};
+        return new String[] {maPNH, maNV, maNCC, ngayTaoPhieu.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), trangThai, phuongThucThanhToan,String.valueOf(tongTien)};
     }
     @Override
     public void ghiFile(DataOutputStream dos) throws IOException {
