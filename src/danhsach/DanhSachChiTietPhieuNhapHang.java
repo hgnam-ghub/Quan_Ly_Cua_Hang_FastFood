@@ -64,7 +64,11 @@ public class DanhSachChiTietPhieuNhapHang implements IChiTietDanhSach{
     
     @Override
     public void nhapTimKiem() {
-        
+        System.out.println("**** Tim kiem chi tiet hoa don (Nhap it nhat 1 ma de tim) ****");
+        DanhSachChiTietPhieuNhapHang dsKq = timKiemNhieuMa(NhapChuan.docChuoi("Ma phieu nhap"), NhapChuan.docChuoi("Ma nguyen lieu"));
+        if(dsKq == null) System.out.println(">> khong tim thay");
+        else dsKq.xuatDanhSach();
+        NhapChuan.docChuoi("Enter de quay lai");
     }
     @Override
     public void xuatDanhSachRaFile() throws IOException{
@@ -82,16 +86,19 @@ public class DanhSachChiTietPhieuNhapHang implements IChiTietDanhSach{
         dis.close();
     }
 
-    public DanhSachChiTietPhieuNhapHang timKiemMaPNH(String maPNH) {
-        return null;
-    }
-    public DanhSachChiTietPhieuNhapHang timKiemMaNL(String maNL) {
-        return null;
-    }
+    public DanhSachChiTietPhieuNhapHang timKiemMaPNH(String maPNH) {return timKiemNhieuMa(maPNH, "");}
+    public DanhSachChiTietPhieuNhapHang timKiemMaNL(String maNL) {return timKiemNhieuMa("", maNL);}
     public boolean kiemTraMa(String maPNH, String maNL) {
         for(int i = 0; i < soLuong; i++) 
             if(DS_ChiTietPhieuNhapHang[i].getMaPNH().equals(maPNH) && DS_ChiTietPhieuNhapHang[i].getMaNL().equals(maNL)) return true;
         return false;
+    }
+
+    private ChiTietPhieuNhapHang them(ChiTietPhieuNhapHang ctpnh) {
+        if(kiemTraMa(ctpnh.getMaPNH(), ctpnh.getMaNL())) return null;
+        if(soLuong == DS_ChiTietPhieuNhapHang.length) DS_ChiTietPhieuNhapHang = Arrays.copyOf(DS_ChiTietPhieuNhapHang, ++soLuong);
+        else soLuong++;
+        return DS_ChiTietPhieuNhapHang[soLuong-1] = ctpnh;
     }
 
     @Override 
@@ -101,5 +108,17 @@ public class DanhSachChiTietPhieuNhapHang implements IChiTietDanhSach{
         bangDuLieu[0] = tieuDeCot;
         for(int i = 0; i < soLuong; i++) bangDuLieu[i+1] = DS_ChiTietPhieuNhapHang[i].xuat();
         FormatBang.inBangDuLieu("Chi Tiet Phieu Nhap Hang",bangDuLieu);
+    }
+
+    public DanhSachChiTietPhieuNhapHang timKiemNhieuMa(String maPNH, String maNCC) {
+        if(maPNH.isEmpty() && maNCC.isEmpty()) return null;
+        DanhSachChiTietPhieuNhapHang dsTam = new DanhSachChiTietPhieuNhapHang();
+        for (int i = 0; i < soLuong; i++) {
+            ChiTietPhieuNhapHang cthd = DS_ChiTietPhieuNhapHang[i];
+            if(!maPNH.isEmpty() && !cthd.getMaPNH().equals(maPNH)) continue;
+            if(!maNCC.isEmpty() && !cthd.getMaNL().equals(maNCC)) continue;
+            dsTam.them(cthd.saoChep());
+        }
+        return (dsTam.soLuong == 0) ? null : dsTam;
     }
 }

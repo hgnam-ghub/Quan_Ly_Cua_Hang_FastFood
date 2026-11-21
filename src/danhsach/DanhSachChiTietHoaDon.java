@@ -118,23 +118,8 @@ public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
         return 0;
     }
 
-    public DanhSachChiTietHoaDon timKiemMaHD(String maHD) {
-        DanhSachChiTietHoaDon dsTam = new DanhSachChiTietHoaDon();
-        for (int i = 0; i < soLuong; i++)
-            if (DS_ChiTietHoaDon[i] != null && DS_ChiTietHoaDon[i].getMaHoaDon().equals(maHD))
-                dsTam.them(DS_ChiTietHoaDon[i].saoChep());
-        return (dsTam.soLuong == 0) ? null : dsTam;
-    }
-
-    public DanhSachChiTietHoaDon timKiemMaSP(String maSP) {
-        DanhSachChiTietHoaDon dsTam = new DanhSachChiTietHoaDon();
-        for (int i = 0; i < soLuong; i++)
-            if (DS_ChiTietHoaDon[i] != null && DS_ChiTietHoaDon[i].getMaSanPham().equals(maSP))
-                dsTam.them(DS_ChiTietHoaDon[i].saoChep());
-        return (dsTam.soLuong == 0) ? null : dsTam;
-    }
-    // tim theo nhieu ma cung luc: ma nao rong thi bo qua, cac ma con lai phai khop dong thoi
-    // chi nhap 1 ma thi tra ve tat ca chi tiet hoa don chua ma do
+    public DanhSachChiTietHoaDon timKiemMaHD(String maHD) {return timKiemNhieuMa(maHD, "");}
+    public DanhSachChiTietHoaDon timKiemMaSP(String maSP) {return timKiemNhieuMa("", maSP);}
     public DanhSachChiTietHoaDon timKiemNhieuMa(String maHD, String maSP) {
         if(maHD.isEmpty() && maSP.isEmpty()) return null;
         DanhSachChiTietHoaDon dsTam = new DanhSachChiTietHoaDon();
