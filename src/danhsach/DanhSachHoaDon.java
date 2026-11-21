@@ -12,6 +12,7 @@ import mohinh.HoaDon;
 import tienich.FormatBang;
 import tienich.LuuTru;
 import tienich.NhapChuan;
+import tienich.QuanLyDanhSach;
 import rangbuoc.IDanhSach;
 
 public class DanhSachHoaDon implements IDanhSach {
@@ -91,7 +92,12 @@ public class DanhSachHoaDon implements IDanhSach {
         for (int i = viTri; i < soLuong - 1; i++)
             DS_HoaDon[i] = DS_HoaDon[i + 1];
         DS_HoaDon[--soLuong] = null;
+        QuanLyDanhSach.DS_CHITIETHOADON.xoaTheoMaHD(maHD);
         return true;
+    }
+    public void xoaTheoMaKH(String maKH) {
+        for (int i = soLuong - 1; i >= 0; i--)
+            if (DS_HoaDon[i].getMaKhachHang().equals(maKH)) xoa(DS_HoaDon[i].getMaHoaDon());
     }
     public boolean kiemTraMa(String maHD) {
         return timKiemViTriHoaDon(maHD) != -1;
@@ -120,16 +126,18 @@ public class DanhSachHoaDon implements IDanhSach {
         return them(hd) != null;
     }
     private String nhapMaNVHopLe() {
+        if(dsNhanVien==null) dsNhanVien=QuanLyDanhSach.DS_NHANVIEN;
         while (true) {
             String maNV = NhapChuan.docChuoiKhongRong("Nhap ma nhan vien");
-            if (dsNhanVien == null || dsNhanVien.kiemTraMa(maNV)) return maNV;
+            if (dsNhanVien.kiemTraMa(maNV)) return maNV;
             System.out.println(">> Ma nhan vien khong ton tai, nhap lai!");
         }
     }
     private String nhapMaKHHopLe() {
+        if (dsKhachHang == null) dsKhachHang = QuanLyDanhSach.DS_KHACHHANG; // tro thang vao danh sach khach hang that (khong sao chep) de luon dong bo
         while (true) {
             String maKH = NhapChuan.docChuoiKhongRong("Nhap ma khach hang");
-            if (dsKhachHang == null || dsKhachHang.kiemTraMa(maKH)) return maKH;
+            if (dsKhachHang.kiemTraMa(maKH)) return maKH; // ma khach hang phai ton tai trong danh sach khach hang
             System.out.println(">> Ma khach hang khong ton tai, nhap lai!");
         }
     }
@@ -149,6 +157,7 @@ public class DanhSachHoaDon implements IDanhSach {
         }
         NhapChuan.docChuoi("Enter de quay lai");
     }
+    @Override
     public void nhapSapXep() {
         System.out.println("**** Sap xep hoa don theo ngay tao don ****");
         DanhSachHoaDon dsDaSapXep = sapXepTheoNgayTaoDon(NhapChuan.docThuTuSapXep());
