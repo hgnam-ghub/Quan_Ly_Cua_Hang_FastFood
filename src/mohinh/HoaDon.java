@@ -1,4 +1,6 @@
 package mohinh;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -9,15 +11,15 @@ public class HoaDon implements ITruyXuatMoHinh {
     private String maHD;
     private String maNV;
     private String maKH;
-    private String ngayTaoDon;
+    private LocalDate ngayTaoDon;
     private String trangThai;
     private String phuongThucThanhToan;
     private double tongTien;
 
-    public HoaDon() {this("", "", "", "01/01/2000", "khong co", "khong co", 0);}
-    protected HoaDon(String maHD, String maNV, String maKH, String ngayTaoDon, String trangThai, String phuongThucThanhToan, double tongTien) {
+    public HoaDon() {this("", "", "", LocalDate.of(2000, 1, 1), "khong co", "khong co", 0);}
+    protected HoaDon(String maHD, String maNV, String maKH, LocalDate ngayTaoDon, String trangThai, String phuongThucThanhToan, double tongTien) {
         if(setMa(maHD, maNV, maKH)==null) {this.maHD = "khong hop le"; this.maNV = "khong hop le"; this.maKH = "khong hop le";}
-        if(setNgayTaoDon(ngayTaoDon)==null) this.ngayTaoDon = "01/01/2000";
+        if(setNgayTaoDon(ngayTaoDon)==null) this.ngayTaoDon = LocalDate.of(2000, 1, 1);
         if(setTrangThai(trangThai)==null) this.trangThai = "khong co";
         if(setPhuongThucThanhToan(phuongThucThanhToan)==null) this.phuongThucThanhToan = "khong co";
         if(setTongTien(tongTien)==null) this.tongTien = 0;
@@ -28,12 +30,13 @@ public class HoaDon implements ITruyXuatMoHinh {
     public HoaDon saoChep() {return new HoaDon(this){};}
 
     public String[] xuat() {
-        return new String[] {maHD, maNV, maKH, ngayTaoDon, trangThai, phuongThucThanhToan, String.valueOf(tongTien)};
+        String NgayStr = (ngayTaoDon != null) ? ngayTaoDon.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "01/01/2000";
+        return new String[] {maHD, maNV, maKH, NgayStr, trangThai, phuongThucThanhToan, String.valueOf(tongTien)};
     }
 
     public HoaDon nhap() {
         System.out.println("Nhap thong tin cho hoa don co ma: " + maHD);
-        setNgayTaoDon(NhapChuan.docChuoiKhongRong("Ngay tao don (dd/MM/yyyy)"));
+        setNgayTaoDon(NhapChuan.docNgay("Ngay tao don (dd/MM/yyyy)"));
         setTrangThai(NhapChuan.docChuoiKhongRong("Trang thai"));
         setPhuongThucThanhToan(NhapChuan.docChuoiKhongRong("Phuong thuc thanh toan"));
         setTongTien(NhapChuan.docSoThucKhongAm("Tong tien"));
@@ -44,7 +47,7 @@ public class HoaDon implements ITruyXuatMoHinh {
         dos.writeUTF(maHD);
         dos.writeUTF(maNV);
         dos.writeUTF(maKH);
-        dos.writeUTF(ngayTaoDon);
+        dos.writeUTF(ngayTaoDon != null ? ngayTaoDon.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "01/01/2000");
         dos.writeUTF(trangThai);
         dos.writeUTF(phuongThucThanhToan);
         dos.writeDouble(tongTien);
@@ -54,7 +57,7 @@ public class HoaDon implements ITruyXuatMoHinh {
         maHD = dis.readUTF();
         maNV = dis.readUTF();
         maKH = dis.readUTF();
-        ngayTaoDon = dis.readUTF();
+        ngayTaoDon = LocalDate.parse(dis.readUTF(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         trangThai = dis.readUTF();
         phuongThucThanhToan = dis.readUTF();
         tongTien = dis.readDouble();
@@ -63,7 +66,7 @@ public class HoaDon implements ITruyXuatMoHinh {
     public String getMaHoaDon() {return maHD;}
     public String getMaNhanVien() {return maNV;}
     public String getMaKhachHang() {return maKH;}
-    public String getNgayTaoDon() {return ngayTaoDon;}
+    public LocalDate getNgayTaoDon() {return ngayTaoDon;}
     public String getTrangThai() {return trangThai;}
     public String getPhuongThucThanhToan() {return phuongThucThanhToan;}
     public double getTongTien() {return tongTien;}
@@ -75,8 +78,8 @@ public class HoaDon implements ITruyXuatMoHinh {
         maKH = maKHMoi;
         return this;
     }
-    public HoaDon setNgayTaoDon(String ngayTaoDonMoi) {
-        if(ngayTaoDonMoi.isEmpty()) return null;
+    public HoaDon setNgayTaoDon(LocalDate ngayTaoDonMoi) {
+        if(ngayTaoDonMoi == null) return null;
         ngayTaoDon = ngayTaoDonMoi;
         return this;
     }

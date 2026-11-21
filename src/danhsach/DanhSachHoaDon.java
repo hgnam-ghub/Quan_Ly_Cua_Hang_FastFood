@@ -5,7 +5,9 @@ import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Comparator;
 
 import mohinh.HoaDon;
 import tienich.FormatBang;
@@ -16,6 +18,8 @@ import rangbuoc.IDanhSach;
 public class DanhSachHoaDon implements IDanhSach {
     private HoaDon[] DS_HoaDon;
     private int soLuong;
+    private DanhSachNhanVien dsNhanVien;
+    private DanhSachKhachHang dsKhachHang;
 
     public DanhSachHoaDon () {
         soLuong = 0;
@@ -32,13 +36,13 @@ public class DanhSachHoaDon implements IDanhSach {
 
     @Override
     public void xuatDanhSach() {
-        System.out.println("==== Danh Sach Cac Hoa Don ====");
-        for(int i = 0; i < soLuong; i++) {
-            System.out.println("------------");
-            if (DS_HoaDon[i] != null)
-                DS_HoaDon[i].xuat();
+       String[][] bangKhachHang = new String[soLuong + 1][];
+        bangKhachHang[0] = new String[] {"Ma HD", "Ma NV", "Ma KH", "Ngay lap", "Tong tien", "Trang thai", "Phuong thuc thanh toan"};
+        for (int i = 0; i < soLuong; i++) {
+            bangKhachHang[i + 1] = DS_HoaDon[i].xuat();
         }
-        System.out.println("==== Het ====");
+        FormatBang.inBangDuLieu("DANH SACH HOA DON", bangKhachHang);
+        NhapChuan.docChuoi("Enter de quay lai");
     }
     @Override
     public void xuatDanhSachRaFile() {
@@ -116,20 +120,41 @@ public class DanhSachHoaDon implements IDanhSach {
         hd.nhap();
         return them(hd) != null;
     }
+    private String nhapMaNVHopLe() {
+        while (true) {
+            String maNV = NhapChuan.docChuoiKhongRong("Nhap ma nhan vien");
+            if (dsNhanVien == null || dsNhanVien.kiemTraMa(maNV)) return maNV;
+            System.out.println(">> Ma nhan vien khong ton tai, nhap lai!");
+        }
+    }
+    private String nhapMaKHHopLe() {
+        while (true) {
+            String maKH = NhapChuan.docChuoiKhongRong("Nhap ma khach hang");
+            if (dsKhachHang == null || dsKhachHang.kiemTraMa(maKH)) return maKH;
+            System.out.println(">> Ma khach hang khong ton tai, nhap lai!");
+        }
+    }
     @Override
     public void nhapTimKiem() {
-        String maHD = NhapChuan.docChuoiKhongRong("Nhap ma hoa don can tim");
-        HoaDon kq = timKiemTheoMa(maHD);
+        System.out.println("**** Tim kiem hoa don (nhap 1 den 3 ma, Enter de bo qua ma khong nhap) ****");
+        String[] ma = NhapChuan.docNhieuMa("Ma hoa don", "Ma nhan vien", "Ma khach hang");
+        DanhSachHoaDon kq = timKiemNhieuMa(ma[0], ma[1], ma[2]);
         if (kq == null) {
             System.out.println(">> Khong tim thay hoa don!");
         } else {
-            String[][] bang = new String[][] {
-                {"Ma HD", "Ma NV", "Ma KH", "Ngay tao don", "Trang thai", "PT Thanh toan", "Tong tien"},
-                kq.xuat()
-            };
+            String[][] bang = new String[kq.soLuong + 1][];
+            bang[0] = new String[] {"Ma HD", "Ma NV", "Ma KH", "Ngay tao don", "Trang thai", "PT Thanh toan", "Tong tien"};
+            for (int i = 0; i < kq.soLuong; i++)
+                bang[i + 1] = kq.DS_HoaDon[i].xuat();
             FormatBang.inBangDuLieu("KET QUA TIM KIEM", bang);
         }
         NhapChuan.docChuoi("Enter de quay lai");
+    }
+    @Override
+    public void nhapSapXep() {
+        System.out.println("**** Sap xep hoa don theo ngay tao don ****");
+        DanhSachHoaDon dsDaSapXep = sapXepTheoNgayTaoDon(NhapChuan.docThuTuSapXep());
+        dsDaSapXep.xuatDanhSach();
     }
     @Override
     public void nhapThem() {
@@ -138,11 +163,14 @@ public class DanhSachHoaDon implements IDanhSach {
         DS_HoaDon = Arrays.copyOf(DS_HoaDon, soLuong+nhapThem);
         for(int i=0; i<nhapThem; i++){
             System.out.println("--------------");
-            System.out.println("Nhap hoa don thu " + (i+1)+": ");
-            DS_HoaDon[i]=new HoaDon();
-            DS_HoaDon[i].setMa(NhapChuan.docChuoiKhongRong("Ma hoa don"), NhapChuan.docChuoiKhongRong("Ma nhan vien"), NhapChuan.docChuoiKhongRong("Ma khach hang"));
-            DS_HoaDon[i].nhap();
-            soLuong++;
+            System.out.printf("Nhap hoa don thu %d: \n", soLuong + 1);
+            HoaDon hdMoi = new HoaDon();
+            String maNV = nhapMaNVHopLe();
+            String maKH = nhapMaKHHopLe();
+            while (them(hdMoi.setMa(NhapChuan.docChuoiKhongRong("Nhap ma hoa don"), maNV, maKH)) == null) {
+                System.out.println("Ma hoa don da ton tai, nhap lai ma hoa don khac!!!");
+            }
+            hdMoi.nhap();
         }
         System.out.println("**** Ket thuc nhap danh sach hoa don ****");
         NhapChuan.docChuoi("Enter de quay lai");
@@ -190,32 +218,31 @@ public class DanhSachHoaDon implements IDanhSach {
                 dsTam.them(DS_HoaDon[i]);
         return (dsTam.soLuong == 0) ? null : dsTam;
     }
-    public DanhSachHoaDon timKiemTheotongTien(double tongTien) {
+    // tim theo nhieu ma cung luc: ma nao rong thi bo qua, cac ma con lai phai khop dong thoi
+    // chi nhap 1 ma thi tra ve tat ca hoa don chua ma do
+    public DanhSachHoaDon timKiemNhieuMa(String maHD, String maNV, String maKH) {
         DanhSachHoaDon dsTam = new DanhSachHoaDon();
-        for (int i = 0; i < soLuong; i++)
-            if (DS_HoaDon[i] != null && DS_HoaDon[i].getTongTien() == tongTien)
-                dsTam.them(DS_HoaDon[i]);
+        for (int i = 0; i < soLuong; i++) {
+            HoaDon hd = DS_HoaDon[i];
+            if (hd == null) continue;
+            if (!maHD.isEmpty() && !hd.getMaHoaDon().equals(maHD)) continue;
+            if (!maNV.isEmpty() && !hd.getMaNhanVien().equals(maNV)) continue;
+            if (!maKH.isEmpty() && !hd.getMaKhachHang().equals(maKH)) continue;
+            dsTam.them(hd.saoChep());
+        }
         return (dsTam.soLuong == 0) ? null : dsTam;
     }
-    public DanhSachHoaDon timKiemTheoNgayTaoDon(String ngayTaoDon) {
-        DanhSachHoaDon dsTam = new DanhSachHoaDon();
-        for (int i = 0; i < soLuong; i++)
-            if (DS_HoaDon[i] != null && DS_HoaDon[i].getNgayTaoDon().equals(ngayTaoDon)) 
-                dsTam.them(DS_HoaDon[i]);
-        return (dsTam.soLuong == 0) ? null : dsTam;
+    // tra ve ban sao da sap xep, danh sach goc giu nguyen thu tu
+    public DanhSachHoaDon sapXepTheoNgayTaoDon() {
+        return sapXepTheoNgayTaoDon(true);
     }
-    public DanhSachHoaDon timKiemTheoTrangThai(String trangThai) {
-        DanhSachHoaDon dsTam = new DanhSachHoaDon();
-        for (int i = 0; i < soLuong; i++) 
-            if (DS_HoaDon[i] != null && DS_HoaDon[i].getTrangThai().equalsIgnoreCase(trangThai)) 
-                dsTam.them(DS_HoaDon[i]);
-        return (dsTam.soLuong == 0) ? null : dsTam;
-    }
-    public DanhSachHoaDon timKiemTheoPhuongThucThanhToan(String phuongThucThanhToan) {
-        DanhSachHoaDon dsTam = new DanhSachHoaDon();
-        for (int i = 0; i < soLuong; i++) 
-            if (DS_HoaDon[i] != null && DS_HoaDon[i].getPhuongThucThanhToan().equalsIgnoreCase(phuongThucThanhToan)) 
-                dsTam.them(DS_HoaDon[i]);
-        return (dsTam.soLuong == 0) ? null : dsTam;
+    // so sanh bang LocalDate (nam -> thang -> ngay), cung ngay thi xep theo ma hoa don de ket qua on dinh
+    public DanhSachHoaDon sapXepTheoNgayTaoDon(boolean tangDan) {
+        DanhSachHoaDon dsTam = new DanhSachHoaDon(this);
+        Comparator<HoaDon> soSanh = Comparator.comparing(HoaDon::getNgayTaoDon);
+        if (!tangDan) soSanh = soSanh.reversed();
+        soSanh = soSanh.thenComparing(HoaDon::getMaHoaDon);
+        Arrays.sort(dsTam.DS_HoaDon, 0, dsTam.soLuong, soSanh);
+        return dsTam;
     }
 }

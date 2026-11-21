@@ -1,4 +1,7 @@
 package tienich;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import java.util.Scanner;
 
@@ -10,6 +13,45 @@ public final class NhapChuan
     public static String docChuoi(String prompt) {
         System.out.print(prompt + ": ");
         return SCANNER.nextLine().trim();
+    }
+    public static LocalDate docNgay(String prompt) {
+        while (true) {
+            System.out.print(prompt + ": ");
+            String input = SCANNER.nextLine().trim();
+            try {
+                return LocalDate.parse(input, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            } catch (DateTimeParseException e) {
+                System.out.println(">> Ngay khong hop le. Vui long nhap theo dinh dang dd/MM/yyyy.");
+            }
+        }
+    }
+
+    // doc toi da n ma (n = so nhan truyen vao, toi da 3), moi ma co the bo qua bang Enter
+    // neu tat ca cac ma deu rong thi bat nhap lai, ket qua tra ve co cung thu tu voi nhan (ma bo qua la chuoi rong)
+    public static String[] docNhieuMa(String... nhanCacMa) {
+        String[] maDaNhap = new String[nhanCacMa.length];
+        String goiY = (nhanCacMa.length == 1) ? "" : " (Enter de bo qua)";
+        while (true) {
+            boolean coMa = false;
+            for (int i = 0; i < nhanCacMa.length; i++) {
+                maDaNhap[i] = docChuoi(nhanCacMa[i] + goiY);
+                if (!maDaNhap[i].isEmpty()) coMa = true;
+            }
+            if (coMa) return maDaNhap;
+            System.out.println(">> Phai nhap it nhat 1 ma, vui long nhap lai!");
+        }
+    }
+
+    // hoi nguoi dung chon sap xep tang dan (cu -> moi) hay giam dan (moi -> cu), true = tang dan
+    public static boolean docThuTuSapXep() {
+        System.out.println("1. Tang dan (cu nhat -> moi nhat)");
+        System.out.println("2. Giam dan (moi nhat -> cu nhat)");
+        while (true) {
+            int chon = docSoNguyen("Chon thu tu sap xep");
+            if (chon == 1) return true;
+            if (chon == 2) return false;
+            System.out.println(">> Chi duoc chon 1 hoac 2!");
+        }
     }
 
     public static int nhapLuaChonMenu() {
