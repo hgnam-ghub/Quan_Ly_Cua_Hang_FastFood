@@ -57,7 +57,7 @@ public class DanhSachPhieuNhapHang implements IDanhSach{
         DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.FILEDSPNH));
             soLuong = dis.readInt();
             if(soLuong > DS_PhieuNhapHang.length) DS_PhieuNhapHang = new PhieuNhapHang[soLuong];
-            for(int i = 0; i < soLuong; i++) DS_PhieuNhapHang[i].docFile(dis);
+            for(int i = 0; i < soLuong; i++) {DS_PhieuNhapHang[i] = new PhieuNhapHang(); DS_PhieuNhapHang[i].docFile(dis);}
         dis.close();
     }
 

@@ -42,7 +42,7 @@ public final class PhieuNhapHang implements ITruyXuatMoHinh{
     }
     @Override 
     public String[] xuat() {
-        return new String[] {maPNH, maNV, maNCC, trangThai, ngayTaoPhieu.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), phuongThucThanhToan,String.valueOf(tongTien)};
+        return new String[] {maPNH, maNV, maNCC, trangThai, ngayTaoPhieu.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), trangThai, phuongThucThanhToan,String.valueOf(tongTien)};
     }
     @Override
     public void ghiFile(DataOutputStream dos) throws IOException {
