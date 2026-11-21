@@ -12,6 +12,7 @@ import rangbuoc.IChiTietDanhSach;
 import tienich.FormatBang;
 import tienich.LuuTru;
 import tienich.NhapChuan;
+import tienich.QuanLyDanhSach;
 
 public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
     private ChiTietHoaDon[] DS_ChiTietHoaDon;
@@ -44,7 +45,6 @@ public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
         FormatBang.inBangDuLieu("DANH SACH CHI TIET HOA DON", bangDuLieu);
         NhapChuan.docChuoi("Enter de quay lai");
     }
-
     @Override
     public void xuatDanhSachRaFile() throws IOException {
         DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.FILEDSCTDH));
@@ -54,7 +54,6 @@ public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
         }
         dos.close();
     }
-
     @Override
     public void nhapDanhSachTuFile() throws IOException {
         DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.FILEDSCTDH));
@@ -113,9 +112,28 @@ public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
         else dsKq.xuatDanhSach();
         NhapChuan.docChuoi("Enter de quay lai");
     }
+    // nhan ma hoa don, kiem tra co ton tai roi moi nhap tung ma san pham + so luong (don gia, thanh tien may tu tinh)
+    // tra ve tong tien cua cac chi tiet vua nhap, tra ve -1 neu khong nhap duoc
     @Override
     public double nhapChiTiet(String maHD) {
-        return 0;
+        if (!QuanLyDanhSach.DS_HOADON.kiemTraMa(maHD) || QuanLyDanhSach.DS_SANPHAM.getSoLuong() == 0) return -1;
+        double tongTien = 0;
+        int soChiTiet;
+        do soChiTiet = NhapChuan.docSoNguyenKhongAm("Nhap so luong chi tiet hoa don muon them (>= 1)"); 
+        while (soChiTiet < 1);
+        
+        for (int i = 0; i < soChiTiet; i++) {
+            String maSP = NhapChuan.docChuoiKhongRong("Ma san pham");
+            while (!QuanLyDanhSach.DS_SANPHAM.kiemTraMa(maSP) || kiemTraMa(maHD, maSP))
+                maSP = NhapChuan.docChuoiKhongRong("Ma san pham khong ton tai hoac da co, nhap lai");
+            int soLuongBan;
+            do soLuongBan = NhapChuan.docSoNguyenKhongAm("So luong (>= 1)"); while (soLuongBan < 1);
+            ChiTietHoaDon cthd = new ChiTietHoaDon();
+            cthd.setMa(maHD, maSP).setSoLuong(soLuongBan);
+            cthd.setDonGiaBan(QuanLyDanhSach.DS_SANPHAM.timKiemMa(maSP).getGia());
+            tongTien += them(cthd).getThanhTien();
+        }
+        return tongTien;
     }
 
     public DanhSachChiTietHoaDon timKiemMaHD(String maHD) {return timKiemNhieuMa(maHD, "");}
