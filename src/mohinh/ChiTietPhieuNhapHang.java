@@ -1,42 +1,54 @@
 package mohinh;
 
-public final class ChiTietPhieuNhapHang{
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import rangbuoc.ITruyXuatMoHinh;
+import tienich.NhapChuan;
+
+public final class ChiTietPhieuNhapHang implements ITruyXuatMoHinh{
     private String maPNH; 
     private String maNL; 
     private double donGiaNhap;
     private double thanhTien;
     private int soLuong;
 
-    public ChiTietPhieuNhapHang (String maPNH, String maNL, double donGiaNhap, double thanhTien, int soLuong) {
-        if(!setMa(maPNH, maNL)) {this.maPNH = "khong hop le"; this.maNL = "khong hop le";}
-        if(!setDonGiaNhap(donGiaNhap)) this.donGiaNhap = 0;
-        if(!setThanhTien(thanhTien)) this.thanhTien = 0;
-        if(!setSoLuong(soLuong)) this.soLuong = 1;
+    public ChiTietPhieuNhapHang (String maPNH, String maNL, double donGiaNhap, double thanhTien, int soLuong){
+        if(setMaPNH(maPNH) == null) {this.maPNH = "khong hop le";}
+        if(setMaNL(maNL) == null) {this.maNL = "khong hop le";}
+        if(setDonGiaNhap(donGiaNhap) == null) this.donGiaNhap = 0;
+        if(setThanhTien(thanhTien) == null) this.thanhTien = 0;
+        if(setSoLuong(soLuong) == null) this.soLuong = 1;
     }
-    public ChiTietPhieuNhapHang (String maPNHMoi, String maNLMoi) {
-        this(maPNHMoi, maNLMoi, 0, 0, 1);
-    }
-    public ChiTietPhieuNhapHang (String maPNHMoi, String MaNLMoi, ChiTietPhieuNhapHang CTPNH) {
-        this(maPNHMoi, MaNLMoi, CTPNH.donGiaNhap, CTPNH.thanhTien, CTPNH.soLuong);
-    }
-    public ChiTietPhieuNhapHang (ChiTietPhieuNhapHang CTPNH) {
-        this(CTPNH.maPNH, CTPNH.maNL, CTPNH);
-    }
-    public ChiTietPhieuNhapHang saoChep() {
-        return new ChiTietPhieuNhapHang(this);
-    }
-    public ChiTietPhieuNhapHang saoChepVoiMaMoi(String maPNHMoi, String maNLMoi) {
-        return new ChiTietPhieuNhapHang(maPNHMoi, maNLMoi, this);
-    }
+    public ChiTietPhieuNhapHang () {this("chua co", "chua co", 0, 0, 1);}
+    public ChiTietPhieuNhapHang (ChiTietPhieuNhapHang CTPNH) {this(CTPNH.maPNH, CTPNH.maNL, CTPNH.donGiaNhap, CTPNH.thanhTien, CTPNH.soLuong);}
+    public ChiTietPhieuNhapHang saoChep() {return new ChiTietPhieuNhapHang(this);}
 
-    public void xuat() {
-
+    @Override
+    public  ChiTietPhieuNhapHang nhap() {
+        donGiaNhap = NhapChuan.docSoNguyenKhongAm("So Luong");
+        return this;
     }
-    public boolean ghiFile() {
-        return true;
+    @Override 
+    public String[] xuat() {
+        return new String[] {maPNH, maNL, String.valueOf(donGiaNhap), String.valueOf(thanhTien), String.valueOf(soLuong)};
     }
-    public boolean docFile() {
-        return true;
+    @Override
+    public void ghiFile(DataOutputStream dos) throws IOException {
+        dos.writeUTF(maPNH);
+        dos.writeUTF(maNL);
+        dos.writeDouble(donGiaNhap);
+        dos.writeDouble(thanhTien);
+        dos.writeInt(soLuong);
+    }
+    @Override
+    public void docFile(DataInputStream dis) throws IOException {
+        maPNH = dis.readUTF();
+        maNL = dis.readUTF();
+        donGiaNhap = dis.readDouble();
+        thanhTien = dis.readDouble();
+        soLuong = dis.readInt();
     }
 
     public String getMaPNH() {return maPNH;}
@@ -45,25 +57,29 @@ public final class ChiTietPhieuNhapHang{
     public double getThanhTien() {return thanhTien;}
     public int getSoLuong() {return soLuong;}
 
-    private boolean setMa(String maPNHMoi, String maNLMoi) {
-        if(maPNHMoi.isEmpty() || maNLMoi.isEmpty()) return false;
+    public ChiTietPhieuNhapHang setMaPNH(String maPNHMoi) {
+        if(maPNHMoi.isEmpty()) return null;
         maPNH = maPNHMoi;
+        return this;
+    }
+    public ChiTietPhieuNhapHang setMaNL(String maNLMoi) {
+        if((maNLMoi.isEmpty())) return null;
         maNL = maNLMoi;
-        return true;
+        return this;
     }
-    private boolean setDonGiaNhap(double donGiaNhapMoi) {
-        if(donGiaNhapMoi < 0 ) return false;
+    public ChiTietPhieuNhapHang setDonGiaNhap(double donGiaNhapMoi) {
+        if(donGiaNhapMoi < 0 ) return null;
         donGiaNhap = donGiaNhapMoi;
-        return true;
+        return this;
     }
-    private boolean setThanhTien(double thanhTienMoi) {
-        if(thanhTienMoi < 0 ) return false;
+    public ChiTietPhieuNhapHang setThanhTien(double thanhTienMoi) {
+        if(thanhTienMoi < 0 ) return null;
         thanhTien = thanhTienMoi;
-        return true;
+        return this;
     }
-    private boolean setSoLuong(int soLuongMoi) {
-        if(soLuongMoi <= 1) return false;
+    public ChiTietPhieuNhapHang setSoLuong(int soLuongMoi) {
+        if(soLuongMoi <= 1) return null;
         soLuong = soLuongMoi;
-        return true;
+        return this;
     }
 }
