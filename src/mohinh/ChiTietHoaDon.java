@@ -14,7 +14,7 @@ public class ChiTietHoaDon implements ITruyXuatMoHinh {
 
     public ChiTietHoaDon() {this("", "", 0, 0, 0);}
     public ChiTietHoaDon (String maHD, String maSP, double donGiaBan, double thanhTien, int soLuong) {
-        if(setMaHoaDon(maHD) == null) this.maHD = "khong hop le"; this.maSP = "khong hop le";
+        if(setMaHoaDon(maHD) == null) this.maHD = "khong hop le";
         if(setMaSanPham(maSP) == null)  this.maSP = "khong hop le";
         if(setDonGiaBan(donGiaBan) == null) this.donGiaBan = 0;
         if(setThanhTien(thanhTien) == null) this.thanhTien = 0;
@@ -28,8 +28,6 @@ public class ChiTietHoaDon implements ITruyXuatMoHinh {
     }
     @Override 
     public ChiTietHoaDon nhap() {
-        setMaHoaDon(NhapChuan.docChuoiKhongRong("Ma hoa don"));
-        setMaSanPham(NhapChuan.docChuoiKhongRong("Ma san pham"));
         setDonGiaBan(NhapChuan.docSoThucKhongAm("Don gia ban"));
         setSoLuong(NhapChuan.docSoNguyenKhongAm("So luong"));
         thanhTien = donGiaBan * soLuong; // Tự động tính thành tiền
