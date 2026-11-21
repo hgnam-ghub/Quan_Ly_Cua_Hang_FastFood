@@ -28,11 +28,11 @@ public class HoaDon implements ITruyXuatMoHinh {
     }
     public HoaDon( HoaDon hd) {this(hd.maHD, hd.maNV, hd.maKH, hd.ngayTaoDon, hd.trangThai, hd.phuongThucThanhToan, hd.tongTien);}
     public HoaDon saoChep() {return new HoaDon(this){};}
-
+    @Override 
     public String[] xuat() {
-        return new String[] {maHD, maNV, maKH, ngayTaoDon.format(DateTimeFormatter.ofPattern("dd/mm/yyyy")), trangThai, phuongThucThanhToan, String.valueOf(tongTien)};
+        return new String[] {maHD, maNV, maKH, ngayTaoDon.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), trangThai, phuongThucThanhToan, String.valueOf(tongTien)};
     }
-
+    @Override 
     public HoaDon nhap() {
         System.out.println("Nhap thong tin cho hoa don co ma: " + maHD);
         setNgayTaoDon(NhapChuan.docNgay("Ngay tao don (dd/MM/yyyy)"));
@@ -41,7 +41,7 @@ public class HoaDon implements ITruyXuatMoHinh {
         setTongTien(NhapChuan.docSoThucKhongAm("Tong tien"));
         return this;
     }
-
+    @Override 
     public void ghiFile(DataOutputStream dos) throws IOException {
         dos.writeUTF(maHD);
         dos.writeUTF(maNV);
@@ -51,7 +51,7 @@ public class HoaDon implements ITruyXuatMoHinh {
         dos.writeUTF(phuongThucThanhToan);
         dos.writeDouble(tongTien);
     }
-
+    @Override 
     public void docFile(DataInputStream dis) throws IOException {
         maHD = dis.readUTF();
         maNV = dis.readUTF();
