@@ -29,7 +29,9 @@ public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
             DS_ChiTietHoaDon[i] = ds_CTHD.DS_ChiTietHoaDon[i].saoChep();
     }
 
+    @Override 
     public DanhSachChiTietHoaDon saoChep() { return new DanhSachChiTietHoaDon(this); }
+    @Override
     public int getSoLuong() { return soLuong; }
 
     @Override
@@ -81,20 +83,17 @@ public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
         DS_ChiTietHoaDon[soLuong++] = cthd;
         return cthd;
     }
-
-    private boolean xoa(String maHD, String maSP) {
-        int viTri = timKiemViTriChiTietHoaDon(maHD, maSP);
-        if (viTri == -1) return false;
-        for (int i = viTri; i < soLuong - 1; i++)
-            DS_ChiTietHoaDon[i] = DS_ChiTietHoaDon[i + 1];
-        DS_ChiTietHoaDon[--soLuong] = null;
-        return true;
+    public void xoaHoaDon(String maHD){
+        int doLech = 0;
+        for(int i = 0; i < soLuong - doLech;i++){
+            while(i + doLech < soLuong && DS_ChiTietHoaDon[i + doLech].getMaHoaDon().equals(maHD)) doLech++;
+            DS_ChiTietHoaDon[i] =  (i+doLech<soLuong)?DS_ChiTietHoaDon[i + doLech]:null;
+        }
+        soLuong-=doLech;
     }
 
     // --- Cac phuong thuc giao tiep ra ben ngoai ---
-    public boolean kiemTraMa(String maHD, String maSP) {
-        return timKiemViTriChiTietHoaDon(maHD, maSP) != -1;
-    }
+    public boolean kiemTraMa(String maHD, String maSP) {return timKiemViTriChiTietHoaDon(maHD, maSP) != -1;}
 
     public ChiTietHoaDon timKiemTheoMa(String maHD, String maSP) {
         int viTri = timKiemViTriChiTietHoaDon(maHD, maSP);
@@ -106,49 +105,17 @@ public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
         if (cthd == null) return false;
         return them(cthd.saoChep()) != null;
     }
-
-    public boolean themChiTietHoaDon(String maHD) {
-        String maSP;
-        while (true) {
-            maSP = NhapChuan.docChuoiKhongRong("Ma San Pham");
-            if (!kiemTraMa(maHD, maSP)) break;
-            System.out.println(">> Ma hoa don va san pham nay da ton tai, nhap ma san pham khac!!");
-        }
-        ChiTietHoaDon cthd = new ChiTietHoaDon();
-        cthd.nhap();
-        return them(cthd) != null;
-    }
-@Override
+    @Override
     public void nhapTimKiem() {
-        System.out.println("**** Tim kiem chi tiet hoa don (nhap 1 den 2 ma, Enter de bo qua ma khong nhap) ****");
-        String[] ma = NhapChuan.docNhieuMa("Ma hoa don", "Ma san pham");
-        DanhSachChiTietHoaDon kq = timKiemNhieuMa(ma[0], ma[1]);
-        if (kq == null) {
-            System.out.println(">> Khong tim thay chi tiet hoa don!");
-        } else {
-            String[][] bang = new String[kq.soLuong + 1][];
-            bang[0] = new String[] {"MaHD", "MaSP", "Don Gia Ban", "Thanh Tien", "So Luong"};
-            for (int i = 0; i < kq.soLuong; i++)
-                bang[i + 1] = kq.DS_ChiTietHoaDon[i].xuat();
-            FormatBang.inBangDuLieu("KET QUA TIM KIEM", bang);
-        }
+        System.out.println("**** Tim kiem chi tiet hoa don (Nhap it nhat 1 ma de tim) ****");
+        DanhSachChiTietHoaDon dsKq = timKiemNhieuMa(NhapChuan.docChuoi("Ma hoa don"), NhapChuan.docChuoi("Ma san pham"));
+        if(dsKq == null) System.out.println(">> khong tim thay");
+        else dsKq.xuatDanhSach();
         NhapChuan.docChuoi("Enter de quay lai");
     }
     @Override
-    public boolean nhapChiTiet(String maDon) {
-
-        return false;
-    }
-
-    public void xoaTheoDanhSach(DanhSachChiTietHoaDon DS_HD) {
-        for (int i = 0; i < DS_HD.soLuong; i++)
-            xoa(DS_HD.DS_ChiTietHoaDon[i].getMaHoaDon(), DS_HD.DS_ChiTietHoaDon[i].getMaSanPham());
-    }
-
-    public void nhapTuDanhSach(DanhSachChiTietHoaDon DS_HD) {
-        for (int i = 0; i < DS_HD.soLuong; i++)
-            if (!kiemTraMa(DS_HD.DS_ChiTietHoaDon[i].getMaHoaDon(), DS_HD.DS_ChiTietHoaDon[i].getMaSanPham()))
-                them(DS_HD.DS_ChiTietHoaDon[i].saoChep());
+    public double nhapChiTiet(String maHD) {
+        return 0;
     }
 
     public DanhSachChiTietHoaDon timKiemMaHD(String maHD) {
@@ -169,12 +136,12 @@ public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
     // tim theo nhieu ma cung luc: ma nao rong thi bo qua, cac ma con lai phai khop dong thoi
     // chi nhap 1 ma thi tra ve tat ca chi tiet hoa don chua ma do
     public DanhSachChiTietHoaDon timKiemNhieuMa(String maHD, String maSP) {
+        if(maHD.isEmpty() && maSP.isEmpty()) return null;
         DanhSachChiTietHoaDon dsTam = new DanhSachChiTietHoaDon();
         for (int i = 0; i < soLuong; i++) {
             ChiTietHoaDon cthd = DS_ChiTietHoaDon[i];
-            if (cthd == null) continue;
-            if (!maHD.isEmpty() && !cthd.getMaHoaDon().equals(maHD)) continue;
-            if (!maSP.isEmpty() && !cthd.getMaSanPham().equals(maSP)) continue;
+            if(!maHD.isEmpty() && !cthd.getMaHoaDon().equals(maHD)) continue;
+            if(!maSP.isEmpty() && !cthd.getMaSanPham().equals(maSP)) continue;
             dsTam.them(cthd.saoChep());
         }
         return (dsTam.soLuong == 0) ? null : dsTam;
