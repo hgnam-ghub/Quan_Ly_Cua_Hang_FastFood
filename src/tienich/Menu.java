@@ -29,12 +29,14 @@ public class Menu {
         clearScreen();
         QuanLyDanhSach.taiDuLieuDanhSach();
         while(true) {
-            String [] menuList = new String[]{"1. San Pham","2. Nhan Vien","3. Khach Hang","4. Hoa Don","5. Nguyen Lieu","6. Nha Cung Cap", "7. Phieu Nhap Hang","8. Thong Ke Danh Sach","0. Thoat"};
+            String [] menuList = new String[]{"1. San Pham","2. Nhan Vien","3. Khach Hang","4. Hoa Don","5. Nguyen Lieu","6. Nha Cung Cap", "7. Phieu Nhap Hang","8. Thong Ke Danh Sach", "9. Xem chi tiet hoa don", "10. xem chi tiet phieu nhap hang","0. Thoat"};
             int luaChon = menuLuaChon("MENU", menuList);
             if(luaChon == 0) break;
             if(luaChon >= 1 && luaChon <= 7)
                 menuDanhSach(QuanLyDanhSach.DANHSACH[luaChon-1]);
             else if(luaChon == 8) menuThongKe();
+            else if(luaChon == 9) {QuanLyDanhSach.DS_CHITIETHOADON.xuatDanhSach();clearScreen();}
+            else if(luaChon == 10) {QuanLyDanhSach.DS_CHITIETPHIEUNHAPHANG.xuatDanhSach();clearScreen();}
             else thongBaoMenu = THONGBAOMENU[1];
         }
         // dong man hinh ung dung
