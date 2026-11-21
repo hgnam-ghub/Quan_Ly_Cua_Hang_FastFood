@@ -39,8 +39,9 @@ public class DanhSachChiTietPhieuNhapHang implements IChiTietDanhSach{
     public int getSoLuong() {return soLuong;}
 
     @Override
-    public boolean nhapChiTiet(String maPNH){
-        if(!QuanLyDanhSach.DS_PHIEUNHAPHANG.kiemTraMa(maPNH)) return false;
+    public double nhapChiTiet(String maPNH){
+        if(!QuanLyDanhSach.DS_PHIEUNHAPHANG.kiemTraMa(maPNH)) return -1;
+        double tongTien = 0;
         if(DS_ChiTietPhieuNhapHang.length < this.soLuong + soLuong) DS_ChiTietPhieuNhapHang = Arrays.copyOf(DS_ChiTietPhieuNhapHang, this.soLuong + soLuong);
         for(int i = 0; i < soLuong; i++) {
             ChiTietPhieuNhapHang ctpnhMoi = new ChiTietPhieuNhapHang();
@@ -53,13 +54,12 @@ public class DanhSachChiTietPhieuNhapHang implements IChiTietDanhSach{
             }
             DS_ChiTietPhieuNhapHang[soLuong++] = ctpnhMoi;
             NguyenLieu nl = QuanLyDanhSach.DS_NGUYENLIEU.timKiemMa(ctpnhMoi.getMaNL());
-            while (ctpnhMoi.nhap().getSoLuong() > nl.getSoLuong())
-                System.out.println("So nguyen lieu con lai trong kho trong du");
+            ctpnhMoi.nhap();
             ctpnhMoi.setDonGiaNhap(nl.getDonGia());
-            ctpnhMoi.setThanhTien(ctpnhMoi.getDonGiaNhap() * ctpnhMoi.getSoLuong());
-            QuanLyDanhSach.DS_NGUYENLIEU.capNhatSoLuong(maPNH, ctpnhMoi.getSoLuong());
+            tongTien += ctpnhMoi.setThanhTien(ctpnhMoi.getDonGiaNhap() * ctpnhMoi.getSoLuong()).getThanhTien();
+            QuanLyDanhSach.DS_NGUYENLIEU.capNhatSoLuong(maPNH, nl.getSoLuong() + ctpnhMoi.getSoLuong());
         }
-        return true;
+        return tongTien;
     }
     
     @Override
