@@ -16,7 +16,7 @@ public final class NhapChuan
     }
     public static LocalDate docNgay(String prompt) {
         while (true) {
-            System.out.print(prompt + ": ");
+            System.out.print(prompt + " (dd/MM/yyyy): ");
             String input = SCANNER.nextLine().trim();
             try {
                 return LocalDate.parse(input, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
