@@ -122,16 +122,4 @@ public class DanhSachChiTietPhieuNhapHang implements IChiTietDanhSach{
         }
         return (dsTam.soLuong == 0) ? null : dsTam;
     }
-
-    public DanhSachChiTietPhieuNhapHang timKiemNhieuMa(String maPNH, String maNCC) {
-        if(maPNH.isEmpty() && maNCC.isEmpty()) return null;
-        DanhSachChiTietPhieuNhapHang dsTam = new DanhSachChiTietPhieuNhapHang();
-        for (int i = 0; i < soLuong; i++) {
-            ChiTietPhieuNhapHang cthd = DS_ChiTietPhieuNhapHang[i];
-            if(!maPNH.isEmpty() && !cthd.getMaPNH().equals(maPNH)) continue;
-            if(!maNCC.isEmpty() && !cthd.getMaNL().equals(maNCC)) continue;
-            dsTam.them(cthd.saoChep());
-        }
-        return (dsTam.soLuong == 0) ? null : dsTam;
-    }
 }
