@@ -46,7 +46,7 @@ public class HoaDon implements ITruyXuatMoHinh {
         dos.writeUTF(maHD);
         dos.writeUTF(maNV);
         dos.writeUTF(maKH);
-        dos.writeUTF(ngayTaoDon.toString());
+        dos.writeUTF(ngayTaoDon.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         dos.writeUTF(trangThai);
         dos.writeUTF(phuongThucThanhToan);
         dos.writeDouble(tongTien);
