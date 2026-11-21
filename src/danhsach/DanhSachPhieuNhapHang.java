@@ -31,10 +31,8 @@ public class DanhSachPhieuNhapHang implements IDanhSach{
 
     @Override
     public DanhSachPhieuNhapHang saoChep() {return new DanhSachPhieuNhapHang(this);}
-
     @Override
     public int getSoLuong() {return soLuong;}
-
     @Override
     public void xuatDanhSach() {
         String[] tieuDeCot= new String[] {"Ma PNH", "Ma NV", "Ma NCC", "Ngay Tao Phieu", "Trang Thai", "Phuong Thuc Thanh Toan", "Tong Tien"};
@@ -69,14 +67,32 @@ public class DanhSachPhieuNhapHang implements IDanhSach{
         return false;
     }
 
+    private boolean them(PhieuNhapHang pnh) {
+        if(kiemTraMa(pnh.getMaPNH())) return false;
+        if(soLuong == DS_PhieuNhapHang.length) DS_PhieuNhapHang = Arrays.copyOf(DS_PhieuNhapHang, ++soLuong);
+        else ++soLuong;
+        DS_PhieuNhapHang[soLuong - 1] = pnh.saoChep();
+        return true;
+    }
+
     private int timViTriPhieuNhapHang(String maPNH) {
         for(int i =0; i < soLuong; i++)
             if(DS_PhieuNhapHang[i].getMaPNH().equals(maPNH)) return i;
         return -1;
     }
+
     @Override 
     public void nhapTimKiem() {
-
+        System.out.println("**** Tim kiem phieu nhap hang ****");
+        String maPNH = NhapChuan.docChuoi("Ma phieu can tim");
+        int viTriPhieu = timViTriPhieuNhapHang(maPNH); 
+        if(viTriPhieu == -1)
+            System.out.println("Khong tim thay phieu nhap hang nay");
+        else {
+            DanhSachPhieuNhapHang dsTam = new DanhSachPhieuNhapHang();
+            dsTam.them((DS_PhieuNhapHang[viTriPhieu]));
+            dsTam.xuatDanhSach();
+        }
     }
 
     @Override 
@@ -97,7 +113,7 @@ public class DanhSachPhieuNhapHang implements IDanhSach{
             pnhMoi.setTongTien(QuanLyDanhSach.DS_CHITIETPHIEUNHAPHANG.nhapChiTiet(pnhMoi.getMaPNH()));
         }
     }
-
+    
     @Override 
     public void nhapSua() {
         do {
