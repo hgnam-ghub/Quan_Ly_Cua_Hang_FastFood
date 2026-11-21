@@ -29,7 +29,6 @@ public class Menu {
         // chay man hinh ung dung
         System.out.print("\033[?1049h");
         QuanLyDanhSach.taiDuLieuDanhSach();
-        menuLoop:
         while(true) {
             String [] menuList = new String[]{
                 "1. Quan ly danh sach San Pham",
@@ -42,18 +41,14 @@ public class Menu {
                 "8. Thong Ke Danh Sach",
                 "0. Thoat"
             };
-            switch (menuLuaChon("MENU", menuList)) {
-                case 0 -> {break menuLoop;}
-                case 1 -> DanhSachDangLamViec = QuanLyDanhSach.DS_SANPHAM;
-                case 2 -> DanhSachDangLamViec = QuanLyDanhSach.DS_KHACHHANG;
-                case 3 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
-                case 4 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
-                case 5 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
-                case 6 -> DanhSachDangLamViec = QuanLyDanhSach.DS_HOADON;
-                case 7 -> {thongBaoMenu = THONGBAOMENU[0]; continue menuLoop;}
-                default -> {thongBaoMenu = THONGBAOMENU[1]; continue menuLoop;}
-            };
-            menuDanhSach();
+            int luaChon = menuLuaChon("MENU", menuList);
+            if(luaChon == 0) break;
+            if(luaChon >= 1 && luaChon <= 7) {
+                DanhSachDangLamViec = QuanLyDanhSach.DANHSACH[luaChon+1];
+                menuDanhSach();
+            }
+            else if(luaChon == 8) menuThongKe();
+            else thongBaoMenu = THONGBAOMENU[1];
         }
         // dong man hinh ung dung
         System.out.print("\033[?1049l");
@@ -62,7 +57,7 @@ public class Menu {
     public static void menuDanhSach() {
         menuLoop:
         while(true) {
-            String [] menuList = new String[]{"1. Xem Danh Sach", "2. Nhap Them", "3. Sua", "4. Xoa","5. Tim Kiem", "6. Sap Xep", "0. Thoat"};
+            String[] menuList = new String[]{"1. Xem Danh Sach", "2. Them", "3. Sua", "4. Xoa", "5. Tim Kiem", "0. Thoat"};
             switch (menuLuaChon("Danh Sach", menuList)) {
                 case 0 -> {break menuLoop;}
                 case 1 -> DanhSachDangLamViec.xuatDanhSach();
@@ -70,10 +65,25 @@ public class Menu {
                 case 3 -> DanhSachDangLamViec.nhapSua();
                 case 4 -> DanhSachDangLamViec.nhapXoa();
                 case 5 -> DanhSachDangLamViec.nhapTimKiem();
-                case 6 -> DanhSachDangLamViec.nhapSapXep();
                 default -> {thongBaoMenu = THONGBAOMENU[1]; continue menuLoop;}
             };
             clearScreen();
+        }
+    }
+    public static void menuThongKe() {
+        menuLoop:
+        while (true) {
+            String[] menuList = new String[] {
+                "1. Tong Tien Hoa Don (ngay/Thang)",
+                "2. Tong Tien Hoa Don (Quy|Thang/Nam)",
+                "3. Tong Tien Hoa Don Cua Nhan Vien (Quy|Nam)",
+                "4. Tong Tien Hoa Don Cua Khach Hang (Quy|Nam)",
+                "5. Tong Tien Hoa Don Theo San Pham (Quy|Nam)"
+            };
+            switch (menuLuaChon("Thong Ke", menuList)) {
+                case 0 -> {break menuLoop;}
+                default -> {thongBaoMenu = THONGBAOMENU[0];}
+            }
         }
     }
 }

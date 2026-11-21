@@ -131,7 +131,12 @@ public class DanhSachNguyenLieu implements IDanhSach {
         if (dsTam.soLuong == 0) return null;
         return dsTam;
     }
-
+    public boolean capNhatSoLuong(String maNL, int soLuongMoi){
+        if (maNL == null || maNL.trim().isEmpty()) return false;
+        int viTri = timKiemViTriNguyenLieu(maNL);
+        if (viTri == -1 || DS_NguyenLieu[viTri] == null) return false;
+        return DS_NguyenLieu[viTri].setSoLuong(soLuongMoi);
+    }
     // ------------------------------------
     // cac phuong thuc giao dien
     @Override

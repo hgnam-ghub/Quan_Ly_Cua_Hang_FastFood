@@ -15,7 +15,7 @@ public final class QuanLyDanhSach{
     public static DanhSachNhaCungCap DS_NHACUNGCAP = new DanhSachNhaCungCap();
     public static DanhSachPhieuNhapHang DS_PHIEUNHAPHANG = new DanhSachPhieuNhapHang();
     public static DanhSachChiTietPhieuNhapHang DS_CHITIETPHIEUNHAPHANG = new DanhSachChiTietPhieuNhapHang();
-    private static IDanhSach[] DANHSACH = new IDanhSach[] {DS_SANPHAM, DS_NHANVIEN, DS_KHACHHANG, DS_HOADON, DS_CHITIETHOADON, DS_NGUYENLIEU};
+    public static IDanhSach[] DANHSACH = new IDanhSach[] {DS_SANPHAM, DS_NHANVIEN, DS_KHACHHANG, DS_HOADON, DS_CHITIETHOADON, DS_NGUYENLIEU, DS_PHIEUNHAPHANG};
 
     private QuanLyDanhSach() {}
     public static void taiDuLieuDanhSach() {

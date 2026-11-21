@@ -5,7 +5,6 @@ import java.io.IOException;
 public interface IDanhSach {
     IDanhSach saoChep();
     int getSoLuong();
-    void xuatDanhSach();
     void xuatDanhSachRaFile() throws IOException;
     void nhapDanhSachTuFile() throws IOException;
     void nhapTimKiem();
@@ -17,4 +16,5 @@ public interface IDanhSach {
     void nhapThem();
     void nhapSua();
     void nhapXoa();
+    void xuatDanhSach();
 }
