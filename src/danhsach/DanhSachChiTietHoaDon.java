@@ -55,8 +55,10 @@ public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
         DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.FILEDSCTDH));
         soLuong = dis.readInt();
         if (DS_ChiTietHoaDon.length < soLuong) DS_ChiTietHoaDon = new ChiTietHoaDon[soLuong];
-        for (int i = 0; i < soLuong; i++) 
+        for (int i = 0; i < soLuong; i++) {
+            DS_ChiTietHoaDon[i]= new ChiTietHoaDon();
             DS_ChiTietHoaDon[i].docFile(dis);
+        }
         dis.close();
     }
     private ChiTietHoaDon them(ChiTietHoaDon cthd) {
