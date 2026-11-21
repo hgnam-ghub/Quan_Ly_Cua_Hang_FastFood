@@ -83,7 +83,7 @@ public class DanhSachChiTietPhieuNhapHang implements IChiTietDanhSach{
         DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.FILEDSCTPNH));
         soLuong = dis.readInt();
         if(soLuong > DS_ChiTietPhieuNhapHang.length) DS_ChiTietPhieuNhapHang = new ChiTietPhieuNhapHang[soLuong];
-        for(int i = 0; i < soLuong; i++) DS_ChiTietPhieuNhapHang[i].docFile(dis);
+        for(int i = 0; i < soLuong; i++) {DS_ChiTietPhieuNhapHang[i] = new ChiTietPhieuNhapHang(); DS_ChiTietPhieuNhapHang[i].docFile(dis);}
         dis.close();
     }
 
