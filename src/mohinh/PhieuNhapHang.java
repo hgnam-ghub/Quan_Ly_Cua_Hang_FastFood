@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import rangbuoc.ITruyXuatMoHinh;
 import tienich.NhapChuan;
@@ -37,13 +38,14 @@ public final class PhieuNhapHang implements ITruyXuatMoHinh{
         maPNH = NhapChuan.docChuoiKhongRong("Ma PNH");
         maNV = NhapChuan.docChuoiKhongRong("Ma NV");
         maNCC = NhapChuan.docChuoiKhongRong("Ma NCC");
+        ngayTaoPhieu = NhapChuan.docNgay(maNCC);
         trangThai = NhapChuan.docChuoi("Trang Thai");
         phuongThucThanhToan = NhapChuan.docChuoi("Phuong Thuc Thanh Toan");
         return this;
     }
     @Override 
     public String[] xuat() {
-        return new String[] {maPNH, maNV, maNCC, trangThai, ngayTaoPhieu.toString(), phuongThucThanhToan,String.valueOf(tongTien)};
+        return new String[] {maPNH, maNV, maNCC, trangThai, ngayTaoPhieu.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), phuongThucThanhToan,String.valueOf(tongTien)};
     }
     @Override
     public void ghiFile(DataOutputStream dos) throws IOException {
