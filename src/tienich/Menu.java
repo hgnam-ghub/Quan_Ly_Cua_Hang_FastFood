@@ -71,6 +71,7 @@ public class Menu {
             };
             switch (menuLuaChon("Thong Ke", menuList)) {
                 case 0 -> {break menuLoop;}
+                case 4 -> {QuanLyDanhSach.thongKeTongTienKhachHang(); clearScreen();}
                 default -> {thongBaoMenu = THONGBAOMENU[0];}
             }
         }
