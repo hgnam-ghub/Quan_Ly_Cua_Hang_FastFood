@@ -121,4 +121,5 @@ public class DanhSachKhachHang implements IDanhSach {
             soLuong--;
         } while (NhapChuan.docYesNo("Co muon xoa tiep hay khong", false));
     }
+    public KhachHang layKhachHang(int i) { return DS_KhachHang[i]; }
 }
