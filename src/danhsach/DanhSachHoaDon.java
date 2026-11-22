@@ -125,7 +125,7 @@ public class DanhSachHoaDon implements IDanhSach {
             if(viTri == -1) {System.out.println("khong ton tai ma hoa don nay!!!"); continue;}
             QuanLyDanhSach.DS_CHITIETHOADON.xoaHoaDon(DS_HoaDon[viTri].getMaHD());
             for(int i = viTri; i < soLuong - 1; i++)
-                DS_HoaDon[viTri + 1] = DS_HoaDon[viTri];
+                DS_HoaDon[viTri] = DS_HoaDon[viTri + 1];
             soLuong--;
         } while (NhapChuan.docYesNo("Co muon xoa tiep hay khong", false));
     }
