@@ -1,5 +1,6 @@
 package tienich;
 
+import rangbuoc.IChiTietDanhSach;
 import rangbuoc.IDanhSach;
 
 public class Menu {
@@ -29,14 +30,14 @@ public class Menu {
         clearScreen();
         QuanLyDanhSach.taiDuLieuDanhSach();
         while(true) {
-            String [] menuList = new String[]{"1. San Pham","2. Nhan Vien","3. Khach Hang","4. Hoa Don","5. Nguyen Lieu","6. Nha Cung Cap", "7. Phieu Nhap Hang","8. Thong Ke Danh Sach", "9. Xem chi tiet hoa don", "10. xem chi tiet phieu nhap hang","0. Thoat"};
+            String [] menuList = new String[]{"1. San Pham","2. Nhan Vien","3. Khach Hang","4. Hoa Don","5. Nguyen Lieu","6. Nha Cung Cap", "7. Phieu Nhap Hang", "8. Chi Tiet Hoa Don", "9. Chi Tiet Phieu Nhap Hang", "10. Thong Ke Danh Sach", "0. Thoat"};
             int luaChon = menuLuaChon("MENU", menuList);
             if(luaChon == 0) break;
             if(luaChon >= 1 && luaChon <= 7)
                 menuDanhSach(QuanLyDanhSach.DANHSACH[luaChon-1]);
-            else if(luaChon == 8) menuThongKe();
-            else if(luaChon == 9) {QuanLyDanhSach.DS_CHITIETHOADON.xuatDanhSach();clearScreen();}
-            else if(luaChon == 10) {QuanLyDanhSach.DS_CHITIETPHIEUNHAPHANG.xuatDanhSach();clearScreen();}
+            else if(luaChon == 8 || luaChon == 9)
+                menuChiTiet(QuanLyDanhSach.DANHSACHCHITIET[luaChon - 8]);
+            else if(luaChon == 10) menuThongKe();
             else thongBaoMenu = THONGBAOMENU[1];
         }
         // dong man hinh ung dung
@@ -53,6 +54,20 @@ public class Menu {
                 case 3 -> DSLamViec.nhapSua();
                 case 4 -> DSLamViec.nhapXoa();
                 case 5 -> DSLamViec.nhapTimKiem();
+                default -> {thongBaoMenu = THONGBAOMENU[1]; continue menuLoop;}
+            };
+            clearScreen();
+        }
+    }
+
+    public static void menuChiTiet(IChiTietDanhSach ctds) {
+        menuLoop:
+        while(true) {
+            String[] menuList = new String[]{"1. Xem Danh Sach", "2. tim kiem", "0. Thoat"};
+            switch (menuLuaChon("Danh Sach", menuList)) {
+                case 0 -> {break menuLoop;}
+                case 1 -> ctds.xuatDanhSach();
+                case 2 -> ctds.nhapTimKiem();
                 default -> {thongBaoMenu = THONGBAOMENU[1]; continue menuLoop;}
             };
             clearScreen();

@@ -152,7 +152,7 @@ public final class QuanLyDanhSach{
             tong[2][i] = tong[0][i] - tong[1][i];
         }
         String[] tieuDeDong = new String[] {"tong thu", "tong chi", "loi nhuan"};
-        String[] tieuDeCot = new String[] {"Hoa Don","Quy 1", "Quy 2", "Quy 3", "Quy 4", "Tong Cong"};
+        String[] tieuDeCot = new String[] {"Nam "+nam,"Quy 1", "Quy 2", "Quy 3", "Quy 4", "Tong Cong"};
         FormatBang.inBangThongKe(tieuDeDong, tieuDeCot, tong);
     }
     public static void tongTienHoaDonTheoNgay() {
