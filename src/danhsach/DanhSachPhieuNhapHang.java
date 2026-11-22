@@ -129,6 +129,7 @@ public class DanhSachPhieuNhapHang implements IDanhSach{
         do {
             int viTri = timViTriPhieuNhapHang(NhapChuan.docChuoiKhongRong("Nhap Ma Phieu Nhap Hang muon xoa"));
             if(viTri == -1) {System.out.println("khong ton tai ma phieu nhap hang nay!!!"); continue;}
+            QuanLyDanhSach.DS_CHITIETPHIEUNHAPHANG.xoaPhieu(DS_PhieuNhapHang[viTri].getMaPNH());
             for(int i = viTri; i < soLuong - 1; i++)
                 DS_PhieuNhapHang[viTri + 1] = DS_PhieuNhapHang[viTri];
             soLuong--;

@@ -35,12 +35,12 @@ public class DanhSachHoaDon implements IDanhSach {
 
     @Override
     public void xuatDanhSach() {
-       String[][] bangKhachHang = new String[soLuong + 1][];
-        bangKhachHang[0] = new String[] {"Ma HD", "Ma NV", "Ma KH", "Ngay lap", "Phuong thuc thanh toan", "Trang thai",  "Tong tien"};
-        for (int i = 0; i < soLuong; i++) {
-            bangKhachHang[i + 1] = DS_HoaDon[i].xuat();
-        }
-        FormatBang.inBangDuLieu("DANH SACH HOA DON", bangKhachHang);
+        String[] tieuDeCot= new String[] {"Ma HD", "Ma NV", "Ma KH", "Ngay lap", "Phuong Thuc Thanh Toan", "Trang Thai", "Tong Tien"};
+        String[][] bangDuLieu = new String[soLuong + 1][];
+        bangDuLieu[0] = tieuDeCot;
+        for(int i = 0; i < soLuong; i++)
+            bangDuLieu[i+1] = DS_HoaDon[i].xuat();
+        FormatBang.inBangDuLieu("Danh sach hoa don",bangDuLieu);
         NhapChuan.docChuoi("Enter de quay lai");
     }
     @Override
@@ -55,116 +55,64 @@ public class DanhSachHoaDon implements IDanhSach {
         DataInputStream dis = new DataInputStream(new FileInputStream(LuuTru.FILEDSHD));
             soLuong = dis.readInt();
             if(soLuong > DS_HoaDon.length) DS_HoaDon = new HoaDon[soLuong];
-            for(int i = 0; i < soLuong; i++) {
-                DS_HoaDon[i] = new HoaDon();
-                DS_HoaDon[i].docFile(dis);
-            }
+            for(int i = 0; i < soLuong; i++) { DS_HoaDon[i] = new HoaDon(); DS_HoaDon[i].docFile(dis);}
         dis.close();
     }
     private int timKiemViTriHoaDon(String maHD) {
         for(int i = 0; i < soLuong; i++)
-            if(DS_HoaDon[i] != null && DS_HoaDon[i].getMaHoaDon().equals(maHD)) return i;
+            if(DS_HoaDon[i].getMaHD().equals(maHD)) return i;
         return -1;
     }
-    private HoaDon them(HoaDon hd) {
-        if(kiemTraMa(hd.getMaHoaDon())) return null;
-        if(soLuong == DS_HoaDon.length) DS_HoaDon = Arrays.copyOf(DS_HoaDon, soLuong + 1);
-        DS_HoaDon[soLuong++] = hd;
-        return hd;
-    }
-    private HoaDon sua(String maHD) {
-        int viTri = timKiemViTriHoaDon(maHD);
-        if(viTri == -1) return null;
-        return DS_HoaDon[viTri].nhap();
-    }
-    private boolean xoa(String maHD) {
-        int viTri = timKiemViTriHoaDon(maHD);
-        if (viTri == -1) return false;
-        for (int i = viTri; i < soLuong - 1; i++)
-            DS_HoaDon[i] = DS_HoaDon[i + 1];
-        DS_HoaDon[--soLuong] = null;
-        QuanLyDanhSach.DS_CHITIETHOADON.xoaHoaDon(maHD);
+    private boolean them(HoaDon hd) {
+        if(kiemTraMa(hd.getMaHD())) return false;
+        if(soLuong == DS_HoaDon.length) DS_HoaDon = Arrays.copyOf(DS_HoaDon, soLuong+1);
+        DS_HoaDon[soLuong++] = hd.saoChep();
         return true;
     }
-    public void xoaTheoMaKH(String maKH) {
-        int doLech = 0;
-        for(int i = 0; i < soLuong - doLech;i++){
-            while(i + doLech < soLuong && DS_HoaDon[i + doLech].getMaKhachHang().equals(maKH)) {
-                doLech++; QuanLyDanhSach.DS_CHITIETHOADON.xoaHoaDon(DS_HoaDon[i + doLech].getMaHoaDon());
-            }
-            DS_HoaDon[i] =  (i+doLech<soLuong)?DS_HoaDon[i + doLech]:null;
-        }
-        soLuong-=doLech;
-    }
     public boolean kiemTraMa(String maHD) {
-        return timKiemViTriHoaDon(maHD) != -1;
-    }
-    public HoaDon timKiemTheoMaHoaDon(String maHD) {
-        int viTri = timKiemViTriHoaDon(maHD);
-        if (viTri == -1) return null;
-        return DS_HoaDon[viTri].saoChep();
-    }
-    public HoaDon timKiemHoaDon(String maHD) {return timKiemTheoMaHoaDon(maHD);}
-    public boolean themVaoHoaDonDanhSach(HoaDon hd) {
-        if (hd == null) return false;
-        return them(hd.saoChep()) != null;
-    }
-    private String nhapMaNVHopLe() {
-        while (true) {
-            String maNV = NhapChuan.docChuoiKhongRong("Nhap ma nhan vien");
-            if (QuanLyDanhSach.DS_NHANVIEN.kiemTraMa(maNV)) return maNV;
-            System.out.println(">> Ma nhan vien khong ton tai, nhap lai!");
-        }
-    }
-    private String nhapMaKHHopLe() {
-        while (true) {
-            String maKH = NhapChuan.docChuoiKhongRong("Nhap ma khach hang");
-            if (QuanLyDanhSach.DS_KHACHHANG.kiemTraMa(maKH)) return maKH; // ma khach hang phai ton tai trong danh sach khach hang
-            System.out.println(">> Ma khach hang khong ton tai, nhap lai!");
-        }
+        for(int i = 0; i < soLuong; i++)
+            if(DS_HoaDon[i].getMaHD().equals(maHD)) return true;
+        return false;
     }
     @Override
     public void nhapTimKiem() {
         System.out.println("**** Tim kiem hoa don ****");
-        HoaDon kq = timKiemTheoMaHoaDon(NhapChuan.docChuoi("Ma hoa don"));
-        if(kq == null)
-            System.out.println(">> khong tim thay");
+        String maHD = NhapChuan.docChuoi("Ma hoa don can tim");
+        int viTriHD = timKiemViTriHoaDon(maHD); 
+        if(viTriHD == -1)
+            System.out.println("Khong tim thay phieu nhap hang nay");
         else {
             DanhSachHoaDon dsTam = new DanhSachHoaDon();
-            dsTam.them(kq).xuat();
+            dsTam.them((DS_HoaDon[viTriHD]));
+            dsTam.xuatDanhSach();
         }
-        NhapChuan.docChuoi("Enter de quay lai");
     }
     @Override
     public void nhapThem() {
-        System.out.println("**** Bat dau nhap danh sach hoa don ****");
-        int nhapThem= NhapChuan.docSoNguyenKhongAm("So luong hoa don can nhap them");
-        DS_HoaDon = Arrays.copyOf(DS_HoaDon, soLuong+nhapThem);
-        for(int i=0; i<nhapThem; i++){
-            System.out.println("--------------");
-            System.out.printf("Nhap hoa don thu %d: \n", soLuong + 1);
+        System.out.println("==============================");
+        int soLuongThem = NhapChuan.docSoNguyenKhongAm("So luong hoa don muon them");
+        if(DS_HoaDon.length < soLuong + soLuongThem) DS_HoaDon = Arrays.copyOf(DS_HoaDon, soLuong + soLuongThem);
+        for(int i = 0; i < soLuongThem; i++) {
             HoaDon hdMoi = new HoaDon();
-            String maNV = nhapMaNVHopLe();
-            String maKH = nhapMaKHHopLe();
-            while (them(hdMoi.setMa(NhapChuan.docChuoiKhongRong("Nhap ma hoa don"), maNV, maKH)) == null) {
-                System.out.println("Ma hoa don da ton tai, nhap lai ma hoa don khac!!!");
-            }
+            while (kiemTraMa(hdMoi.setMaHD(NhapChuan.docChuoiKhongRong("Ma Hoa Don")).getMaHD()))
+                System.out.println("Hoa don nay da ton tai");
+            while (!QuanLyDanhSach.DS_NHANVIEN.kiemTraMa(hdMoi.setMaNV(NhapChuan.docChuoiKhongRong("Ma Nhan vien")).getMaNV()))
+                System.out.println("Khong tim thay nhan vien nay!!!");
+            while (!QuanLyDanhSach.DS_KHACHHANG.kiemTraMa(hdMoi.setMaKH(NhapChuan.docChuoiKhongRong("Ma Khach hang")).getMaKH()))
+                System.out.println("khong tim thay khach hang nay!!!");
+            DS_HoaDon[soLuong++] = hdMoi;
             hdMoi.nhap();
-            QuanLyDanhSach.DS_CHITIETHOADON.nhapChiTiet(maKH);
+            hdMoi.setTongTien(QuanLyDanhSach.DS_CHITIETHOADON.nhapChiTiet(hdMoi.getMaHD()));
+            NhapChuan.docChuoi("Enter de quay lai");
         }
-        System.out.println("**** Ket thuc nhap danh sach hoa don ****");
-        NhapChuan.docChuoi("Enter de quay lai");
     }
      @Override
     public void nhapSua() {
         do {
-            String maHD = NhapChuan.docChuoiKhongRong("Nhap ma hoa don");
-            if (sua(maHD) == null)
-                System.out.println(">> Chi tiet hoa don nay khong ton tai trong danh sach");
-            else
-                System.out.println(">> Sua thanh cong");
-            System.out.println("Co tiep tuc nhap sua them chi tiet hoa don khac khong?");
-        } while (NhapChuan.docYesNo("", false));
+            int viTri = timKiemViTriHoaDon(NhapChuan.docChuoiKhongRong("Nhap Ma hoa don muon sua"));
+            if(viTri == -1) {System.out.println("khong ton tai ma hoa don nay!!!"); continue;}
+            DS_HoaDon[viTri].nhap();
+        } while (NhapChuan.docYesNo("Co muon nhap tiep hay khong", false));
     }
     @Override
     public void nhapXoa() {
