@@ -71,9 +71,11 @@ public class Menu {
             };
             switch (menuLuaChon("Thong Ke", menuList)) {
                 case 0 -> {break menuLoop;}
-                case 3 -> QuanLyDanhSach.thongKeHoaDonTheoNam(0);
-                case 4 -> QuanLyDanhSach.thongKeHoaDonTheoNam(1);
-                case 5 -> QuanLyDanhSach.thongKeHoaDonTheoNam(2);
+                case 1 -> QuanLyDanhSach.tongTienHoaDonTheoNgay();
+                case 2 -> QuanLyDanhSach.thongKeTienHoaDonTheoQuy();
+                case 3 -> QuanLyDanhSach.inBangThongKeTienHoaDonTheoNam(0);
+                case 4 -> QuanLyDanhSach.inBangThongKeTienHoaDonTheoNam(1);
+                case 5 -> QuanLyDanhSach.inBangThongKeTienHoaDonTheoNam(2);
                 default -> {thongBaoMenu = THONGBAOMENU[0];}
             }
             clearScreen();

@@ -94,6 +94,7 @@ public class DanhSachPhieuNhapHang implements IDanhSach{
             dsTam.xuatDanhSach();
         }
     }
+    public PhieuNhapHang docPhanTu(int i) {return DS_PhieuNhapHang[i];}
 
     @Override 
     public void nhapThem() {
