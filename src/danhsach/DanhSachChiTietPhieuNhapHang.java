@@ -87,6 +87,15 @@ public class DanhSachChiTietPhieuNhapHang implements IChiTietDanhSach{
         dis.close();
     }
 
+    public void xoaPhieu(String maPNH){
+        int doLech = 0;
+        for(int i = 0; i < soLuong - doLech;i++){
+            while(i + doLech < soLuong && DS_ChiTietPhieuNhapHang[i + doLech].getMaPNH().equals(maPNH)) doLech++;
+            DS_ChiTietPhieuNhapHang[i] =  (i+doLech<soLuong)?DS_ChiTietPhieuNhapHang[i + doLech]:null;
+        }
+        soLuong-=doLech;
+    }
+
     public DanhSachChiTietPhieuNhapHang timKiemMaPNH(String maPNH) {return timKiemNhieuMa(maPNH, "");}
     public DanhSachChiTietPhieuNhapHang timKiemMaNL(String maNL) {return timKiemNhieuMa("", maNL);}
     public boolean kiemTraMa(String maPNH, String maNL) {
