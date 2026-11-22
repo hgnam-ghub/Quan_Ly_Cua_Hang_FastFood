@@ -5,6 +5,9 @@ import rangbuoc.ITruyVanDanhSach;
 
 import java.io.IOException;
 
+import mohinh.HoaDon;
+import mohinh.NhanVien;
+
 import danhsach.*;
 
 public final class QuanLyDanhSach{
@@ -31,5 +34,50 @@ public final class QuanLyDanhSach{
         for(ITruyVanDanhSach ds: DANHSACHTRUYCAPFILE)
         try{ds.xuatDanhSachRaFile();}
         catch (IOException e ) {}
+    }
+
+    private static String[][] thongKeTongTienNhanVienTheoNam(int namBatDau, int namKetThuc) {
+        int soNam = namKetThuc - namBatDau + 1;
+        int soNV = DS_NHANVIEN.getSoLuong();
+        double[][] tong = new double[soNV][soNam];
+
+        for (int i = 0; i < DS_HOADON.getSoLuong(); i++) {
+            HoaDon hd = DS_HOADON.docPhanTu(i);
+            int cot = hd.getNgayTaoDon().getYear() - namBatDau;
+            if (cot < 0 || cot >= soNam) continue;
+            for (int j = 0; j < soNV; j++)
+                if (DS_NHANVIEN.docPhanTu(j).getMa().equals(hd.getMaNV())) {
+                    tong[j][cot] += hd.getTongTien();
+                    break;
+                }
+        }
+        String[][] bang = new String[soNV + 1][soNam + 2];
+        bang[0][0] = "Nhan vien";
+        for (int c = 0; c < soNam; c++) bang[0][c + 1] = String.valueOf(namBatDau + c);
+        bang[0][soNam + 1] = "Tong Cong";
+
+        for (int j = 0; j < soNV; j++) {
+            NhanVien nv = DS_NHANVIEN.docPhanTu(j);
+            double tongNV = 0;
+            bang[j + 1][0] = nv.getMa() + " - " + nv.getHo() + " " + nv.getTen();
+            for (int c = 0; c < soNam; c++) {
+                bang[j + 1][c + 1] = String.format("%,.0f", tong[j][c]);
+                tongNV += tong[j][c];
+            }
+            bang[j + 1][soNam + 1] = String.format("%,.0f", tongNV);
+        }
+        return bang;
+    }
+
+    public static void thongKeTongTienNhanVien() {
+        int namBatDau = NhapChuan.docNam("Tu nam (yyyy)");
+        int namKetThuc;
+        while ((namKetThuc = NhapChuan.docNam("Den nam (yyyy)")) < namBatDau)
+            System.out.println(">> Nam ket thuc phai lon hon hoac bang nam bat dau!");
+        Menu.clearScreen();
+        String[][] bang = thongKeTongTienNhanVienTheoNam(namBatDau, namKetThuc);
+        FormatBang.inBangDuLieu("TONG TIEN HOA DON CUA NHAN VIEN TU NAM " + namBatDau + " DEN NAM " + namKetThuc, bang);
+        if (bang.length == 1) System.out.println(">> Chua co nhan vien nao trong danh sach");
+        NhapChuan.docChuoi("Enter de quay lai");
     }
 }
