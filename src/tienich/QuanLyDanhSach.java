@@ -3,6 +3,7 @@ import rangbuoc.IChiTietDanhSach;
 import rangbuoc.IDanhSach;
 import rangbuoc.ITruyVanDanhSach;
 import java.io.IOException;
+import java.time.LocalDate;
 
 import mohinh.HoaDon;
 import mohinh.NhanVien;
@@ -57,7 +58,11 @@ public final class QuanLyDanhSach{
             NhanVien nv = DS_NHANVIEN.docPhanTu(i);
             tieuDeDong[i] = nv.getMa() + "-" + nv.getHo() + " " + nv.getTen();
         }
-        FormatBang.inBangThongKeTheoNam("Nhan Vien", tieuDeDong, namBatDau, tong);
+        String[] tieuDeCot = new String[soNam + 2];
+        for (int i = 1; i <= soNam; i++) tieuDeCot[i] = String.valueOf(namBatDau + i); 
+        tieuDeCot[0] = "Nhan Vien";
+        tieuDeCot[soNam + 1] = "tong cong";
+        FormatBang.inBangThongKe(tieuDeDong, tieuDeCot, tong);
     }
     private static void tongTienSanPhamTheoNam(int namBatDau, int namKetThuc) {
         int soNam = namKetThuc - namBatDau + 1;
@@ -80,9 +85,12 @@ public final class QuanLyDanhSach{
             SanPham sp = DS_SANPHAM.docPhanTu(i);
             tieuDeDong[i] = sp.getMa() + "-" + sp.getTen();
         }
-        FormatBang.inBangThongKeTheoNam("San Pham", tieuDeDong, namBatDau, tong);
+        String[] tieuDeCot = new String[soNam + 2];
+        for (int i = 0; i < soNam; i++) tieuDeCot[i] = String.valueOf(namBatDau + i); 
+        tieuDeCot[0] = "San Pham";
+        tieuDeCot[soNam + 1] = "tong cong";
+        FormatBang.inBangThongKe(tieuDeDong, tieuDeCot, tong);
     }
-
     private static void tongTienKhachHangTheoNam(int namBatDau, int namKetThuc) {
         int soNam = namKetThuc - namBatDau + 1;
         int soKH = DS_KHACHHANG.getSoLuong();
@@ -98,17 +106,72 @@ public final class QuanLyDanhSach{
                     break;
                 }
         }
+        // tao tieu de cot
         String[] tieuDeDong = new String[DS_KHACHHANG.getSoLuong()];
         for(int i = 0; i < DS_KHACHHANG.getSoLuong(); i++) {
             KhachHang nv = DS_KHACHHANG.docPhanTu(i);
             tieuDeDong[i] = nv.getMa() + "-" + nv.getHo() + " " + nv.getTen();
         }
-        FormatBang.inBangThongKeTheoNam("Khach Hang", tieuDeDong, namBatDau, tong);
+        // tao tieu de dong
+        String[] tieuDeCot = new String[soNam + 2];
+        for (int i = 0; i < soNam; i++) tieuDeCot[i] = String.valueOf(namBatDau + i); 
+        tieuDeCot[0] = "Khach Hang";
+        tieuDeCot[soNam + 1] = "tong cong";
+        FormatBang.inBangThongKe(tieuDeDong, tieuDeCot, tong);
+    }
+    public static double tongTienHoaDonTheoNgay(LocalDate dateDau, LocalDate dateCuoi) {
+        int soHD = DS_HOADON.getSoLuong();
+        double tong = 0;
+        for(int i = 0; i < soHD; i++) {
+            LocalDate ngayHD = DS_HOADON.docPhanTu(i).getNgayTaoDon();
+            if(ngayHD.isBefore(dateDau) || ngayHD.isAfter(dateCuoi)) continue;
+            tong += DS_HOADON.docPhanTu(i).getTongTien();
+        }
+        return tong;
+    }
+    public static double tongTienPhieuNhapHangTheoNgay(LocalDate dateDau, LocalDate dateCuoi) {
+        int soPNH = DS_PHIEUNHAPHANG.getSoLuong();
+        double tong = 0;
+        for(int i = 0; i < soPNH; i++) {
+            LocalDate ngayPNH = DS_PHIEUNHAPHANG.docPhanTu(i).getNgayTaoPhieu();
+            if(ngayPNH.isBefore(dateDau) || ngayPNH.isAfter(dateCuoi)) continue;
+            tong += DS_PHIEUNHAPHANG.docPhanTu(i).getTongTien();
+        }
+        return tong;
+    } 
+    private static void tongTienHoaDonTheoQuy(int nam) {
+        double[][] tong = new double[3][4];
+        LocalDate[][] gioiHanQuy = new LocalDate[4][2]; 
+        gioiHanQuy[0] = new LocalDate[] {LocalDate.of(nam, 1, 1), LocalDate.of(nam, 3, 31)};
+        gioiHanQuy[1] = new LocalDate[] {LocalDate.of(nam, 4, 1), LocalDate.of(nam, 6, 30)};
+        gioiHanQuy[2] = new LocalDate[] {LocalDate.of(nam, 7, 1), LocalDate.of(nam, 9, 30)};
+        gioiHanQuy[3] = new LocalDate[] {LocalDate.of(nam, 10, 1), LocalDate.of(nam, 12, 31)};
+        for(int i = 0; i < 4; i++) {
+            tong[0][i] = tongTienHoaDonTheoNgay(gioiHanQuy[i][0], gioiHanQuy[i][1]);
+            tong[1][i] = tongTienPhieuNhapHangTheoNgay(gioiHanQuy[i][0], gioiHanQuy[i][1]);
+            tong[2][i] = tong[0][i] - tong[1][i];
+        }
+        String[] tieuDeDong = new String[] {"tong thu", "tong chi", "loi nhuan"};
+        String[] tieuDeCot = new String[] {"Nam "+nam,"Quy 1", "Quy 2", "Quy 3", "Quy 4", "Tong Cong"};
+        FormatBang.inBangThongKe(tieuDeDong, tieuDeCot, tong);
+    }
+    public static void tongTienHoaDonTheoNgay() {
+        LocalDate ngayBatDau = NhapChuan.docNgay("Nhap ngay bat dau");
+        LocalDate ngayKetThuc;
+        while (ngayBatDau.isAfter(ngayKetThuc = NhapChuan.docNgay("Nhap ngay ket thuc")))
+            System.out.println("Ngay ket thuc khong duoc dung truoc ngay bat dau, nhap lai");
+        System.out.println("Tong Gia Tri Hoa Don: " + tongTienHoaDonTheoNgay(ngayBatDau, ngayKetThuc));
+        NhapChuan.docChuoi("Enter de quay lai");
     }
 
-
+    public static void thongKeTienHoaDonTheoQuy() {
+        int namXem = NhapChuan.docNam("Nam muon thong ke");
+        Menu.clearScreen();
+        tongTienHoaDonTheoQuy(namXem);
+        NhapChuan.docChuoi("Enter de quay lai");
+    }
     // 0: in thong ke nhan vien 1: in thong ke theo khach hang 2: in thong ke theo san pham 
-    public static void thongKeHoaDonTheoNam(int luaChon) {
+    public static void inBangThongKeTienHoaDonTheoNam(int luaChon) {
         int namBatDau = NhapChuan.docNam("Tu nam (yyyy)");
         int namKetThuc;
         while ((namKetThuc = NhapChuan.docNam("Den nam (yyyy)")) < namBatDau)
