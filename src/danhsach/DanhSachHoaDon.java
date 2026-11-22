@@ -169,13 +169,13 @@ public class DanhSachHoaDon implements IDanhSach {
     @Override
     public void nhapXoa() {
         do {
-            String maHD = NhapChuan.docChuoiKhongRong("Nhap ma hoa don");
-            if (!xoa(maHD))
-                System.out.println(">> Khong tim thay chi tiet hoa don can xoa");
-            else
-                System.out.println(">> Xoa thanh cong");
-            System.out.println("Co tiep tuc xoa cac chi tiet hoa don khac khong?");
-        } while (NhapChuan.docYesNo("", false));
+            int viTri = timKiemViTriHoaDon(NhapChuan.docChuoiKhongRong("Nhap Ma hoa don muon xoa"));
+            if(viTri == -1) {System.out.println("khong ton tai ma hoa don nay!!!"); continue;}
+            QuanLyDanhSach.DS_CHITIETHOADON.xoaHoaDon(DS_HoaDon[viTri].getMaHD());
+            for(int i = viTri; i < soLuong - 1; i++)
+                DS_HoaDon[viTri + 1] = DS_HoaDon[viTri];
+            soLuong--;
+        } while (NhapChuan.docYesNo("Co muon xoa tiep hay khong", false));
     }
 
     public DanhSachHoaDon timKiemTheoMaNV(String maNV) {
