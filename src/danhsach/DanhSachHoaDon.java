@@ -35,7 +35,7 @@ public class DanhSachHoaDon implements IDanhSach {
 
     @Override
     public void xuatDanhSach() {
-        String[] tieuDeCot= new String[] {"Ma HD", "Ma NV", "Ma KH", "Ngay lap", "Trang Thai","Phuong Thuc Thanh Toan", "Tong Tien"};
+        String[] tieuDeCot= new String[] {"Ma HD", "Ma NV", "Ma KH", "Ngay lap", "Phuong Thuc Thanh Toan", "Trang Thai", "Tong Tien"};
         String[][] bangDuLieu = new String[soLuong + 1][];
         bangDuLieu[0] = tieuDeCot;
         for(int i = 0; i < soLuong; i++)
@@ -140,4 +140,5 @@ public class DanhSachHoaDon implements IDanhSach {
                 dsTam.them(DS_HoaDon[i]);
         return (dsTam.soLuong == 0) ? null : dsTam;
     }
+    public HoaDon layHoaDon(int i) { return DS_HoaDon[i]; }
 }
