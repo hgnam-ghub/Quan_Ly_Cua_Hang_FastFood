@@ -41,6 +41,7 @@ public class DanhSachHoaDon implements IDanhSach {
         for(int i = 0; i < soLuong; i++)
             bangDuLieu[i+1] = DS_HoaDon[i].xuat();
         FormatBang.inBangDuLieu("Danh sach hoa don",bangDuLieu);
+        System.out.println("So luong: " + soLuong);
         NhapChuan.docChuoi("Enter de quay lai");
     }
     @Override

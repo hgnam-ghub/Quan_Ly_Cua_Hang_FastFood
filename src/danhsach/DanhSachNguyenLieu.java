@@ -207,6 +207,7 @@ public class DanhSachNguyenLieu implements IDanhSach {
             };
         }
         FormatBang.inBangDuLieu("DANH SACH NGUYEN LIEU", bangNguyenLieu);
+        System.out.println("So luong: " + soLuong);
         NhapChuan.docChuoi("Enter de quay lai");
     }
 }

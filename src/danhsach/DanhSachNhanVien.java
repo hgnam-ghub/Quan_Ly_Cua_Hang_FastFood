@@ -205,6 +205,7 @@ public class DanhSachNhanVien implements IDanhSach {
             };
         }
         FormatBang.inBangDuLieu("DANH SACH NHAN VIEN", bangNhanVien);
+        System.out.println("So luong: " + soLuong);
         NhapChuan.docChuoi("Enter de quay lai");
     }
 }
