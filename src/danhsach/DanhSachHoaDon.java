@@ -71,6 +71,10 @@ public class DanhSachHoaDon implements IDanhSach {
         DS_HoaDon[soLuong++] = hd.saoChep();
         return true;
     }
+    public HoaDon timKiemMa(String maHD) {
+        int viTri = timKiemViTriHoaDon(maHD);
+        return viTri == -1?null:DS_HoaDon[viTri].saoChep();
+    }
     public boolean kiemTraMa(String maHD) {
         for(int i = 0; i < soLuong; i++)
             if(DS_HoaDon[i].getMaHD().equals(maHD)) return true;
