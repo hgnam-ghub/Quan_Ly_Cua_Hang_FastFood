@@ -74,6 +74,7 @@ public class Menu {
                 case 3 -> QuanLyDanhSach.thongKeTongTienNhanVien();
                 default -> {thongBaoMenu = THONGBAOMENU[0];}
             }
+            clearScreen();
         }
     }
 }
