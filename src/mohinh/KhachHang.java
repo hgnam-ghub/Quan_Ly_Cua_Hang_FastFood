@@ -37,7 +37,7 @@ public class KhachHang implements ITruyXuatMoHinh
     }
     public String[] xuat() {
         String ngaySinhStr = ngaySinh.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        return new String[] {ma, ho, ten, soDienThoai, ngaySinhStr, String.valueOf(tongTienDaMua)};
+        return new String[] {ma, ho, ten, soDienThoai, ngaySinhStr, String.format("%.1f", tongTienDaMua)};
     }
     public KhachHang nhap() {
         System.out.println("Nhap thong tin cho khach hang co ma: " + ma);
