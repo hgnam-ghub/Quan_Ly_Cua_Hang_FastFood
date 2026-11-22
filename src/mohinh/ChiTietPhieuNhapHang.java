@@ -32,7 +32,7 @@ public final class ChiTietPhieuNhapHang implements ITruyXuatMoHinh{
     }
     @Override 
     public String[] xuat() {
-        return new String[] {maPNH, maNL, String.valueOf(donGiaNhap), String.valueOf(thanhTien), String.valueOf(soLuong)};
+        return new String[] {maPNH, maNL, String.valueOf(donGiaNhap), String.format("%.1f", thanhTien), String.valueOf(soLuong)};
     }
     @Override
     public void ghiFile(DataOutputStream dos) throws IOException {

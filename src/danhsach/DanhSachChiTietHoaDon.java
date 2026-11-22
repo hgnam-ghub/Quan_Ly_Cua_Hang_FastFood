@@ -87,7 +87,6 @@ public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
         DanhSachChiTietHoaDon dsKq = timKiemNhieuMa(NhapChuan.docChuoi("Ma hoa don"), NhapChuan.docChuoi("Ma san pham"));
         if(dsKq == null) System.out.println(">> khong tim thay");
         else dsKq.xuatDanhSach();
-        NhapChuan.docChuoi("Enter de quay lai");
     }
     @Override
     public double nhapChiTiet(String maHD) {

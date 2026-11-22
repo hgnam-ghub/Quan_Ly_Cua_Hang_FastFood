@@ -28,7 +28,7 @@ public abstract class SanPham implements ITruyXuatMoHinh {
     
     @Override
     public String[] xuat() {
-        return new String[]{ma, ten, donVi, phuongThucCheBien, String.valueOf(giaBan), String.valueOf(soLuong)};
+        return new String[]{ma, ten, donVi, phuongThucCheBien, String.format("%.1f", giaBan), String.valueOf(soLuong)};
     }
     @Override
     public SanPham nhap() {

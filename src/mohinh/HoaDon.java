@@ -30,7 +30,7 @@ public class HoaDon implements ITruyXuatMoHinh {
     public HoaDon saoChep() {return new HoaDon(this){};}
     @Override 
     public String[] xuat() {
-        return new String[] {maHD, maNV, maKH, ngayTaoDon.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), trangThai, phuongThucThanhToan, String.valueOf(tongTien)};
+        return new String[] {maHD, maNV, maKH, ngayTaoDon.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), trangThai, phuongThucThanhToan, String.format("%.1f", tongTien)};
     }
     @Override 
     public HoaDon nhap() {
