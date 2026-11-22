@@ -32,9 +32,7 @@ public class DanhSachHoaDon implements IDanhSach {
     public DanhSachHoaDon saoChep() {return new DanhSachHoaDon(this);}
     @Override 
     public int getSoLuong() { return soLuong; }
-
     public HoaDon docPhanTu(int index) {return DS_HoaDon[index].saoChep();}
-    
     @Override
     public void xuatDanhSach() {
         String[] tieuDeCot= new String[] {"Ma HD", "Ma NV", "Ma KH", "Ngay lap", "Phuong Thuc Thanh Toan", "Trang Thai", "Tong Tien"};

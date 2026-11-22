@@ -2,13 +2,13 @@ package tienich;
 import rangbuoc.IChiTietDanhSach;
 import rangbuoc.IDanhSach;
 import rangbuoc.ITruyVanDanhSach;
-
 import java.io.IOException;
 
 import mohinh.HoaDon;
 import mohinh.NhanVien;
 import mohinh.SanPham;
 import mohinh.ChiTietHoaDon;
+import mohinh.KhachHang;
 
 import danhsach.*;
 
@@ -83,6 +83,29 @@ public final class QuanLyDanhSach{
         FormatBang.inBangThongKeTheoNam("San Pham", tieuDeDong, namBatDau, tong);
     }
 
+    private static void tongTienKhachHangTheoNam(int namBatDau, int namKetThuc) {
+        int soNam = namKetThuc - namBatDau + 1;
+        int soKH = DS_KHACHHANG.getSoLuong();
+        double[][] tong = new double[soKH][soNam];
+
+        for (int i = 0; i < DS_HOADON.getSoLuong(); i++) {
+            HoaDon hd = DS_HOADON.docPhanTu(i);
+            int cot = hd.getNgayTaoDon().getYear() - namBatDau;
+            if (cot < 0 || cot >= soNam) continue;
+            for (int j = 0; j < soKH; j++)
+                if (DS_KHACHHANG.docPhanTu(j).getMa().equals(hd.getMaKH())) {
+                    tong[j][cot] += hd.getTongTien();
+                    break;
+                }
+        }
+        String[] tieuDeDong = new String[DS_KHACHHANG.getSoLuong()];
+        for(int i = 0; i < DS_KHACHHANG.getSoLuong(); i++) {
+            KhachHang nv = DS_KHACHHANG.docPhanTu(i);
+            tieuDeDong[i] = nv.getMa() + "-" + nv.getHo() + " " + nv.getTen();
+        }
+        FormatBang.inBangThongKeTheoNam("Khach Hang", tieuDeDong, namBatDau, tong);
+    }
+
 
     // 0: in thong ke nhan vien 1: in thong ke theo khach hang 2: in thong ke theo san pham 
     public static void thongKeHoaDonTheoNam(int luaChon) {
@@ -93,7 +116,7 @@ public final class QuanLyDanhSach{
         Menu.clearScreen();
         switch (luaChon) {
             case 0 -> tongTienNhanVienTheoNam(namBatDau, namKetThuc);
-            case 1 -> {}
+            case 1 -> tongTienKhachHangTheoNam(namBatDau, namKetThuc);
             case 2 -> tongTienSanPhamTheoNam(namBatDau, namKetThuc);
         }
         NhapChuan.docChuoi("Enter de quay lai");
