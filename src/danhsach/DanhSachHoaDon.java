@@ -36,6 +36,7 @@ public class DanhSachHoaDon implements IDanhSach {
     @Override
     public void xuatDanhSach() {
         String[] tieuDeCot= new String[] {"Ma HD", "Ma NV", "Ma KH", "Ngay lap", "Phuong Thuc Thanh Toan", "Trang Thai", "Tong Tien"};
+        String[] tieuDeCot= new String[] {"Ma HD", "Ma NV", "Ma KH", "Ngay lap", "Phuong Thuc Thanh Toan", "Trang Thai", "Tong Tien"};
         String[][] bangDuLieu = new String[soLuong + 1][];
         bangDuLieu[0] = tieuDeCot;
         for(int i = 0; i < soLuong; i++)
@@ -68,6 +69,10 @@ public class DanhSachHoaDon implements IDanhSach {
         if(soLuong == DS_HoaDon.length) DS_HoaDon = Arrays.copyOf(DS_HoaDon, soLuong+1);
         DS_HoaDon[soLuong++] = hd.saoChep();
         return true;
+    }
+    public HoaDon timKiemMa(String maHD) {
+        int viTri = timKiemViTriHoaDon(maHD);
+        return viTri == -1?null:DS_HoaDon[viTri].saoChep();
     }
     public boolean kiemTraMa(String maHD) {
         for(int i = 0; i < soLuong; i++)
