@@ -8,10 +8,9 @@ import mohinh.HoaDon;
 import mohinh.NhanVien;
 import mohinh.SanPham;
 import mohinh.ChiTietHoaDon;
+import mohinh.KhachHang;
 
 import danhsach.*;
-import mohinh.HoaDon;
-import mohinh.KhachHang;
 
 public final class QuanLyDanhSach{
     public static DanhSachSanPham DS_SANPHAM = new DanhSachSanPham();
@@ -84,22 +83,7 @@ public final class QuanLyDanhSach{
         FormatBang.inBangThongKeTheoNam("San Pham", tieuDeDong, namBatDau, tong);
     }
 
-
-    // 0: in thong ke nhan vien 1: in thong ke theo khach hang 2: in thong ke theo san pham 
-    public static void thongKeHoaDonTheoNam(int luaChon) {
-        int namBatDau = NhapChuan.docNam("Tu nam (yyyy)");
-        int namKetThuc;
-        while ((namKetThuc = NhapChuan.docNam("Den nam (yyyy)")) < namBatDau)
-            System.out.println(">> Nam ket thuc phai lon hon hoac bang nam bat dau!");
-        Menu.clearScreen();
-        switch (luaChon) {
-            case 0 -> tongTienNhanVienTheoNam(namBatDau, namKetThuc);
-            case 1 -> {}
-            case 2 -> tongTienSanPhamTheoNam(namBatDau, namKetThuc);
-        }
-        NhapChuan.docChuoi("Enter de quay lai");
-    }
-     private static String[][] thongKeTongTienKhachHangTheoNam(int namBatDau, int namKetThuc) {
+    private static void tongTienKhachHangTheoNam(int namBatDau, int namKetThuc) {
         int soNam = namKetThuc - namBatDau + 1;
         int soKH = DS_KHACHHANG.getSoLuong();
         double[][] tong = new double[soKH][soNam];
@@ -114,33 +98,27 @@ public final class QuanLyDanhSach{
                     break;
                 }
         }
-        String[][] bang = new String[soKH + 1][soNam + 2];
-        bang[0][0] = "Khach hang";
-        for (int c = 0; c < soNam; c++) bang[0][c + 1] = String.valueOf(namBatDau + c);
-        bang[0][soNam + 1] = "Tong Cong";
-
-        for (int j = 0; j < soKH; j++) {
-            KhachHang kh = DS_KHACHHANG.docPhanTu(j);
-            double tongKH = 0;
-            bang[j + 1][0] = kh.getMa() + " - " + kh.getHo() + " " + kh.getTen();
-            for (int c = 0; c < soNam; c++) {
-                bang[j + 1][c + 1] = String.format("%,.0f", tong[j][c]);
-                tongKH += tong[j][c];
-            }
-            bang[j + 1][soNam + 1] = String.format("%,.0f", tongKH);
+        String[] tieuDeDong = new String[DS_KHACHHANG.getSoLuong()];
+        for(int i = 0; i < DS_KHACHHANG.getSoLuong(); i++) {
+            KhachHang nv = DS_KHACHHANG.docPhanTu(i);
+            tieuDeDong[i] = nv.getMa() + "-" + nv.getHo() + " " + nv.getTen();
         }
-        return bang;
+        FormatBang.inBangThongKeTheoNam("Khach Hang", tieuDeDong, namBatDau, tong);
     }
 
-    public static void thongKeTongTienKhachHang() {
+
+    // 0: in thong ke nhan vien 1: in thong ke theo khach hang 2: in thong ke theo san pham 
+    public static void thongKeHoaDonTheoNam(int luaChon) {
         int namBatDau = NhapChuan.docNam("Tu nam (yyyy)");
         int namKetThuc;
         while ((namKetThuc = NhapChuan.docNam("Den nam (yyyy)")) < namBatDau)
             System.out.println(">> Nam ket thuc phai lon hon hoac bang nam bat dau!");
         Menu.clearScreen();
-        String[][] bang = thongKeTongTienKhachHangTheoNam(namBatDau, namKetThuc);
-        FormatBang.inBangDuLieu("TONG TIEN HOA DON CUA KHACH HANG TU NAM " + namBatDau + " DEN NAM " + namKetThuc, bang);
-        if (bang.length == 1) System.out.println(">> Chua co khach hang nao trong danh sach");
+        switch (luaChon) {
+            case 0 -> tongTienNhanVienTheoNam(namBatDau, namKetThuc);
+            case 1 -> tongTienKhachHangTheoNam(namBatDau, namKetThuc);
+            case 2 -> tongTienSanPhamTheoNam(namBatDau, namKetThuc);
+        }
         NhapChuan.docChuoi("Enter de quay lai");
     }
 }
