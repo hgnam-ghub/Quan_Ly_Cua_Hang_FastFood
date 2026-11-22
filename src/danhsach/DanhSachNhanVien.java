@@ -136,7 +136,16 @@ public class DanhSachNhanVien implements IDanhSach {
     // cac phuong thuc giao dien
     @Override
     public void nhapTimKiem() {
-
+        System.out.println("**** Tim kiem phieu nhap hang ****");
+        String maNV = NhapChuan.docChuoi("Ma phieu can tim");
+        int viTriPhieu = timKiemViTriNhanVien(maNV); 
+        if(viTriPhieu == -1)
+            System.out.println("Khong tim thay phieu nhap hang nay");
+        else {
+            DanhSachNhanVien dsTam = new DanhSachNhanVien();
+            dsTam.them((DS_NhanVien[viTriPhieu]));
+            dsTam.xuatDanhSach();
+        }
     }
 
     // them, sua, xoa
