@@ -10,6 +10,7 @@ import java.util.Arrays;
 import mohinh.HoaDon;
 import tienich.FormatBang;
 import tienich.LuuTru;
+import tienich.Menu;
 import tienich.NhapChuan;
 import tienich.QuanLyDanhSach;
 import rangbuoc.IDanhSach;
@@ -81,16 +82,19 @@ public class DanhSachHoaDon implements IDanhSach {
     }
     @Override
     public void nhapTimKiem() {
-        System.out.println("**** Tim kiem hoa don ****");
-        String maHD = NhapChuan.docChuoi("Ma hoa don can tim");
-        int viTriHD = timKiemViTriHoaDon(maHD); 
-        if(viTriHD == -1)
-            System.out.println("Khong tim thay hoa don nay");
-        else {
-            DanhSachHoaDon dsTam = new DanhSachHoaDon();
-            dsTam.them((DS_HoaDon[viTriHD]));
-            dsTam.xuatDanhSach();
-        }
+        do {
+            Menu.clearScreen();
+            System.out.println("**** Tim kiem hoa don ****");
+            String maHD = NhapChuan.docChuoi("Ma hoa don can tim");
+            int viTriHD = timKiemViTriHoaDon(maHD); 
+            if(viTriHD == -1)
+                System.out.println("Khong tim thay hoa don nay");
+            else {
+                DanhSachHoaDon dsTam = new DanhSachHoaDon();
+                dsTam.them((DS_HoaDon[viTriHD]));
+                dsTam.xuatDanhSach();
+            }
+        } while(NhapChuan.docYesNo("Co muon cap tiep khong", false));
     }
     @Override
     public void nhapThem() {

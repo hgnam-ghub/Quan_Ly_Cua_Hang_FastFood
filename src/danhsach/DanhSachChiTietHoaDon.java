@@ -12,6 +12,7 @@ import mohinh.SanPham;
 import rangbuoc.IChiTietDanhSach;
 import tienich.FormatBang;
 import tienich.LuuTru;
+import tienich.Menu;
 import tienich.NhapChuan;
 import tienich.QuanLyDanhSach;
 
@@ -84,10 +85,13 @@ public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
     }
     @Override
     public void nhapTimKiem() {
-        System.out.println("**** Tim kiem chi tiet hoa don (Nhap it nhat 1 ma de tim) ****");
-        DanhSachChiTietHoaDon dsKq = timKiemNhieuMa(NhapChuan.docChuoi("Ma hoa don"), NhapChuan.docChuoi("Ma san pham"));
-        if(dsKq == null) System.out.println(">> khong tim thay");
-        else dsKq.xuatDanhSach();
+        do {
+            Menu.clearScreen();
+            System.out.println("**** Tim kiem chi tiet hoa don (Nhap it nhat 1 ma de tim) ****");
+            DanhSachChiTietHoaDon dsKq = timKiemNhieuMa(NhapChuan.docChuoi("Ma hoa don"), NhapChuan.docChuoi("Ma san pham"));
+            if(dsKq == null) System.out.println(">> khong tim thay");
+            else dsKq.xuatDanhSach();
+        } while(NhapChuan.docYesNo("Co muon nhap tiep khong", false));
     }
     @Override
     public double nhapChiTiet(String maHD) {

@@ -11,6 +11,7 @@ import mohinh.KhachHang;
 import rangbuoc.IDanhSach;
 import tienich.FormatBang;
 import tienich.LuuTru;
+import tienich.Menu;
 import tienich.NhapChuan;
 public class DanhSachKhachHang implements IDanhSach {
     private KhachHang[] DS_KhachHang;
@@ -77,16 +78,19 @@ public class DanhSachKhachHang implements IDanhSach {
     public boolean kiemTraMa(String ma) { return timKiemViTriKhachHang(ma) != -1; }
     @Override
     public void nhapTimKiem() {
-        System.out.println("**** Tim kiem khach hang ****");
-        String maHD = NhapChuan.docChuoi("Ma khach hang can tim");
-        int viTriHD = timKiemViTriKhachHang(maHD); 
-        if(viTriHD == -1)
-            System.out.println("Khong tim thay phieu nhap hang nay");
-        else {
-            DanhSachKhachHang dsTam = new DanhSachKhachHang();
-            dsTam.them((DS_KhachHang[viTriHD]));
-            dsTam.xuatDanhSach();
-        }
+        do {
+            Menu.clearScreen();
+            System.out.println("**** Tim kiem khach hang ****");
+            String maHD = NhapChuan.docChuoi("Ma khach hang can tim");
+            int viTriHD = timKiemViTriKhachHang(maHD); 
+            if(viTriHD == -1)
+                System.out.println("Khong tim thay phieu nhap hang nay");
+            else {
+                DanhSachKhachHang dsTam = new DanhSachKhachHang();
+                dsTam.them((DS_KhachHang[viTriHD]));
+                dsTam.xuatDanhSach();
+            }
+        } while(NhapChuan.docYesNo("Co nhap tiep hay khong", false));
     }
     @Override 
     // them, sua, xoa

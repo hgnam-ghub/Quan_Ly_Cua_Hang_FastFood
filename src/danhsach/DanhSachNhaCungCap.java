@@ -11,6 +11,7 @@ import mohinh.NhaCungCap;
 import rangbuoc.IDanhSach;
 import tienich.FormatBang;
 import tienich.LuuTru;
+import tienich.Menu;
 import tienich.NhapChuan;
 
 public class DanhSachNhaCungCap implements IDanhSach {
@@ -136,16 +137,19 @@ public class DanhSachNhaCungCap implements IDanhSach {
     // cac phuong thuc giao dien
     @Override
     public void nhapTimKiem() {
-        System.out.println("**** Tim kiem nha cung cap ****");
-        String maNCC = NhapChuan.docChuoi("Ma nha cung cap can tim");
-        int viTriPhieu = timKiemViTriNhaCungCap(maNCC); 
-        if(viTriPhieu == -1)
-            System.out.println("Khong tim thay nha cung cap nay");
-        else {
-            DanhSachNhaCungCap dsTam = new DanhSachNhaCungCap();
-            dsTam.them((DS_NhaCungCap[viTriPhieu]));
-            dsTam.xuatDanhSach();
-        }
+        do {
+            Menu.clearScreen();
+            System.out.println("**** Tim kiem nha cung cap ****");
+            String maNCC = NhapChuan.docChuoi("Ma nha cung cap can tim");
+            int viTriPhieu = timKiemViTriNhaCungCap(maNCC); 
+            if(viTriPhieu == -1)
+                System.out.println("Khong tim thay nha cung cap nay");
+            else {
+                DanhSachNhaCungCap dsTam = new DanhSachNhaCungCap();
+                dsTam.them((DS_NhaCungCap[viTriPhieu]));
+                dsTam.xuatDanhSach();
+            }
+        } while (NhapChuan.docYesNo("Co muon nhap tiep", false));
     }
 
     // them, sua, xoa

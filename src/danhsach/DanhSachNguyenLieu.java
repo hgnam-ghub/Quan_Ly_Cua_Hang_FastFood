@@ -11,6 +11,7 @@ import mohinh.NguyenLieu;
 import rangbuoc.IDanhSach;
 import tienich.FormatBang;
 import tienich.LuuTru;
+import tienich.Menu;
 import tienich.NhapChuan;
 
 public class DanhSachNguyenLieu implements IDanhSach {
@@ -141,16 +142,19 @@ public class DanhSachNguyenLieu implements IDanhSach {
     // cac phuong thuc giao dien
     @Override
     public void nhapTimKiem() {
-        System.out.println("**** Tim kiem nguyen lieu ****");
-        String maNL = NhapChuan.docChuoi("Ma nguyen lieu can tim");
-        int viTriPhieu = timKiemViTriNguyenLieu(maNL); 
-        if(viTriPhieu == -1)
-            System.out.println("Khong tim thay nguyen lieu nay");
-        else {
-            DanhSachNguyenLieu dsTam = new DanhSachNguyenLieu();
-            dsTam.them((DS_NguyenLieu[viTriPhieu]));
-            dsTam.xuatDanhSach();
-        }
+        do {
+            Menu.clearScreen();
+            System.out.println("**** Tim kiem nguyen lieu ****");
+            String maNL = NhapChuan.docChuoi("Ma nguyen lieu can tim");
+            int viTriPhieu = timKiemViTriNguyenLieu(maNL); 
+            if(viTriPhieu == -1)
+                System.out.println("Khong tim thay nguyen lieu nay");
+            else {
+                DanhSachNguyenLieu dsTam = new DanhSachNguyenLieu();
+                dsTam.them((DS_NguyenLieu[viTriPhieu]));
+                dsTam.xuatDanhSach();
+            }
+        } while (NhapChuan.docYesNo("Co nhap tiep khong", false));
     }
 
     // them, sua, xoa
