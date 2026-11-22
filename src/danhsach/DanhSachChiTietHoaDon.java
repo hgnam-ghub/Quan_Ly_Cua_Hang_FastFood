@@ -114,6 +114,8 @@ public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
         return tongTien;
     }
 
+    public ChiTietHoaDon docPhanTu(int index) {return DS_ChiTietHoaDon[index].saoChep();}
+
     public DanhSachChiTietHoaDon timKiemMaHD(String maHD) {return timKiemNhieuMa(maHD, "");}
     public DanhSachChiTietHoaDon timKiemMaSP(String maSP) {return timKiemNhieuMa("", maSP);}
     public DanhSachChiTietHoaDon timKiemNhieuMa(String maHD, String maSP) {
