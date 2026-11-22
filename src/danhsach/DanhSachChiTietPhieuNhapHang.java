@@ -117,6 +117,7 @@ public class DanhSachChiTietPhieuNhapHang implements IChiTietDanhSach{
         bangDuLieu[0] = tieuDeCot;
         for(int i = 0; i < soLuong; i++) bangDuLieu[i+1] = DS_ChiTietPhieuNhapHang[i].xuat();
         FormatBang.inBangDuLieu("Chi Tiet Phieu Nhap Hang",bangDuLieu);
+        System.out.println("So luong: " + soLuong);
         NhapChuan.docChuoi("Enter de thoat");
     }
 

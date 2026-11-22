@@ -199,6 +199,7 @@ public class DanhSachSanPham implements IDanhSach {
             }
         }
         FormatBang.inBangDuLieu("DANH SACH SAN PHAM",bangSanPham);
+        System.out.println("So luong: " + soLuong);
         NhapChuan.docChuoi("Enter de quay lai");
     }
 }

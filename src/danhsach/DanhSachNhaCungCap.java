@@ -203,6 +203,7 @@ public class DanhSachNhaCungCap implements IDanhSach {
             };
         }
         FormatBang.inBangDuLieu("DANH SACH NHA CUNG CAP", bangNhaCungCap);
+        System.out.println("So luong: " + soLuong);
         NhapChuan.docChuoi("Enter de quay lai");
     }
 }

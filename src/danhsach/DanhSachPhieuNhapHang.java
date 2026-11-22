@@ -41,6 +41,7 @@ public class DanhSachPhieuNhapHang implements IDanhSach{
         for(int i = 0; i < soLuong; i++)
             bangDuLieu[i+1] = DS_PhieuNhapHang[i].xuat();
         FormatBang.inBangDuLieu("Phieu Nhap Hang",bangDuLieu);
+        System.out.println("So luong: " + soLuong);
         NhapChuan.docChuoi("Enter de quay lai");
     }
 
