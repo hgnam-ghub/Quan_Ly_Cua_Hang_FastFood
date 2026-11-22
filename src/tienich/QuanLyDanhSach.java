@@ -172,9 +172,9 @@ public final class QuanLyDanhSach{
     }
     // 0: in thong ke nhan vien 1: in thong ke theo khach hang 2: in thong ke theo san pham 
     public static void inBangThongKeTienHoaDonTheoNam(int luaChon) {
-        int namBatDau = NhapChuan.docNam("Tu nam (yyyy)");
+        int namBatDau = NhapChuan.docNam("Tu nam");
         int namKetThuc;
-        while ((namKetThuc = NhapChuan.docNam("Den nam (yyyy)")) < namBatDau)
+        while ((namKetThuc = NhapChuan.docNam("Den nam")) < namBatDau)
             System.out.println(">> Nam ket thuc phai lon hon hoac bang nam bat dau!");
         Menu.clearScreen();
         switch (luaChon) {
