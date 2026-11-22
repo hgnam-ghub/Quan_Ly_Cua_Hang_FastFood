@@ -80,7 +80,7 @@ public class DanhSachKhachHang implements IDanhSach {
         String maHD = NhapChuan.docChuoi("Ma khach hang can tim");
         int viTriHD = timKiemViTriKhachHang(maHD); 
         if(viTriHD == -1)
-            System.out.println("Khong tim thay phieu nhap hang nay");
+            System.out.println("Khong tim thay khach hang nay");
         else {
             DanhSachKhachHang dsTam = new DanhSachKhachHang();
             dsTam.them((DS_KhachHang[viTriHD]));

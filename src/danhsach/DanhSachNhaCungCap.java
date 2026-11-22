@@ -136,11 +136,11 @@ public class DanhSachNhaCungCap implements IDanhSach {
     // cac phuong thuc giao dien
     @Override
     public void nhapTimKiem() {
-        System.out.println("**** Tim kiem phieu nhap hang ****");
-        String maNCC = NhapChuan.docChuoi("Ma phieu can tim");
+        System.out.println("**** Tim kiem nha cung cap ****");
+        String maNCC = NhapChuan.docChuoi("Ma nha cung cap can tim");
         int viTriPhieu = timKiemViTriNhaCungCap(maNCC); 
         if(viTriPhieu == -1)
-            System.out.println("Khong tim thay phieu nhap hang nay");
+            System.out.println("Khong tim thay nha cung cap nay");
         else {
             DanhSachNhaCungCap dsTam = new DanhSachNhaCungCap();
             dsTam.them((DS_NhaCungCap[viTriPhieu]));
