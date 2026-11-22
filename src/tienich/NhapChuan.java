@@ -25,7 +25,12 @@ public final class NhapChuan
             }
         }
     }
-
+    public static int docNam(String prompt) {
+        int nam;
+        while ((nam = NhapChuan.docSoNguyen(prompt)) < 1000 || nam > 9999)
+            System.out.println(">> Nam phai co dang yyyy (1000 - 9999)!");
+        return nam;
+    }
     // hoi nguoi dung chon sap xep tang dan (cu -> moi) hay giam dan (moi -> cu), true = tang dan
     public static boolean docThuTuSapXep() {
         System.out.println("1. Tang dan (cu nhat -> moi nhat)");
