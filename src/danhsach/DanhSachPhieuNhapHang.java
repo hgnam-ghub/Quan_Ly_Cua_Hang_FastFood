@@ -11,6 +11,7 @@ import mohinh.PhieuNhapHang;
 import rangbuoc.IDanhSach;
 import tienich.FormatBang;
 import tienich.LuuTru;
+import tienich.Menu;
 import tienich.NhapChuan;
 import tienich.QuanLyDanhSach;
 
@@ -84,16 +85,19 @@ public class DanhSachPhieuNhapHang implements IDanhSach{
 
     @Override 
     public void nhapTimKiem() {
-        System.out.println("**** Tim kiem phieu nhap hang ****");
-        String maPNH = NhapChuan.docChuoi("Ma phieu can tim");
-        int viTriPhieu = timViTriPhieuNhapHang(maPNH); 
-        if(viTriPhieu == -1)
-            System.out.println("Khong tim thay phieu nhap hang nay");
-        else {
-            DanhSachPhieuNhapHang dsTam = new DanhSachPhieuNhapHang();
-            dsTam.them((DS_PhieuNhapHang[viTriPhieu]));
-            dsTam.xuatDanhSach();
-        }
+        do {
+            Menu.clearScreen();
+            System.out.println("**** Tim kiem phieu nhap hang ****");
+            String maPNH = NhapChuan.docChuoi("Ma phieu can tim");
+            int viTriPhieu = timViTriPhieuNhapHang(maPNH); 
+            if(viTriPhieu == -1)
+                System.out.println("Khong tim thay phieu nhap hang nay");
+            else {
+                DanhSachPhieuNhapHang dsTam = new DanhSachPhieuNhapHang();
+                dsTam.them((DS_PhieuNhapHang[viTriPhieu]));
+                dsTam.xuatDanhSach();
+            }
+        } while(NhapChuan.docYesNo("Co Muon Nhap Tiep", false));
     }
     public PhieuNhapHang docPhanTu(int i) {return DS_PhieuNhapHang[i];}
 

@@ -13,6 +13,7 @@ import mohinh.SanPham;
 import rangbuoc.IDanhSach;
 import tienich.FormatBang;
 import tienich.LuuTru;
+import tienich.Menu;
 import tienich.NhapChuan;
 
 public class DanhSachSanPham implements IDanhSach {
@@ -132,16 +133,19 @@ public class DanhSachSanPham implements IDanhSach {
     // cac phuong thuc giao dien
     @Override
     public void nhapTimKiem() {
-        System.out.println("**** Tim kiem san pham ****");
-        String maSP = NhapChuan.docChuoi("San pham can tim");
-        int viTriPhieu = timKiemViTriSanPham(maSP);
-        if(viTriPhieu == -1)
-            System.out.println("Khong tim thay san pham nay");
-        else {
-            DanhSachSanPham dsTam = new DanhSachSanPham();
-            dsTam.them((DS_SanPham[viTriPhieu]));
-            dsTam.xuatDanhSach();
-        }
+        do {
+            Menu.clearScreen();
+            System.out.println("**** Tim kiem san pham ****");
+            String maSP = NhapChuan.docChuoi("San pham can tim");
+            int viTriPhieu = timKiemViTriSanPham(maSP);
+            if(viTriPhieu == -1)
+                System.out.println("Khong tim thay san pham nay");
+            else {
+                DanhSachSanPham dsTam = new DanhSachSanPham();
+                dsTam.them((DS_SanPham[viTriPhieu]));
+                dsTam.xuatDanhSach();
+            }
+        } while(NhapChuan.docYesNo("Co muon tiep tuc", false));
     }
     //them, sua, xoa
     @Override

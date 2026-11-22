@@ -13,6 +13,7 @@ import rangbuoc.IChiTietDanhSach;
 import rangbuoc.ITruyVanDanhSach;
 import tienich.FormatBang;
 import tienich.LuuTru;
+import tienich.Menu;
 import tienich.NhapChuan;
 import tienich.QuanLyDanhSach;
 
@@ -65,10 +66,13 @@ public class DanhSachChiTietPhieuNhapHang implements IChiTietDanhSach{
     
     @Override
     public void nhapTimKiem() {
-        System.out.println("**** Tim kiem chi tiet hoa don (Nhap it nhat 1 ma de tim) ****");
-        DanhSachChiTietPhieuNhapHang dsKq = timKiemNhieuMa(NhapChuan.docChuoi("Ma phieu nhap"), NhapChuan.docChuoi("Ma nguyen lieu"));
-        if(dsKq == null) System.out.println(">> khong tim thay");
-        else dsKq.xuatDanhSach();
+        do {
+            Menu.clearScreen();
+            System.out.println("**** Tim kiem chi tiet hoa don (Nhap it nhat 1 ma de tim) ****");
+            DanhSachChiTietPhieuNhapHang dsKq = timKiemNhieuMa(NhapChuan.docChuoi("Ma phieu nhap"), NhapChuan.docChuoi("Ma nguyen lieu"));
+            if(dsKq == null) System.out.println(">> khong tim thay");
+            else dsKq.xuatDanhSach();
+        } while (NhapChuan.docYesNo("Co muon nhap tiep khong", false));
     }
     @Override
     public void xuatDanhSachRaFile() throws IOException{
