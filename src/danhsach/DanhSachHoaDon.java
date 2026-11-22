@@ -84,7 +84,7 @@ public class DanhSachHoaDon implements IDanhSach {
         String maHD = NhapChuan.docChuoi("Ma hoa don can tim");
         int viTriHD = timKiemViTriHoaDon(maHD); 
         if(viTriHD == -1)
-            System.out.println("Khong tim thay phieu nhap hang nay");
+            System.out.println("Khong tim thay hoa don nay");
         else {
             DanhSachHoaDon dsTam = new DanhSachHoaDon();
             dsTam.them((DS_HoaDon[viTriHD]));

@@ -141,11 +141,11 @@ public class DanhSachNguyenLieu implements IDanhSach {
     // cac phuong thuc giao dien
     @Override
     public void nhapTimKiem() {
-        System.out.println("**** Tim kiem phieu nhap hang ****");
-        String maNL = NhapChuan.docChuoi("Ma phieu can tim");
+        System.out.println("**** Tim kiem nguyen lieu ****");
+        String maNL = NhapChuan.docChuoi("Ma nguyen lieu can tim");
         int viTriPhieu = timKiemViTriNguyenLieu(maNL); 
         if(viTriPhieu == -1)
-            System.out.println("Khong tim thay phieu nhap hang nay");
+            System.out.println("Khong tim thay nguyen lieu nay");
         else {
             DanhSachNguyenLieu dsTam = new DanhSachNguyenLieu();
             dsTam.them((DS_NguyenLieu[viTriPhieu]));
