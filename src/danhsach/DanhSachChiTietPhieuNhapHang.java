@@ -69,7 +69,6 @@ public class DanhSachChiTietPhieuNhapHang implements IChiTietDanhSach{
         DanhSachChiTietPhieuNhapHang dsKq = timKiemNhieuMa(NhapChuan.docChuoi("Ma phieu nhap"), NhapChuan.docChuoi("Ma nguyen lieu"));
         if(dsKq == null) System.out.println(">> khong tim thay");
         else dsKq.xuatDanhSach();
-        NhapChuan.docChuoi("Enter de quay lai");
     }
     @Override
     public void xuatDanhSachRaFile() throws IOException{

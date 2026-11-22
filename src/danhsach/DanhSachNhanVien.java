@@ -200,7 +200,7 @@ public class DanhSachNhanVien implements IDanhSach {
                 DS_NhanVien[i].getChucVu(),
                 DS_NhanVien[i].getSoDienThoai(),
                 DS_NhanVien[i].getGioiTinh(),
-                String.valueOf(DS_NhanVien[i].getLuongCoBan()),
+                String.format(".1f",DS_NhanVien[i].getLuongCoBan()),
                 String.valueOf(DS_NhanVien[i].getTongTienDaBan())
             };
         }

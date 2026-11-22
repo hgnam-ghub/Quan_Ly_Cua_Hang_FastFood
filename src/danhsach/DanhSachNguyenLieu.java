@@ -202,7 +202,7 @@ public class DanhSachNguyenLieu implements IDanhSach {
                 DS_NguyenLieu[i].getMa(),
                 DS_NguyenLieu[i].getTen(),
                 DS_NguyenLieu[i].getDonVi(),
-                String.valueOf(DS_NguyenLieu[i].getDonGia()),
+                String.format("%.1f",DS_NguyenLieu[i].getDonGia()),
                 String.valueOf(DS_NguyenLieu[i].getSoLuong())
             };
         }

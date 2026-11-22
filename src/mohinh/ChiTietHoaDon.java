@@ -24,7 +24,7 @@ public class ChiTietHoaDon implements ITruyXuatMoHinh {
     public ChiTietHoaDon saoChep() {return new ChiTietHoaDon(this){};}
     @Override 
     public String[] xuat() {
-        return new String[] {maHD,maSP,String.valueOf(donGiaBan),String.valueOf(thanhTien),String.valueOf(soLuong)};
+        return new String[] {maHD,maSP,String.valueOf(donGiaBan), String.format("%.1f", thanhTien), String.valueOf(soLuong)};
     }
     @Override 
     public ChiTietHoaDon nhap() {
