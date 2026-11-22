@@ -37,7 +37,8 @@ public final class QuanLyDanhSach{
         try{ds.xuatDanhSachRaFile();}
         catch (IOException e ) {}
     }
-private static String[][] lapBangThongKeNhanVien(String[] tieuDeCot, ToIntFunction<LocalDate> chiSoCot) {
+
+     private static String[][] lapBangThongKeNhanVien(String[] tieuDeCot, ToIntFunction<LocalDate> chiSoCot) {
         int soCot = tieuDeCot.length;
         int soNV = DS_NHANVIEN.getSoLuong();
         double[][] tong = new double[soNV][soCot];
@@ -70,9 +71,29 @@ private static String[][] lapBangThongKeNhanVien(String[] tieuDeCot, ToIntFuncti
         return bang;
     }
 
-     public static String[][] thongKeTongTienNhanVienTheoNam(int namBatDau, int namKetThuc) {
+    private static String[][] thongKeTongTienNhanVienTheoNam(int namBatDau, int namKetThuc) {
         String[] tieuDe = new String[namKetThuc - namBatDau + 1];
         for (int i = 0; i < tieuDe.length; i++) tieuDe[i] = String.valueOf(namBatDau + i);
         return lapBangThongKeNhanVien(tieuDe, ngay -> ngay.getYear() - namBatDau);
+    }
+
+    private static int docNam(String prompt) {
+        int nam;
+        while ((nam = NhapChuan.docSoNguyen(prompt)) < 1000 || nam > 9999)
+            System.out.println(">> Nam phai co dang yyyy (1000 - 9999)!");
+        return nam;
+    }
+
+    public static void thongKeTongTienNhanVien() {
+        int namBatDau = docNam("Tu nam (yyyy)");
+        int namKetThuc;
+        while ((namKetThuc = docNam("Den nam (yyyy)")) < namBatDau)
+            System.out.println(">> Nam ket thuc phai lon hon hoac bang nam bat dau!");
+        Menu.clearScreen();
+        String[][] bang = thongKeTongTienNhanVienTheoNam(namBatDau, namKetThuc);
+        FormatBang.inBangDuLieu("TONG TIEN HOA DON CUA NHAN VIEN TU NAM " + namBatDau + " DEN NAM " + namKetThuc, bang);
+        if (bang.length == 1) System.out.println(">> Chua co nhan vien nao trong danh sach");
+        NhapChuan.docChuoi("Enter de quay lai");
+        Menu.clearScreen();
     }
 }
