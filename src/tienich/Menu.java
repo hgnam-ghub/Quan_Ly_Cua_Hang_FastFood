@@ -71,9 +71,29 @@ public class Menu {
             };
             switch (menuLuaChon("Thong Ke", menuList)) {
                 case 0 -> {break menuLoop;}
+                case 3 -> thongKeTongTienNhanVien();
                 default -> {thongBaoMenu = THONGBAOMENU[0];}
             }
         }
+    }
+    private static void thongKeTongTienNhanVien() {
+        int namBatDau = docNam("Tu nam (yyyy)");
+        int namKetThuc;
+        while ((namKetThuc = docNam("Den nam (yyyy)")) < namBatDau)
+            System.out.println(">> Nam ket thuc phai lon hon hoac bang nam bat dau!");
+        clearScreen();
+        String[][] bang = QuanLyDanhSach.thongKeTongTienNhanVienTheoNam(namBatDau, namKetThuc);
+        FormatBang.inBangDuLieu("TONG TIEN HOA DON CUA NHAN VIEN TU NAM " + namBatDau + " DEN NAM " + namKetThuc, bang);
+        if (bang.length == 1) System.out.println(">> Chua co nhan vien nao trong danh sach");
+        NhapChuan.docChuoi("Enter de quay lai");
+        clearScreen();
+    }
+
+    private static int docNam(String prompt) {
+        int nam;
+        while ((nam = NhapChuan.docSoNguyen(prompt)) < 1000 || nam > 9999)
+            System.out.println(">> Nam phai co dang yyyy (1000 - 9999)!");
+        return nam;
     }
 }
 
