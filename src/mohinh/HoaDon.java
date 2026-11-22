@@ -35,7 +35,7 @@ public class HoaDon implements ITruyXuatMoHinh {
     @Override 
     public HoaDon nhap() {
         System.out.println("Nhap thong tin cho hoa don co ma: " + maHD);
-        setNgayTaoDon(NhapChuan.docNgay("Ngay tao don (dd/MM/yyyy)"));
+        setNgayTaoDon(NhapChuan.docNgay("Ngay tao don"));
         setTrangThai(NhapChuan.docChuoiKhongRong("Trang thai"));
         setPhuongThucThanhToan(NhapChuan.docChuoiKhongRong("Phuong thuc thanh toan"));
         setTongTien(NhapChuan.docSoThucKhongAm("Tong tien"));
