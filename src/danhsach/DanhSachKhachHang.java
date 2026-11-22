@@ -86,7 +86,6 @@ public class DanhSachKhachHang implements IDanhSach {
             DS_KhachHang[i] = DS_KhachHang[i + 1];
         }
         DS_KhachHang[--soLuong] = null;
-        QuanLyDanhSach.DS_HOADON.xoaTheoMaKH(ma);
         return true;
     }
     // cac phuong thuc giao tiep ra ben ngoai
