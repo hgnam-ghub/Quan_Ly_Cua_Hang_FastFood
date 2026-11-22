@@ -12,7 +12,6 @@ import rangbuoc.IDanhSach;
 import tienich.FormatBang;
 import tienich.LuuTru;
 import tienich.NhapChuan;
-import tienich.QuanLyDanhSach;
 public class DanhSachKhachHang implements IDanhSach {
     private KhachHang[] DS_KhachHang;
     private int soLuong;
