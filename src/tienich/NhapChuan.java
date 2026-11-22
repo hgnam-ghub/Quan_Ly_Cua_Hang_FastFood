@@ -27,7 +27,7 @@ public final class NhapChuan
     }
     public static int docNam(String prompt) {
         int nam;
-        while ((nam = NhapChuan.docSoNguyen(prompt)) < 1000 || nam > 9999)
+        while ((nam = NhapChuan.docSoNguyen(prompt + " (yyyy): ")) < 1000 || nam > 9999)
             System.out.println(">> Nam phai co dang yyyy (1000 - 9999)!");
         return nam;
     }

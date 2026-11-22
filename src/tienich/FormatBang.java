@@ -98,14 +98,11 @@ public class FormatBang {
         return true;
     }
 
-    public static void inBangThongKeTheoNam(String tenBang,String[] tieuDeDong,int namBatDau,double[][] bangTongTien) {
+    public static void inBangThongKe(String[] tieuDeDong, String[] tieuDeCot,double[][] bangTongTien) {
         int soCot = bangTongTien[0].length;
         int soDong = bangTongTien.length;
         String[][] bangData = new String[soDong + 1][soCot + 2];
-        // nhap noi dung tieu de cot
-        bangData[0][0] = tenBang;
-        for (int c = 0; c < bangTongTien[0].length; c++) bangData[0][c + 1] = String.valueOf(namBatDau + c);
-        bangData[0][soCot + 1] = "Tong Cong";
+        bangData[0] = tieuDeCot;
 
         // nhap noi dung cac hang du lieu, dong thoi tu dong tinh tong dong
         for (int j = 0; j < soDong; j++) {
@@ -117,7 +114,7 @@ public class FormatBang {
             }
             bangData[j + 1][soCot + 1] = String.format("%.1f", tongCuaDong);
         }
-        inBangDuLieu("Thong Ke Tong Hoa Don cua " + tenBang + " Tu Nam " + namBatDau + " Den Nam " + (namBatDau + soCot), bangData);
+        inBangDuLieu("Thong Ke Tong Hoa Don", bangData);
     }
 }
  
