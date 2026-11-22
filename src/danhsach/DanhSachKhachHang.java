@@ -29,6 +29,7 @@ public class DanhSachKhachHang implements IDanhSach {
     public DanhSachKhachHang saoChep() { return new DanhSachKhachHang(this); }
     @Override 
     public int getSoLuong() { return soLuong; }
+    public KhachHang docPhanTu(int index) { return DS_KhachHang[index].saoChep(); }
     @Override
     public void xuatDanhSach() {
         String[] tieuDeCot= new String[] {"Ma KH", "Ho", "Ten", "So dien thoai", "Ngay sinh", "Tong tien da mua"};
@@ -121,5 +122,4 @@ public class DanhSachKhachHang implements IDanhSach {
             soLuong--;
         } while (NhapChuan.docYesNo("Co muon xoa tiep hay khong", false));
     }
-    public KhachHang layKhachHang(int i) { return DS_KhachHang[i]; }
 }
