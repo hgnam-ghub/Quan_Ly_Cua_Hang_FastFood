@@ -125,4 +125,19 @@ public class DanhSachHoaDon implements IDanhSach {
             soLuong--;
         } while (NhapChuan.docYesNo("Co muon xoa tiep hay khong", false));
     }
+
+    public DanhSachHoaDon timKiemTheoMaNV(String maNV) {
+        DanhSachHoaDon dsTam = new DanhSachHoaDon();
+        for (int i = 0; i < soLuong; i++)
+            if (DS_HoaDon[i] != null && DS_HoaDon[i].getMaNhanVien().equals(maNV)) 
+                dsTam.them(DS_HoaDon[i]);
+        return (dsTam.soLuong == 0) ? null : dsTam;
+    }
+    public DanhSachHoaDon timKiemTheoMaKH(String maKH) {
+        DanhSachHoaDon dsTam = new DanhSachHoaDon();
+        for (int i = 0; i < soLuong; i++)
+            if (DS_HoaDon[i] != null && DS_HoaDon[i].getMaKhachHang().equals(maKH)) 
+                dsTam.them(DS_HoaDon[i]);
+        return (dsTam.soLuong == 0) ? null : dsTam;
+    }
 }

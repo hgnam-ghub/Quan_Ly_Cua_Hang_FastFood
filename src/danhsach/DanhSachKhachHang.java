@@ -31,21 +31,20 @@ public class DanhSachKhachHang implements IDanhSach {
     public int getSoLuong() { return soLuong; }
     @Override
     public void xuatDanhSach() {
-        String[][] bangKhachHang = new String[soLuong + 1][];
-        bangKhachHang[0] = new String[] {"Ma KH", "Ho", "Ten", "So dien thoai", "Ngay sinh", "Tong tien da mua"};
-        for (int i = 0; i < soLuong; i++) {
-            bangKhachHang[i + 1] = DS_KhachHang[i].xuat();
-        }
-        FormatBang.inBangDuLieu("DANH SACH KHACH HANG", bangKhachHang);
+        String[] tieuDeCot= new String[] {"Ma KH", "Ho", "Ten", "So dien thoai", "Ngay sinh", "Tong tien da mua"};
+        String[][] bangDuLieu = new String[soLuong + 1][];
+        bangDuLieu[0] = tieuDeCot;
+        for(int i = 0; i < soLuong; i++)
+            bangDuLieu[i+1] = DS_KhachHang[i].xuat();
+        FormatBang.inBangDuLieu("Danh sach khach hang",bangDuLieu);
         NhapChuan.docChuoi("Enter de quay lai");
     }
     @Override
     public void xuatDanhSachRaFile() throws IOException {
         DataOutputStream dos = new DataOutputStream(new FileOutputStream(LuuTru.FILEDSKH));
         dos.writeInt(soLuong);
-        for (int i = 0; i < soLuong; i++) {
+        for (int i = 0; i < soLuong; i++) 
             DS_KhachHang[i].ghiFile(dos);
-        }
         dos.close();
     }
     @Override
@@ -63,57 +62,42 @@ public class DanhSachKhachHang implements IDanhSach {
     // phuong thuc noi bo, dung de tao chuoi xu ly cho gon
     private int timKiemViTriKhachHang(String ma) {
         for (int i = 0; i < soLuong; i++)
-            if (DS_KhachHang[i] != null && DS_KhachHang[i].getMa().equals(ma)) return i;
+            if (DS_KhachHang[i].getMa().equals(ma)) return i;
         return -1;
     }
-    // them, sua, xoa
-    private KhachHang them(KhachHang kh) {
-        if (kiemTraMa(kh.getMa())) return null;
-        if (soLuong == DS_KhachHang.length) DS_KhachHang = Arrays.copyOf(DS_KhachHang, soLuong + 1);
-        DS_KhachHang[soLuong++] = kh;
-        return kh;
-    }
-    private KhachHang sua(String ma) {
-        int viTri = timKiemViTriKhachHang(ma);
-        if (viTri == -1) return null;
-        return DS_KhachHang[viTri].nhap();
-    }
-    private boolean xoa(String ma) {
-        int viTri = timKiemViTriKhachHang(ma);
-        if (viTri == -1) return false;
-        for (int i = viTri; i < soLuong - 1; i++) {
-            DS_KhachHang[i] = DS_KhachHang[i + 1];
-        }
-        DS_KhachHang[--soLuong] = null;
+    private boolean them(KhachHang kh) {
+        if (kiemTraMa(kh.getMa())) return false;
+        if (soLuong == DS_KhachHang.length) DS_KhachHang = Arrays.copyOf(DS_KhachHang, soLuong+1);
+        DS_KhachHang[soLuong++] = kh.saoChep();
         return true;
     }
     // cac phuong thuc giao tiep ra ben ngoai
     public boolean kiemTraMa(String ma) { return timKiemViTriKhachHang(ma) != -1; }
-    // tra ra KhachHang sao chep, ben ngoai xem duoc nhung khong sua duoc danh sach
-    public KhachHang timKiemTheoMa(String ma) {
-        int viTriKH = timKiemViTriKhachHang(ma);
-        if (viTriKH == -1) return null;
-        return DS_KhachHang[viTriKH].saoChep();
-    }
-    public KhachHang timKiemKhachHang(String ma) {
-        return timKiemTheoMa(ma);
-    }
     @Override
     public void nhapTimKiem() {
-
+        System.out.println("**** Tim kiem khach hang ****");
+        String maHD = NhapChuan.docChuoi("Ma khach hang can tim");
+        int viTriHD = timKiemViTriKhachHang(maHD); 
+        if(viTriHD == -1)
+            System.out.println("Khong tim thay phieu nhap hang nay");
+        else {
+            DanhSachKhachHang dsTam = new DanhSachKhachHang();
+            dsTam.them((DS_KhachHang[viTriHD]));
+            dsTam.xuatDanhSach();
+        }
     }
     @Override 
     // them, sua, xoa
     public void nhapThem() {
         System.out.println("****bat dau nhap danh sach khach hang****");
         int nhapThem = NhapChuan.docSoNguyenKhongAm("So luong khach hang muon them");
-        DS_KhachHang = Arrays.copyOf(DS_KhachHang, soLuong + nhapThem);
+        if(DS_KhachHang.length < soLuong + nhapThem)    DS_KhachHang = Arrays.copyOf(DS_KhachHang, soLuong + nhapThem);
         for (int i = 0; i < nhapThem; i++) {
             System.out.println("---------------------");
             System.out.printf("Nhap thong tin khach hang thu %d:\n", soLuong + 1);
             KhachHang khMoi = new KhachHang();
-            while(them(khMoi.setMa(NhapChuan.docChuoiKhongRong("Nhap ma khach hang"))) == null)
-                System.out.println("Ma nay da ton tai trong danh sach, nhap lai!!!");
+            while (kiemTraMa(khMoi.setMa(NhapChuan.docChuoiKhongRong("Ma Khach hang")).getMa()))
+                System.out.println("Khach hang nay da ton tai");
             khMoi.nhap();
         }
         System.out.println("****Ket thuc nhap danh sach khach hang****");
@@ -122,19 +106,19 @@ public class DanhSachKhachHang implements IDanhSach {
     @Override 
     public void nhapSua() {
         do {
-            if (sua(NhapChuan.docChuoiKhongRong("Nhap ma khach hang")) == null)
-                System.out.println(">> Khach hang nay khong ton tai trong danh sach");
-            else System.out.println(">> Sua thanh cong");
-            System.out.println("Co tiep tuc nhap sua them khach hang khac khong?");
-        } while (NhapChuan.docYesNo("", false));
+            int viTri = timKiemViTriKhachHang(NhapChuan.docChuoiKhongRong("Nhap ma KH muon sua"));
+            if(viTri == -1) {System.out.println("khong ton tai ma kh nay!!!"); continue;}
+            DS_KhachHang[viTri].nhap();
+        } while (NhapChuan.docYesNo("Co muon nhap tiep hay khong", false));
     }
     @Override 
     public void nhapXoa() {
         do {
-            if (!xoa(NhapChuan.docChuoiKhongRong("Nhap ma khach hang")))
-                System.out.println(">> Khong tim thay khach hang can xoa");
-            else System.out.println(">> Xoa thanh cong");
-            System.out.println("Co tiep tuc xoa cac khach hang khac khong?");
-        } while (NhapChuan.docYesNo("", false));
+            int viTri = timKiemViTriKhachHang(NhapChuan.docChuoiKhongRong("Nhap ma KH muon xoa"));
+            if(viTri == -1) {System.out.println("khong ton tai ma kh nay!!!"); continue;}
+            for(int i = viTri; i < soLuong - 1; i++)
+                DS_KhachHang[viTri + 1] = DS_KhachHang[viTri];
+            soLuong--;
+        } while (NhapChuan.docYesNo("Co muon xoa tiep hay khong", false));
     }
 }
