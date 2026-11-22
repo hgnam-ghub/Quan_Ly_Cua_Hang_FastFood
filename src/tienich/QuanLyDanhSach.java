@@ -51,7 +51,6 @@ public final class QuanLyDanhSach{
                     break;
                 }
         }
-
         String[][] bang = new String[soNV + 1][soNam + 2];
         bang[0][0] = "Nhan vien";
         for (int c = 0; c < soNam; c++) bang[0][c + 1] = String.valueOf(namBatDau + c);
@@ -70,23 +69,15 @@ public final class QuanLyDanhSach{
         return bang;
     }
 
-    private static int docNam(String prompt) {
-        int nam;
-        while ((nam = NhapChuan.docSoNguyen(prompt)) < 1000 || nam > 9999)
-            System.out.println(">> Nam phai co dang yyyy (1000 - 9999)!");
-        return nam;
-    }
-
     public static void thongKeTongTienNhanVien() {
-        int namBatDau = docNam("Tu nam (yyyy)");
+        int namBatDau = NhapChuan.docNam("Tu nam (yyyy)");
         int namKetThuc;
-        while ((namKetThuc = docNam("Den nam (yyyy)")) < namBatDau)
+        while ((namKetThuc = NhapChuan.docNam("Den nam (yyyy)")) < namBatDau)
             System.out.println(">> Nam ket thuc phai lon hon hoac bang nam bat dau!");
         Menu.clearScreen();
         String[][] bang = thongKeTongTienNhanVienTheoNam(namBatDau, namKetThuc);
         FormatBang.inBangDuLieu("TONG TIEN HOA DON CUA NHAN VIEN TU NAM " + namBatDau + " DEN NAM " + namKetThuc, bang);
         if (bang.length == 1) System.out.println(">> Chua co nhan vien nao trong danh sach");
         NhapChuan.docChuoi("Enter de quay lai");
-        Menu.clearScreen();
     }
 }
