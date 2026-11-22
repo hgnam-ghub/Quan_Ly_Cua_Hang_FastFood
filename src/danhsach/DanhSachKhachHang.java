@@ -80,7 +80,7 @@ public class DanhSachKhachHang implements IDanhSach {
         String maHD = NhapChuan.docChuoi("Ma khach hang can tim");
         int viTriHD = timKiemViTriKhachHang(maHD); 
         if(viTriHD == -1)
-            System.out.println("Khong tim thay khach hang nay");
+            System.out.println("Khong tim thay phieu nhap hang nay");
         else {
             DanhSachKhachHang dsTam = new DanhSachKhachHang();
             dsTam.them((DS_KhachHang[viTriHD]));
@@ -100,6 +100,7 @@ public class DanhSachKhachHang implements IDanhSach {
             while (kiemTraMa(khMoi.setMa(NhapChuan.docChuoiKhongRong("Ma Khach hang")).getMa()))
                 System.out.println("Khach hang nay da ton tai");
             khMoi.nhap();
+            them(khMoi);
         }
         System.out.println("****Ket thuc nhap danh sach khach hang****");
         NhapChuan.docChuoi("Enter de quay lai");
@@ -118,8 +119,8 @@ public class DanhSachKhachHang implements IDanhSach {
             int viTri = timKiemViTriKhachHang(NhapChuan.docChuoiKhongRong("Nhap ma KH muon xoa"));
             if(viTri == -1) {System.out.println("khong ton tai ma kh nay!!!"); continue;}
             for(int i = viTri; i < soLuong - 1; i++)
-                DS_KhachHang[viTri + 1] = DS_KhachHang[viTri];
-            soLuong--;
+                DS_KhachHang[i] = DS_KhachHang[i + 1];
+            DS_KhachHang[--soLuong] = null;
         } while (NhapChuan.docYesNo("Co muon xoa tiep hay khong", false));
     }
 }
