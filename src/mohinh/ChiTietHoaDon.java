@@ -28,9 +28,7 @@ public class ChiTietHoaDon implements ITruyXuatMoHinh {
     }
     @Override 
     public ChiTietHoaDon nhap() {
-        setDonGiaBan(NhapChuan.docSoThucKhongAm("Don gia ban"));
         setSoLuong(NhapChuan.docSoNguyenKhongAm("So luong"));
-        thanhTien = donGiaBan * soLuong; // Tự động tính thành tiền
         return this;
     }
     @Override 
