@@ -202,4 +202,10 @@ public class DanhSachSanPham implements IDanhSach {
         System.out.println("So luong: " + soLuong);
         NhapChuan.docChuoi("Enter de quay lai");
     }
+
+    public boolean capNhatSoLuong(String maSP, int soLuong){
+        SanPham sanPham;
+        if((sanPham = DS_SanPham[timKiemViTriSanPham(maSP)]) == null) return false;
+        return sanPham.setSoLuong(soLuong) != null;
+    }
 }

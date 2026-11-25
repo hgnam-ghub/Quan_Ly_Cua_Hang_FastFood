@@ -109,7 +109,7 @@ public final class DanhSachChiTietHoaDon implements IChiTietDanhSach {
             cthdMoi.nhap();
             cthdMoi.setDonGiaBan(sp.getGia());
             tongTien += cthdMoi.setThanhTien(cthdMoi.getDonGiaBan() * cthdMoi.getSoLuong()).getThanhTien();
-            QuanLyDanhSach.DS_NGUYENLIEU.capNhatSoLuong(maHD, sp.getSoLuong() + cthdMoi.getSoLuong());
+            QuanLyDanhSach.DS_SANPHAM.capNhatSoLuong(maHD, sp.getSoLuong() + cthdMoi.getSoLuong());
         }
         return tongTien;
     }

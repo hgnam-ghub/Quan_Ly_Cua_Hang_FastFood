@@ -59,7 +59,7 @@ public final class QuanLyDanhSach{
             tieuDeDong[i] = nv.getMa() + "-" + nv.getHo() + " " + nv.getTen();
         }
         String[] tieuDeCot = new String[soNam + 2];
-        for (int i = 1; i <= soNam; i++) tieuDeCot[i] = String.valueOf(namBatDau + i); 
+        for (int i = 1; i <= soNam; i++) tieuDeCot[i] = String.valueOf(namBatDau + i - 1); 
         tieuDeCot[0] = "Nhan Vien";
         tieuDeCot[soNam + 1] = "tong cong";
         FormatBang.inBangThongKe(tieuDeDong, tieuDeCot, tong);
